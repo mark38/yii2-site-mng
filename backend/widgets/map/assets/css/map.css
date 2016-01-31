@@ -1,0 +1,42 @@
+.links-list ul {
+    margin-bottom: 8px;
+}
+.links-list > ul ul {
+    margin-left: 10px;
+}
+.links-list ul li {
+    margin-bottom: 2px;
+    padding: 2px 5px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+}
+
+.links-list ul li > div.row > div.action > .btn-group {
+    /*display: none;*/
+    opacity: 0.3;
+    -webkit-transition: all .2s;
+    -moz-transition: all .2s;
+    -ms-transition: all .2s;
+    -o-transition: all .2s;
+    transition: all .2s;
+}
+
+.links-list ul li:hover {
+    background: #eee;
+}
+.links-list ul li:hover > div.row > div.action > .btn-group, .links-list ul li > div.row > div.action > .btn-group.open {
+    /*display: block;*/
+    opacity: 1;
+}
+
+.links-list div.action ul {
+    margin: 0;
+}
+.links-list div.action ul li {
+    padding: 0;
+    margin: 2px;
+}
+.links-list div.action .caret {
+    display: none;
+}

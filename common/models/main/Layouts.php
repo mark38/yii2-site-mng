@@ -8,7 +8,8 @@ use Yii;
  * This is the model class for table "layouts".
  *
  * @property integer $id
- * @property string $layout
+ * @property string $name
+ * @property string $comment
  *
  * @property Links[] $links
  */
@@ -28,7 +29,8 @@ class Layouts extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['layout'], 'string', 'max' => 128]
+            [['name', 'comment'], 'string', 'max' => 255],
+            [['name'], 'unique']
         ];
     }
 
@@ -39,7 +41,8 @@ class Layouts extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'layout' => 'Layout',
+            'name' => 'Name',
+            'comment' => 'Comment',
         ];
     }
 

@@ -23,6 +23,7 @@ class AppAsset extends AssetBundle
     public $js = [
     ];
     public $depends = [
+        'diiimonn\assets\SlimScrollAsset',
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
     ];

@@ -1,7 +1,7 @@
 <?php
 return [
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
-    'name' => 'Терем',
+    'name' => 'Company Name',
     'language' => 'ru',
     'timeZone' => 'Europe/Moscow',
     'components' => [

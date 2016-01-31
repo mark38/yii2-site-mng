@@ -11,10 +11,23 @@ return [
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
-    'modules' => [],
+    'modules' => [
+        'map' => [
+            'class' => 'backend\modules\map\Module',
+        ],
+    ],
     'components' => [
         'request' => [
             'baseUrl' => '/mng',
+        ],
+        'assetManager' => [
+            'class' => 'yii\web\AssetManager',
+            'forceCopy' => true,
+            'bundles' => [
+                'dmstr\web\AdminLteAsset' => [
+                    'skin' => 'skin-blue',
+                ],
+            ],
         ],
         'urlManager' => [
             'class' => 'yii\web\UrlManager',
@@ -22,9 +35,9 @@ return [
             'showScriptName' => false,
             'rules' => [
                 '/' => '/site/index',
+                '/<module>/<action>' => '/<module>/default/<action>',
                 '/<action>' => '/site/<action>',
-                '/<route>' => '/<route>/index',
-                '/<route>/<action>' => '/<route>/<action>',
+                '/<controller>/<action>' => '/<controller>/<action>',
             ],
         ],
         'user' => [

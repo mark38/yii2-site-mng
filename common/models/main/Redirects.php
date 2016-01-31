@@ -8,8 +8,9 @@ use Yii;
  * This is the model class for table "redirects".
  *
  * @property integer $id
- * @property integer $links_id
+ * @property string $links_id
  * @property string $url
+ * @property integer $code
  *
  * @property Links $links
  */
@@ -29,8 +30,8 @@ class Redirects extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['links_id'], 'integer'],
-            [['url'], 'string', 'max' => 1024]
+            [['links_id', 'code'], 'integer'],
+            [['url'], 'string', 'max' => 255]
         ];
     }
 
@@ -43,13 +44,14 @@ class Redirects extends \yii\db\ActiveRecord
             'id' => 'ID',
             'links_id' => 'Links ID',
             'url' => 'Url',
+            'code' => 'Code',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getLink()
+    public function getLinks()
     {
         return $this->hasOne(Links::className(), ['id' => 'links_id']);
     }
