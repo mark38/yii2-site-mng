@@ -197,6 +197,13 @@ class Links extends \yii\db\ActiveRecord
 
             return true;
         } else {
+            $link = self::findOne([$this->id]);
+            if ($link && $this->url != $link->url) {
+                $redirect = new Redirects();
+                $redirect->links_id = $link->id;
+                $redirect->url = $link->url;
+                $redirect->save();
+            }
             return true;
         }
     }
