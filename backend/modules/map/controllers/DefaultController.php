@@ -38,4 +38,15 @@ class DefaultController extends Controller
             'link' => $link,
         ]);
     }
+
+    public function actionLinkDel($links_id, $categories_id=null)
+    {
+        $link = Links::findOne($links_id);
+        if ($link) {
+            Yii::$app->getSession()->setFlash('success', 'Ссылка удалена');
+            $link->delete();
+        }
+
+        return $this->redirect(['/map/links', 'categories_id' => $categories_id]);
+    }
 }

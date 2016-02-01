@@ -71,6 +71,7 @@ class Links extends \yii\db\ActiveRecord
     public function init() {
         $this->state = 1;
         $this->priority = '0.5';
+        $this->parent = Yii::$app->request->get('parent_links_id');
     }
 
     /**
@@ -86,7 +87,7 @@ class Links extends \yii\db\ActiveRecord
             'parent' => 'Parent',
             'url' => 'Адрес страницы (URL)',
             'link_name' => 'Наименование латиницай',
-            'anchor' => 'Ннаименование ссылки (анкор)',
+            'anchor' => 'Наименование ссылки (анкор)',
             'child_exist' => 'Child Exist',
             'level' => 'Level',
             'seq' => 'Seq',
@@ -169,25 +170,16 @@ class Links extends \yii\db\ActiveRecord
 
     public function beforeSave($insert)
     {
+        if (!$this->link_name) {
+            $this->link_name = $this->anchor2translit(preg_replace('/\s\/.+$/', '', $this->anchor));
+        }
+
+        $this->url = !$this->parent ? self::findOne($this->parent)->url.'/'.$this->link_name : '/'.$this->link_name;
+
         if ($insert) {
             $this->child_exist = 0;
             $this->level = 1;
             $this->seq = $this->findLastSequence($this->categories_id) + 1;
-
-            if (!$this->link_name) {
-                $this->link_name = $this->anchor2translit(preg_replace('/\s\/.+$/', '', $this->anchor));
-            }
-            if ($this->url) {
-                $link = self::findOne([$this->id]);
-                if ($link && $this->url != $link->url) {
-                    $redirect = new Redirects();
-                    $redirect->links_id = $link->id;
-                    $redirect->url = $link->url;
-                    $redirect->save();
-                }
-            } else {
-                $this->url = !$this->parent ? self::findOne($this->parent)->url.'/'.$this->link_name : '/'.$this->link_name;
-            }
 
             if ($this->parent) {
                 $parent_link = self::findOne($this->parent);
@@ -206,6 +198,18 @@ class Links extends \yii\db\ActiveRecord
             return true;
         } else {
             return true;
+        }
+    }
+
+    public function afterDelete()
+    {
+        self::reSort($this->categories_id, $this->parent);
+        if ($this->parent) {
+            if (self::find()->where(['parent' => $this->parent])->count() == 0) {
+                $parent_link = self::findOne($this->parent);
+                $parent_link->child_exist = 0;
+                $parent_link->save();
+            }
         }
     }
 
@@ -267,9 +271,9 @@ class Links extends \yii\db\ActiveRecord
         return ($q ? $q->seq : 0);
     }
 
-    public function reSort($parent_links_id)
+    public function reSort($categories_id, $parent_links_id=null)
     {
-        $links = self::find()->where(['parent' => $parent_links_id])->orderBy(['seq' => SORT_ASC])->all();
+        $links = self::find()->where(['categories_id' => $categories_id, 'parent' => $parent_links_id])->orderBy(['seq' => SORT_ASC])->all();
         foreach ($links as $index => $link) {
             $link->seq = $index+1;
             $link->update();

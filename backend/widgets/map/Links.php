@@ -45,7 +45,7 @@ class Links extends Widget
                         $link->anchor,
                         ['/map/content', 'categories_id' => Yii::$app->request->get('categories_id'), 'links_id' => $link->id], [
                         'style' => ($link->state == 0 ? 'text-decoration: line-through; color: #aaa;' : '') .
-                                   (Yii::$app->request->get('links_id') == $link->id ? 'font-weight: bold;' : '')
+                                   (Yii::$app->request->get('links_id') == $link->id || Yii::$app->request->get('parent_links_id') == $link->id ? 'font-weight: bold;' : '')
                     ]), ['class' => 'col-sm-9']) .
                 Html::tag('div',
                     ButtonDropdown::widget([
@@ -53,8 +53,8 @@ class Links extends Widget
                         'dropdown' => [
                             'items' => [
                                 ['label' => 'Ретактор контента', 'url' => ['/map/content', 'categories_id' => Yii::$app->request->get('categories_id'), 'links_id' => $link->id]],
-                                ['label' => 'Ретактировать / Удалить', 'url' => Url::current(['mng_link' => 'ch', 'links_id' => $link->id])],
-                                ['label' => 'Добавить дочернюю ссылку', 'url' => '#'],
+                                ['label' => 'Ретактировать / Удалить', 'url' => ['/map/links', 'categories_id' => Yii::$app->request->get('categories_id'), 'mng_link' => 'ch', 'links_id' => $link->id]],
+                                ['label' => 'Добавить дочернюю ссылку', 'url' => ['/map/links', 'categories_id' => Yii::$app->request->get('categories_id'), 'parent_links_id' => $link->id, 'mng_link' => 'add']],
                             ],
                         ],
                         'encodeLabel' => false,

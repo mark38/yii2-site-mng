@@ -7,8 +7,11 @@ use common\models\main\Layouts;
 use common\models\main\Views;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\bootstrap\Modal;
 
 /** @var $link \common\models\main\Links */
+
+$link_close = ['/map/links', 'categories_id' => Yii::$app->request->get('categories_id')];
 
 ?>
 
@@ -31,7 +34,7 @@ use yii\helpers\Url;
     <div class="box-header with-border">
         <h3 class="box-title"><?=Yii::$app->request->get('mng_link') == 'add' ? 'Добавлекние новой ссылки' : 'Редактирование ссылки'?></h3>
         <div class="box-tools pull-right">
-            <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+            <?=Html::a('<i class="fa fa-times"></i>', $link_close, ['class' => 'btn btn-box-tool'])?>
         </div>
     </div>
     <div class="box-body">
@@ -70,15 +73,24 @@ use yii\helpers\Url;
 
     </div>
     <div class="box-footer">
+        <?= Html::a('Отмена', $link_close, ['class' => 'btn btn-default btn-sm btn-flat'])?>
         <?= Html::submitButton(($link->id ? 'Изменить' : 'Добавить'), [
-            'class' => 'btn btn-primary btn-flat btn-sm',
-            'name' => 'signup-button',
-            'value' => 'Добавить',
-        ]) ?>&nbsp;
+                'class' => 'btn btn-primary btn-flat btn-sm',
+                'name' => 'signup-button',
+                'value' => 'Добавить',
+        ])?>
         <?php if ($link->id) {
             echo Html::a('Ретактор контента', Url::to(['/map/content', 'categories_id' => Yii::$app->request->get('categories_id'), 'links_id' => $link->id]), [
                 'class' => 'btn btn-info btn-flat btn-sm'
+            ]).'&nbsp;';
+            Modal::begin([
+                'header' => $link->anchor.' '.Html::a('<i class="fa fa-external-link"></i>', $link->url, ['target' => '_blank']),
+                'toggleButton' => ['label' => 'Удалить', 'class' => 'btn btn-danger btn-flat btn-sm'],
+                'footer' => Html::a('Отмена', '#', ['data-dismiss' => 'modal', 'class' => 'btn btn-default btn-flat btn-sm']) .
+                    Html::a('Удалить', ['/map/link-del', 'categories_id' => Yii::$app->request->get('categories_id'), 'links_id' => $link->id], ['class' => 'btn btn-danger btn-flat btn-sm']),
             ]);
+            echo '<p>Ссылка будет удалена со всем содержимым, в том числе контент страницы, а также дочерние ссылки, если такие имеются.</p><p>Действительно удалить ссылку?</p>';
+            Modal::end();
         }?>
     </div>
 </div>
