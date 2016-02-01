@@ -12,7 +12,6 @@ use yii\bootstrap\Modal;
 /** @var $link \common\models\main\Links */
 
 $link_close = ['/map/links', 'categories_id' => Yii::$app->request->get('categories_id')];
-
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -32,7 +31,7 @@ $link_close = ['/map/links', 'categories_id' => Yii::$app->request->get('categor
 
 <div class="box box-default">
     <div class="box-header with-border">
-        <h3 class="box-title"><?=Yii::$app->request->get('mng_link') == 'add' ? 'Добавлекние новой ссылки' : 'Редактирование ссылки'?></h3>
+        <h3 class="box-title"><?=Yii::$app->request->get('mng_link') == 'add' ? 'Добавление новой ссылки' : 'Редактирование ссылки'?></h3>
         <div class="box-tools pull-right">
             <?=Html::a('<i class="fa fa-times"></i>', $link_close, ['class' => 'btn btn-box-tool'])?>
         </div>
@@ -45,7 +44,7 @@ $link_close = ['/map/links', 'categories_id' => Yii::$app->request->get('categor
                     'label' => 'Основные параметры',
                     'content' => '<p>' .
                         $form->field($link, 'anchor') .
-                        $form->field($link, 'link_name')->hint('(не обязательно)') .
+                        $form->field($link, 'name')->hint('(не обязательно)') .
                         $form->field($link, 'title') .
                         $form->field($link, 'state')->checkbox() .
                         '</p>',

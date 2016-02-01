@@ -15,7 +15,7 @@ use common\models\gl\GlImgs;
  * @property integer $views_id
  * @property string $parent
  * @property string $url
- * @property string $link_name
+ * @property string $name
  * @property string $anchor
  * @property integer $child_exist
  * @property integer $level
@@ -62,7 +62,7 @@ class Links extends \yii\db\ActiveRecord
             [['anchor', 'title'], 'required'],
             [['categories_id', 'layouts_id', 'views_id', 'parent', 'child_exist', 'level', 'seq', 'gl_imgs_id', 'start', 'created_at', 'updated_at', 'state', 'content_nums'], 'integer'],
             [['priority'], 'number'],
-            [['url', 'link_name', 'anchor'], 'string', 'max' => 255],
+            [['url', 'name', 'anchor'], 'string', 'max' => 255],
             [['title', 'keywords', 'description'], 'string', 'max' => 1024],
             [['url'], 'unique']
         ];
@@ -86,7 +86,7 @@ class Links extends \yii\db\ActiveRecord
             'views_id' => 'Вид страницы',
             'parent' => 'Parent',
             'url' => 'Адрес страницы (URL)',
-            'link_name' => 'Наименование латиницай',
+            'name' => 'Наименование латиницей',
             'anchor' => 'Наименование ссылки (анкор)',
             'child_exist' => 'Child Exist',
             'level' => 'Level',
@@ -170,16 +170,16 @@ class Links extends \yii\db\ActiveRecord
 
     public function beforeSave($insert)
     {
-        if (!$this->link_name) {
-            $this->link_name = $this->anchor2translit(preg_replace('/\s\/.+$/', '', $this->anchor));
+        if (!$this->name) {
+            $this->name = $this->anchor2translit(preg_replace('/\s\/.+$/', '', $this->anchor));
         }
 
-        $this->url = !$this->parent ? self::findOne($this->parent)->url.'/'.$this->link_name : '/'.$this->link_name;
+        $this->url = $this->parent ? self::findOne($this->parent)->url.'/'.$this->name : '/'.$this->name;
 
         if ($insert) {
             $this->child_exist = 0;
             $this->level = 1;
-            $this->seq = $this->findLastSequence($this->categories_id) + 1;
+            $this->seq = $this->findLastSequence($this->categories_id, $this->parent) + 1;
 
             if ($this->parent) {
                 $parent_link = self::findOne($this->parent);
@@ -205,6 +205,16 @@ class Links extends \yii\db\ActiveRecord
                 $redirect->save();
             }
             return true;
+        }
+    }
+
+    public function afterSave($insert)
+    {
+        if ($insert) {
+            $content = new Contents();
+            $content->links_id = $this->id;
+            $content->seq = 1;
+            $content->save();
         }
     }
 
@@ -262,14 +272,14 @@ class Links extends \yii\db\ActiveRecord
         return strtr($anchor, $converter);
     }
 
-    public static function findByUrl($link_name, $parent=null)
+    public static function findByUrl($name, $parent=null)
     {
-        return static::findOne(['link_name' => $link_name, 'parent' => $parent]);
+        return static::findOne(['name' => $name, 'parent' => $parent]);
     }
 
-    public static function findByUrlForLink($link_name, $links_id, $parent=null)
+    public static function findByUrlForLink($name, $links_id, $parent=null)
     {
-        return static::find()->where(['link_name' => $link_name])->andWhere(['not in', 'id', $links_id])->andWhere(['parent' => $parent])->all();
+        return static::find()->where(['name' => $name])->andWhere(['not in', 'id', $links_id])->andWhere(['parent' => $parent])->all();
     }
 
     public static function findLastSequence($categoreis_id, $parent=null)

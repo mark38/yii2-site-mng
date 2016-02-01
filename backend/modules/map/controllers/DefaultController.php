@@ -2,11 +2,11 @@
 
 namespace backend\modules\map\controllers;
 
-use common\models\main\Contents;
 use Yii;
+use yii\web\Controller;
 use common\models\main\Categories;
 use common\models\main\Links;
-use yii\web\Controller;
+use common\models\main\Contents;
 
 class DefaultController extends Controller
 {
@@ -25,11 +25,6 @@ class DefaultController extends Controller
         }
 
         if ($link->load(Yii::$app->request->post()) && $link->save()) {
-            $content = new Contents();
-            $content->links_id = $link->id;
-            $content->seq = 1;
-            $content->save();
-
             Yii::$app->getSession()->setFlash('success', 'Изменения приняты');
         }
 
@@ -48,5 +43,29 @@ class DefaultController extends Controller
         }
 
         return $this->redirect(['/map/links', 'categories_id' => $categories_id]);
+    }
+
+    public function actionContent($links_id, $categories_id=null)
+    {
+        $link = Links::findOne($links_id);
+        $contents = Contents::find()->where(['links_id' => $links_id])->orderBy(['seq' => SORT_ASC])->all();
+
+        if (Yii::$app->request->post()) {
+            foreach ($contents as $index => $content) {
+                if (Yii::$app->request->post('content-'.$index)) {
+                    echo Yii::$app->request->post('content-'.$index);
+                    $contents[$index]->text = Yii::$app->request->post('content-'.$index);
+                    $contents[$index]->save();
+
+                    /*$contents[$index]->load(Yii::$app->request->post());
+                    $contents[$index]->save();*/
+                }
+            }
+        }
+
+        return $this->render('content', [
+            'link' => $link,
+            'contents' => $contents
+        ]);
     }
 }

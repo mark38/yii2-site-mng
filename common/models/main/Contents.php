@@ -7,14 +7,14 @@ use Yii;
 /**
  * This is the model class for table "contents".
  *
- * @property integer $id
- * @property integer $links_id
- * @property integer $parent
+ * @property string $id
+ * @property string $links_id
+ * @property string $parent
  * @property string $css_class
- * @property string $content
+ * @property string $text
  * @property integer $seq
  *
- * @property Links $link
+ * @property Links $links
  */
 class Contents extends \yii\db\ActiveRecord
 {
@@ -33,7 +33,7 @@ class Contents extends \yii\db\ActiveRecord
     {
         return [
             [['links_id', 'parent', 'seq'], 'integer'],
-            [['content'], 'string'],
+            [['text'], 'string'],
             [['css_class'], 'string', 'max' => 255]
         ];
     }
@@ -48,7 +48,7 @@ class Contents extends \yii\db\ActiveRecord
             'links_id' => 'Links ID',
             'parent' => 'Parent',
             'css_class' => 'Css Class',
-            'content' => 'Content',
+            'text' => 'Text',
             'seq' => 'Seq',
         ];
     }
