@@ -2,6 +2,7 @@
 
 namespace common\models\main;
 
+use common\models\gallery\GalleryImages;
 use common\models\gl\GlGroups;
 use Yii;
 use common\models\gl\GlImgs;
@@ -23,7 +24,7 @@ use common\models\gl\GlImgs;
  * @property string $title
  * @property string $keywords
  * @property string $description
- * @property string $gl_imgs_id
+ * @property integer $gallery_images_id
  * @property integer $start
  * @property integer $created_at
  * @property integer $updated_at
@@ -37,7 +38,6 @@ use common\models\gl\GlImgs;
  * @property Categories $categories
  * @property Links $parent0
  * @property Links[] $links
- * @property ModGlImgs $glImgs
  * @property ModGlGroups[] $modGlGroups
  * @property ModShGoods[] $modShGoods
  * @property ModShGroups[] $modShGroups
@@ -60,7 +60,7 @@ class Links extends \yii\db\ActiveRecord
     {
         return [
             [['anchor', 'title'], 'required'],
-            [['categories_id', 'layouts_id', 'views_id', 'parent', 'child_exist', 'level', 'seq', 'gl_imgs_id', 'start', 'created_at', 'updated_at', 'state', 'content_nums'], 'integer'],
+            [['categories_id', 'layouts_id', 'views_id', 'parent', 'child_exist', 'level', 'seq', 'gallery_images_id', 'start', 'created_at', 'updated_at', 'state', 'content_nums'], 'integer'],
             [['priority'], 'number'],
             [['url', 'name', 'anchor'], 'string', 'max' => 255],
             [['title', 'keywords', 'description'], 'string', 'max' => 1024],
@@ -72,6 +72,8 @@ class Links extends \yii\db\ActiveRecord
         $this->state = 1;
         $this->priority = '0.5';
         $this->parent = Yii::$app->request->get('parent_links_id');
+
+        //$this->gl_imgs_id = 31;
     }
 
     /**
@@ -94,8 +96,8 @@ class Links extends \yii\db\ActiveRecord
             'title' => 'Заголовок',
             'keywords' => 'Заполнение meta-тека "Keywords"',
             'description' => 'Заполнение meta-тека "Description"',
-            'gl_imgs_id' => 'Gl Imgs ID',
-            'start' => 'Start',
+            'gallery_images_id' => 'Изображение ссылки',
+            'start' => 'Главная',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'priority' => 'Приоритет (применимо к sitemap.xml)',
@@ -155,9 +157,9 @@ class Links extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getGlImg()
+    public function getGalleryImage()
     {
-        return $this->hasOne(GlImgs::className(), ['id' => 'gl_imgs_id']);
+        return $this->hasOne(GalleryImages::className(), ['id' => 'gallery_images_id']);
     }
 
     /**
