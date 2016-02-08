@@ -208,15 +208,6 @@ class Links extends \yii\db\ActiveRecord
         }
     }
 
-    public function afterSave($insert)
-    {
-        if ($insert) {
-            $content = new Contents();
-            $content->links_id = $this->id;
-            $content->seq = 1;
-            $content->save();
-        }
-    }
 
     public function afterDelete()
     {
