@@ -22,7 +22,10 @@
         "dmstr/yii2-adminlte-asset": "^2.2",
         "diiimonn/yii2-asset-slimscroll": "^1.0",
         "2amigos/yii2-ckeditor-widget": "^1.0",
-        "iutbay/yii2-kcfinder": "^0.0.1"
+        "iutbay/yii2-kcfinder": "^0.0.1",
+        "mark38/yii2-image-mng": "dev-master",
+        "kartik-v/yii2-sortable": "^1.2",
+        "yiisoft/yii2-imagine": "^2.0"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

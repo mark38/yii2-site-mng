@@ -8,6 +8,7 @@ use common\models\main\Views;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
+use backend\widgets\gallery\GalleryManager;
 
 /** @var $link \common\models\main\Links */
 
@@ -43,10 +44,21 @@ $link_close = ['/map/links', 'categories_id' => Yii::$app->request->get('categor
                 [
                     'label' => 'Основные параметры',
                     'content' => '<p>' .
+                        $form->field($link, 'state')->checkbox() .
+                        $form->field($link, 'start')->checkbox() .
                         $form->field($link, 'anchor') .
                         $form->field($link, 'name')->hint('(не обязательно)') .
                         $form->field($link, 'title') .
-                        $form->field($link, 'state')->checkbox() .
+                        $form->field($link, 'gallery_images_id')->widget(GalleryManager::className(), [
+                            'group' => false,
+                            'gallery_groups_id' => 3,
+                            'pluginOptions' => [
+                                'type' => 'news',
+                                'apiUrl' => 'gallery-manager',
+                                'webRoute' => Yii::getAlias('@frontend/web'),
+                            ],
+                            //'options' => ['id' => 'gallery-upload'],
+                        ]) .
                         '</p>',
                     'active' => true
                 ],
