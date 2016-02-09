@@ -31,6 +31,12 @@ foreach (Categories::find()->orderBy(['seq' => SORT_ASC])->all() as $category) {
                     ],
                     ['label' => 'Редиректы', 'icon' => 'fa fa-reply', 'url' => ['/redirects']],
                     ['label' => 'Дополнительные модули', 'options' => ['class' => 'header']],
+                    [
+                        'label' => 'Новости',
+                        'icon' => 'fa fa-newspaper-o',
+                        'url' => ['/news/list'],
+                        'active' => $this->context->module->id == 'news' ? true : false,
+                    ],
                     ['label' => 'Menu Yii2 framework', 'options' => ['class' => 'header']],
                     ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii']],
                     ['label' => 'Debug', 'icon' => 'fa fa-dashboard', 'url' => ['/debug']],

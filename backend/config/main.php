@@ -15,6 +15,9 @@ return [
         'map' => [
             'class' => 'backend\modules\map\Module',
         ],
+        'news' => [
+            'class' => 'backend\modules\news\Module',
+        ],
     ],
     'components' => [
         'request' => [
