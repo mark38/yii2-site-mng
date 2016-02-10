@@ -59,7 +59,7 @@ class Links extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['anchor', 'title'], 'required'],
+            [['anchor'], 'required'],
             [['categories_id', 'layouts_id', 'views_id', 'parent', 'child_exist', 'level', 'seq', 'gallery_images_id', 'start', 'created_at', 'updated_at', 'state', 'content_nums'], 'integer'],
             [['priority'], 'number'],
             [['url', 'name', 'anchor'], 'string', 'max' => 255],
