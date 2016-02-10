@@ -35,6 +35,12 @@ class DefaultController extends Controller
         }
 
         if ($link->load(Yii::$app->request->post()) && $link->save()) {
+            if (!$link->contents) {
+                $content = new Contents();
+                $content->links_id = $link->id;
+                $content->seq = 1;
+                $content->save();
+            }
             Yii::$app->getSession()->setFlash('success', 'Изменения приняты');
         }
 
