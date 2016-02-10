@@ -11,13 +11,13 @@ use backend\widgets\ckeditor\CKEditor;
 use iutbay\yii2kcfinder\KCFinder;
 
 /** @var $this \yii\web\View */
+/** @var $news_type NewsTypes */
 /** @var $news \common\models\news\News */
 /** @var $link \common\models\main\Links */
 /** @var $prev_news \common\models\main\Contents */
 /** @var $full_news \common\models\main\Contents */
 
 $link_close = [''];
-$news_type = NewsTypes::findOne(Yii::$app->request->get('news_types_id'));
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -49,6 +49,7 @@ $news_type = NewsTypes::findOne(Yii::$app->request->get('news_types_id'));
                 [
                     'label' => 'Основные параметры',
                     'content' => '<p>' .
+                        $form->field($link, 'state')->checkbox() .
                         $form->field($news, 'news_types_id')->dropDownList(ArrayHelper::map(NewsTypes::find()->orderBy(['name' => SORT_ASC])->all(), 'id', 'name')) .
                         $form->field($link, 'anchor')->label('Заголовок новости') .
                         $form->field($link, 'title')->label('Заголовок страницы (опционально)') .
@@ -94,16 +95,16 @@ $news_type = NewsTypes::findOne(Yii::$app->request->get('news_types_id'));
     </div>
     <div class="box-footer">
 
-        <?=$form->field($prev_news, 'text', [
+        <?=$form->field($news, 'prev_text', [
             'template' => '{label}<div class="col-sm-12">{input}</div><div class="col-sm-10">{error}</div>',
             'labelOptions' => ['class' => 'col-sm-12'],
-        ])->textarea(['maxlength' => true, 'rows' => 2, 'id' => 'prev-news'])->label('Предварительный текст нововсти')?>
+        ])->textarea(['maxlength' => true, 'rows' => 2, 'id' => 'prev-text'])?>
 
-        <?=$form->field($full_news, 'text', [
+        <?=$form->field($news, 'full_text', [
             'template' => '{label}<div class="col-sm-12">{input}</div><div class="col-sm-10">{error}</div>',
             'labelOptions' => ['class' => 'col-sm-12']
         ])->widget(CKEditor::className(), [
-            'options' => ['id' => 'full-news'],
+            'options' => ['id' => 'full-text'],
             'preset' => 'custom',
             'clientOptions' => [
                 'height' => 300,
@@ -121,7 +122,7 @@ $news_type = NewsTypes::findOne(Yii::$app->request->get('news_types_id'));
                     ['name' => 'links']
                 ],
             ],
-        ])->label('Полный текст новости')?>
+        ])?>
 
         <?= Html::a('Отмена', $link_close, ['class' => 'btn btn-default btn-sm btn-flat'])?>
         <?= Html::submitButton(($link->id ? 'Изменить' : 'Добавить'), [
@@ -134,7 +135,7 @@ $news_type = NewsTypes::findOne(Yii::$app->request->get('news_types_id'));
                 'header' => $link->anchor.' '.Html::a('<i class="fa fa-external-link"></i>', $link->url, ['target' => '_blank']),
                 'toggleButton' => ['label' => 'Удалить', 'class' => 'btn btn-danger btn-flat btn-sm'],
                 'footer' => Html::a('Отмена', '#', ['data-dismiss' => 'modal', 'class' => 'btn btn-default btn-flat btn-sm']) .
-                    Html::a('Удалить', ['/map/link-del', 'categories_id' => Yii::$app->request->get('categories_id'), 'links_id' => $link->id], ['class' => 'btn btn-danger btn-flat btn-sm']),
+                    Html::a('Удалить', ['news-del', 'links_id' => $link->id], ['class' => 'btn btn-danger btn-flat btn-sm']),
             ]);
             echo '<p>Действительно удалить новость?</p>';
             Modal::end();

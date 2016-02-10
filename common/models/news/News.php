@@ -18,6 +18,9 @@ use common\models\main\Links;
  */
 class News extends \yii\db\ActiveRecord
 {
+    public $prev_text;
+    public $full_text;
+
     /**
      * @inheritdoc
      */
@@ -33,6 +36,7 @@ class News extends \yii\db\ActiveRecord
     {
         return [
             [['news_types_id', 'links_id'], 'integer'],
+            [['prev_text', 'full_text'], 'string'],
             [['date'], 'safe']
         ];
     }
@@ -47,6 +51,8 @@ class News extends \yii\db\ActiveRecord
             'news_types_id' => 'Категория новости',
             'links_id' => 'Links ID',
             'date' => 'Дата новости',
+            'prev_text' => 'Предварительный текст нововсти',
+            'full_text' => 'Полный текст новости'
         ];
     }
 
@@ -64,5 +70,12 @@ class News extends \yii\db\ActiveRecord
     public function getLink()
     {
         return $this->hasOne(Links::className(), ['id' => 'links_id']);
+    }
+
+    public function beforeSave($insert)
+    {
+        $this->date = $this->date ? date('Y-m-d', strtotime($this->date)) : null;
+
+        return true;
     }
 }

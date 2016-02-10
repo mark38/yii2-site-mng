@@ -281,9 +281,9 @@ class Links extends \yii\db\ActiveRecord
         return ($q ? $q->seq : 0);
     }
 
-    public function reSort($categories_id, $parent_links_id=null)
+    public function reSort($categories_id, $parent=null)
     {
-        $links = self::find()->where(['categories_id' => $categories_id, 'parent' => $parent_links_id])->orderBy(['seq' => SORT_ASC])->all();
+        $links = self::find()->where(['categories_id' => $categories_id, 'parent' => $parent])->orderBy(['seq' => SORT_ASC])->all();
         foreach ($links as $index => $link) {
             $link->seq = $index+1;
             $link->update();

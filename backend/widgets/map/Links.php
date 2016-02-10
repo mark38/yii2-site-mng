@@ -6,8 +6,6 @@ use yii\bootstrap\ButtonDropdown;
 use yii\helpers\Html;
 use yii\base\Widget;
 use yii\base\InvalidConfigException;
-use yii\helpers\Url;
-use yii\bootstrap\Nav;
 
 class Links extends Widget
 {
@@ -23,7 +21,9 @@ class Links extends Widget
     public function getLinks($parent)
     {
         $links = \common\models\main\Links::find()
+            ->innerJoinWith('category')
             ->where(['categories_id' => $this->categories_id])
+            ->andWhere(['categories.visible' => 1])
             ->andWhere(['parent' => $parent])
             ->orderBy(['seq' => SORT_ASC])
             ->all();
@@ -67,7 +67,13 @@ class Links extends Widget
             );
 
             if ($link->child_exist == '1') {
-                $html .= $this->getLinks($link->id);
+                $childs = \common\models\main\Links::find()
+                    ->innerJoinWith('category')
+                    ->where(['categories_id' => $this->categories_id])
+                    ->andWhere(['categories.visible' => 1])
+                    ->andWhere(['parent' => $link->id])
+                    ->count();
+                if ($childs > 0) $html .= $this->getLinks($link->id);
             }
         }
         $html .= Html::endTag('ul');

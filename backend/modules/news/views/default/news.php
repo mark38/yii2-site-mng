@@ -8,7 +8,7 @@ use yii\bootstrap\Html;
 /** @var $prev_news \common\models\main\Contents */
 /** @var $full_news \common\models\main\Contents */
 
-$this->title = 'Новости сайта';
+$this->title = 'Новостной блок';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -30,7 +30,42 @@ $this->params['breadcrumbs'][] = $this->title;
             </div><!-- /.box-header -->
 
             <div class="box-body">
+                <?php if ($news_list) {
+                    $i = 0;
+                    /** @var $new \common\models\news\News */
+                    foreach ($news_list as $new) {
+                        $new_date = $new->date !== null ? date('d.m.Y', strtotime($new->date)) : null;
+                        $image = $new->link->gallery_images_id ? $new->link->galleryImage->small : false;
 
+                        echo '<div class="row">' .
+                            '<div class="col-sm-11">';
+
+
+                            echo Html::beginTag('div', ['class' => 'media']);
+
+                                echo Html::beginTag('div', ['class' => 'media-left media-middle']);
+                                echo Html::a(Html::img($image, ['class' => 'media-object']), '#');
+                                echo Html::endTag('div');
+
+                                echo Html::beginTag('div', ['class' => 'media-body']);
+                                echo Html::tag('h4', '<span class="text-mutted">'.$new_date.'</span> '.$new->link->anchor.' '.Html::a('<i class="fa fa-external-link"></i>', $new->link->url, ['target' => '_blank']));
+                                echo Html::tag('div', $new->link->contents[0]->text);
+                                echo Html::tag('div', '<small>('.$new->newsType->name.')</small>', ['class' => 'text-muted']);
+                                echo Html::endTag('div');
+
+                            echo Html::endTag('div');
+
+                        echo '</div><div class="col-sm-1 text-right">';
+
+                            echo Html::a('<i class="fa fa-pencil-square-o"></i>', ['', 'news' => 'ch', 'news_types_id' => $new->news_types_id, 'news_id' => $new->id]);
+
+                        echo '</div></div>';
+
+                        if ($i < count($new)) echo '<hr>';
+
+                        $i += 1;
+                    }
+                }?>
             </div><!-- /.box-body -->
         </div><!-- /.box -->
 
@@ -39,6 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php if (Yii::$app->request->get('news')) {?>
         <div class="col-sm-7">
             <?= $this->render('newsForm', [
+                'news_type' => $news_type,
                 'news' => $news,
                 'link' => $link,
                 'prev_news' => $prev_news,
