@@ -176,7 +176,11 @@ class Links extends \yii\db\ActiveRecord
             $this->name = $this->anchor2translit(preg_replace('/\s\/.+$/', '', $this->anchor));
         }
 
-        $this->url = $this->parent ? self::findOne($this->parent)->url.'/'.$this->name : '/'.$this->name;
+        if ($this->start == 1) {
+            $this->url = '/';
+        } else {
+            $this->url = $this->parent ? preg_replace('/\/$/', '', self::findOne($this->parent)->url).'/'.$this->name : '/'.$this->name;
+        }
 
         if ($insert) {
             $this->child_exist = 0;

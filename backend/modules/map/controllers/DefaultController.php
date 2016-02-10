@@ -29,6 +29,7 @@ class DefaultController extends Controller
     {
         $category = Categories::findOne($categories_id);
         $link = new Links();
+        $link->categories_id = $categories_id;
 
         if (Yii::$app->request->get('mng_link') == 'ch') {
             $link = Links::findOne(Yii::$app->request->get('links_id'));

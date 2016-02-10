@@ -65,9 +65,8 @@ $link_close = ['/map/links', 'categories_id' => Yii::$app->request->get('categor
                 [
                     'label' => 'Дополнительно (системные параметры)',
                     'content' => '<p>' .
-                        $form->field($link, 'categories_id')->dropDownList(ArrayHelper::map(Categories::find()->orderBy(['seq' => SORT_ASC])->all(), 'id', 'comment')) .
-                        $form->field($link, 'layouts_id')->dropDownList(ArrayHelper::map(Layouts::find()->orderBy(['comment' => SORT_ASC])->all(), 'id', 'comment')) .
-                        $form->field($link, 'views_id')->dropDownList(ArrayHelper::map(Views::find()->orderBy(['comment' => SORT_ASC])->all(), 'id', 'comment')) .
+                        $form->field($link, 'layouts_id')->dropDownList(ArrayHelper::map(Layouts::find()->orderBy(['seq' => SORT_ASC])->all(), 'id', 'comment')) .
+                        $form->field($link, 'views_id')->dropDownList(ArrayHelper::map(Views::find()->orderBy(['seq' => SORT_ASC])->all(), 'id', 'comment')) .
                         $form->field($link, 'url')->staticControl() .
                         '</p>',
                 ],

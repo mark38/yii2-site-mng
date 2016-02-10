@@ -9,6 +9,8 @@ use kartik\date\DatePicker;
 use backend\widgets\gallery\GalleryManager;
 use backend\widgets\ckeditor\CKEditor;
 use iutbay\yii2kcfinder\KCFinder;
+use common\models\main\Layouts;
+use common\models\main\Views;
 
 /** @var $this \yii\web\View */
 /** @var $news_type NewsTypes */
@@ -77,6 +79,8 @@ $link_close = [''];
                 [
                     'label' => 'Дополнительно (системные параметры)',
                     'content' => '<p>' .
+                        $form->field($link, 'layouts_id')->dropDownList(ArrayHelper::map(Layouts::find()->orderBy(['seq' => SORT_ASC])->all(), 'id', 'comment')) .
+                        $form->field($link, 'views_id')->dropDownList(ArrayHelper::map(Views::find()->orderBy(['seq' => SORT_ASC])->all(), 'id', 'comment')) .
                         $form->field($link, 'url')->staticControl() .
                         $form->field($link, 'name') .
                         '</p>',
@@ -89,7 +93,7 @@ $link_close = [''];
                         $form->field($link, 'priority') .
                         '</p>',
                 ]
-            ]
+            ],
         ])?>
 
     </div>

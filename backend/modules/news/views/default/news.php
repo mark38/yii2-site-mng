@@ -36,6 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     foreach ($news_list as $new) {
                         $new_date = $new->date !== null ? date('d.m.Y', strtotime($new->date)) : null;
                         $image = $new->link->gallery_images_id ? $new->link->galleryImage->small : false;
+                        $ch_link = ['', 'news' => 'ch', 'news_types_id' => $new->news_types_id, 'news_id' => $new->id];
 
                         echo '<div class="row">' .
                             '<div class="col-sm-11">';
@@ -44,12 +45,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             echo Html::beginTag('div', ['class' => 'media']);
 
                                 echo Html::beginTag('div', ['class' => 'media-left media-middle']);
-                                echo Html::a(Html::img($image, ['class' => 'media-object']), '#');
+                                echo Html::a(Html::img($image, ['class' => 'media-object media-object', 'style' => 'max-height: 100px;']), $ch_link);
                                 echo Html::endTag('div');
 
                                 echo Html::beginTag('div', ['class' => 'media-body']);
                                 echo Html::tag('h4', '<span class="text-mutted">'.$new_date.'</span> '.$new->link->anchor.' '.Html::a('<i class="fa fa-external-link"></i>', $new->link->url, ['target' => '_blank']));
-                                echo Html::tag('div', $new->link->contents[0]->text);
+                                echo Html::tag('div', $new->link->contents[1]->text);
                                 echo Html::tag('div', '<small>('.$new->newsType->name.')</small>', ['class' => 'text-muted']);
                                 echo Html::endTag('div');
 
@@ -57,11 +58,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
                         echo '</div><div class="col-sm-1 text-right">';
 
-                            echo Html::a('<i class="fa fa-pencil-square-o"></i>', ['', 'news' => 'ch', 'news_types_id' => $new->news_types_id, 'news_id' => $new->id]);
+                            echo Html::a('<i class="fa fa-pencil-square-o"></i>', $ch_link);
 
                         echo '</div></div>';
 
-                        if ($i < count($new)) echo '<hr>';
+                        if ($i < count($news_list) - 1) echo '<hr>';
 
                         $i += 1;
                     }

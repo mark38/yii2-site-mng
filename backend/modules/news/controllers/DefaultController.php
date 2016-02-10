@@ -33,8 +33,8 @@ class DefaultController extends Controller
             $news = News::findOne($news_id);
             $link = Links::findOne($news->links_id);
             $news->date = $news->date !== null ? date('d.m.Y', strtotime($news->date)) : null;
-            $news->prev_text = Contents::findOne(['links_id' => $link->id, 'seq' => 1])->text;
-            $news->full_text = Contents::findOne(['links_id' => $link->id, 'seq' => 2])->text;
+            $news->full_text = Contents::findOne(['links_id' => $link->id, 'seq' => 1])->text;
+            $news->prev_text = Contents::findOne(['links_id' => $link->id, 'seq' => 2])->text;
         }
 
         if (Yii::$app->request->isPost) {
@@ -54,7 +54,7 @@ class DefaultController extends Controller
                 }
                 $content->links_id = $link->id;
                 $content->seq = 1;
-                $content->text = $news->prev_text;
+                $content->text = $news->full_text;
                 $content->save();
                 $parent_conten_id = $content->id;
 
@@ -65,7 +65,7 @@ class DefaultController extends Controller
                 $content->links_id = $link->id;
                 $content->parent = $parent_conten_id;
                 $content->seq = 2;
-                $content->text = $news->full_text;
+                $content->text = $news->prev_text;
                 $content->save();
             }
 
