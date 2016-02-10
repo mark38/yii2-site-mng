@@ -5,7 +5,7 @@ use common\models\main\Categories;
 /** @var $this \yii\web\View */
 
 $categories_items = array();
-foreach (Categories::find()->orderBy(['seq' => SORT_ASC])->all() as $category) {
+foreach (Categories::find()->where(['visible' => 1])->orderBy(['seq' => SORT_ASC])->all() as $category) {
     $categories_items[] = [
         'label' => $category->comment,
         'icon' => 'fa fa-circle-o',
@@ -31,6 +31,12 @@ foreach (Categories::find()->orderBy(['seq' => SORT_ASC])->all() as $category) {
                     ],
                     ['label' => 'Редиректы', 'icon' => 'fa fa-reply', 'url' => ['/redirects']],
                     ['label' => 'Дополнительные модули', 'options' => ['class' => 'header']],
+                    [
+                        'label' => 'Новостной блок',
+                        'icon' => 'fa fa-newspaper-o',
+                        'url' => ['/news/list'],
+                        'active' => $this->context->module->id == 'news' ? true : false,
+                    ],
                     ['label' => 'Menu Yii2 framework', 'options' => ['class' => 'header']],
                     ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii']],
                     ['label' => 'Debug', 'icon' => 'fa fa-dashboard', 'url' => ['/debug']],

@@ -11,6 +11,7 @@ use Yii;
  * @property string $name
  * @property string $comment
  * @property integer $seq
+ * @property integer $visible
  *
  * @property Links[] $links
  */
@@ -30,7 +31,7 @@ class Categories extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['seq'], 'integer'],
+            [['seq', 'visible'], 'integer'],
             [['name', 'comment'], 'string', 'max' => 255]
         ];
     }
@@ -45,6 +46,7 @@ class Categories extends \yii\db\ActiveRecord
             'name' => 'Name',
             'comment' => 'Comment',
             'seq' => 'Seq',
+            'visible' => 'Visible',
         ];
     }
 

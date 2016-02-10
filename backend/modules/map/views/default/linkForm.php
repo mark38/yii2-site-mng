@@ -85,11 +85,13 @@ $link_close = ['/map/links', 'categories_id' => Yii::$app->request->get('categor
     </div>
     <div class="box-footer">
         <?= Html::a('Отмена', $link_close, ['class' => 'btn btn-default btn-sm btn-flat'])?>
+
         <?= Html::submitButton(($link->id ? 'Изменить' : 'Добавить'), [
                 'class' => 'btn btn-primary btn-flat btn-sm',
                 'name' => 'signup-button',
                 'value' => 'Добавить',
         ])?>
+
         <?php if ($link->id) {
             echo Html::a('Ретактор контента', Url::to(['/map/content', 'categories_id' => Yii::$app->request->get('categories_id'), 'links_id' => $link->id]), [
                 'class' => 'btn btn-info btn-flat btn-sm'

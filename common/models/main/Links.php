@@ -59,7 +59,7 @@ class Links extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['anchor', 'title'], 'required'],
+            [['anchor'], 'required'],
             [['categories_id', 'layouts_id', 'views_id', 'parent', 'child_exist', 'level', 'seq', 'gallery_images_id', 'start', 'created_at', 'updated_at', 'state', 'content_nums'], 'integer'],
             [['priority'], 'number'],
             [['url', 'name', 'anchor'], 'string', 'max' => 255],
@@ -210,15 +210,6 @@ class Links extends \yii\db\ActiveRecord
         }
     }
 
-    public function afterSave($insert)
-    {
-        if ($insert) {
-            $content = new Contents();
-            $content->links_id = $this->id;
-            $content->seq = 1;
-            $content->save();
-        }
-    }
 
     public function afterDelete()
     {
@@ -290,9 +281,9 @@ class Links extends \yii\db\ActiveRecord
         return ($q ? $q->seq : 0);
     }
 
-    public function reSort($categories_id, $parent_links_id=null)
+    public function reSort($categories_id, $parent=null)
     {
-        $links = self::find()->where(['categories_id' => $categories_id, 'parent' => $parent_links_id])->orderBy(['seq' => SORT_ASC])->all();
+        $links = self::find()->where(['categories_id' => $categories_id, 'parent' => $parent])->orderBy(['seq' => SORT_ASC])->all();
         foreach ($links as $index => $link) {
             $link->seq = $index+1;
             $link->update();
