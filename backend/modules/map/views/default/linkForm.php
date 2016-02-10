@@ -53,7 +53,7 @@ $link_close = ['/map/links', 'categories_id' => Yii::$app->request->get('categor
                             'group' => false,
                             'gallery_groups_id' => 3,
                             'pluginOptions' => [
-                                'type' => 'news',
+                                'type' => 'links',
                                 'apiUrl' => 'gallery-manager',
                                 'webRoute' => Yii::getAlias('@frontend/web'),
                             ],
