@@ -59,6 +59,7 @@ $link_close = [''];
                             'options' => [
                                 'placeholder' => '___.___.______',
                             ],
+                            'type' => DatePicker::TYPE_COMPONENT_PREPEND,
                             'pluginOptions' => [
                                 'autoclose' => true,
                                 'format' => 'dd.mm.yyyy'
