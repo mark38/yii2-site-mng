@@ -212,6 +212,24 @@ class Gallery extends Model
             ])->execute();
         }
 
+        $this->resortImages($image['gallery_groups_id']);
+
+        return true;
+    }
+
+    public function resortImages($gallery_groups_id)
+    {
+        $images = (new Query())->select(['*'])
+            ->from($this->tableImages)
+            ->where(['gallery_groups_id' => $gallery_groups_id])
+            ->orderBy(['seq' => SORT_ASC])
+            ->createCommand()
+            ->queryAll();
+
+        foreach ($images as $seq => $image) {
+            Yii::$app->db->createCommand()->update($this->tableImages, ['seq' => ($seq+1)], 'id = '.$image['id'])->execute();
+        }
+
         return true;
     }
 }

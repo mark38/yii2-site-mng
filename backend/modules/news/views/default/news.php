@@ -1,8 +1,11 @@
 <?php
 use yii\bootstrap\Html;
+use yii\bootstrap\ButtonDropdown;
 
 /** @var $this \yii\web\View */
 /** @var $news_list \common\models\news\News */
+/** @var $news_type \common\models\news\NewsTypes */
+/** @var $news_types \common\models\news\NewsTypes */
 /** @var $news \common\models\news\News */
 /** @var $link \common\models\main\Links */
 /** @var $prev_news \common\models\main\Contents */
@@ -18,8 +21,26 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="box box-default">
             <div class="box-header with-border">
-
-                <?= Html::a('<i class="fa fa-plus"></i> Добавить новость', ['', 'news' => 'add', 'news_types_id' => 1])?>
+                <?php if (count($news_types) > 1) {
+                    $action = '<i class="fa fa-plus"></i> Добавить новость';
+                    $items = array();
+                    foreach ($news_types as $type) {
+                        $items[] = [
+                            'label' => $type->name,
+                            'url' => ['', 'news' => 'add', 'news_types_id' => $type->id],
+                        ];
+                    }
+                    echo ButtonDropdown::widget([
+                        'label' => $action,
+                        'encodeLabel' => false,
+                        'dropdown' => ['items' => $items],
+                        'options' => [
+                            'class' => 'btn btn-sm btn-default btn-flat'
+                        ]
+                    ]);
+                } else {
+                    echo Html::a($action, ['', 'news' => 'add', 'news_types_id' => 1]);
+                }?>
 
                 <div class="box-tools pull-right">
                     <div class="has-feedback">

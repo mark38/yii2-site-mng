@@ -52,7 +52,6 @@ $link_close = [''];
                     'label' => 'Основные параметры',
                     'content' => '<p>' .
                         $form->field($link, 'state')->checkbox() .
-                        $form->field($news, 'news_types_id')->dropDownList(ArrayHelper::map(NewsTypes::find()->orderBy(['name' => SORT_ASC])->all(), 'id', 'name')) .
                         $form->field($link, 'anchor')->label('Заголовок новости') .
                         $form->field($link, 'title')->label('Заголовок страницы (опционально)') .
                         $form->field($news, 'date')->widget(DatePicker::className(), [
@@ -80,6 +79,7 @@ $link_close = [''];
                 [
                     'label' => 'Дополнительно (системные параметры)',
                     'content' => '<p>' .
+                        //$form->field($news, 'news_types_id')->hiddenInput($news_type->id) .
                         $form->field($link, 'layouts_id')->dropDownList(ArrayHelper::map(Layouts::find()->orderBy(['seq' => SORT_ASC])->all(), 'id', 'comment')) .
                         $form->field($link, 'views_id')->dropDownList(ArrayHelper::map(Views::find()->orderBy(['seq' => SORT_ASC])->all(), 'id', 'comment')) .
                         $form->field($link, 'url')->staticControl() .

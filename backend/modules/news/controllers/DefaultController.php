@@ -78,6 +78,7 @@ class DefaultController extends Controller
         return $this->render('news', [
             'news_list' => $news_list,
             'news_type' => $news_type,
+            'news_types' => NewsTypes::find()->orderBy(['name' => SORT_ASC])->all(),
             'news' => $news,
             'link' => $link,
         ]);

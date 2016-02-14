@@ -28,6 +28,7 @@ class GalleryManagerAction extends Action
             case 'upload_image': return $this->actionUploadImage(); break;
             case 'get_gallery': return $this->actionGetGallery(); break;
             case 'get_gallery_test': return $this->actionGetGalleryTest(); break;
+            case 'delete_image': return $this->actionDeleteImage(); break;
         }
     }
 
@@ -73,11 +74,15 @@ class GalleryManagerAction extends Action
         ];
     }
 
-    public function actionGetGalleryTest()
+    public function actionDeleteImage()
     {
+        (new Gallery())->deleteImage(
+            Yii::$app->request->post('route'),
+            Yii::$app->request->post('gallery_images_id')
+        );
+
         return [
-            'success' => true,
-            'content' => $this->controller->render('test'),
+            'success' => 'true'
         ];
     }
 }
