@@ -18,6 +18,9 @@ return [
         'news' => [
             'class' => 'backend\modules\news\Module',
         ],
+        'gallery' => [
+            'class' => 'backend\modules\gallery\Module',
+        ],
     ],
     'components' => [
         'request' => [

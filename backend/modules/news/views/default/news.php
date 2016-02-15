@@ -21,8 +21,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <div class="box box-default">
             <div class="box-header with-border">
-                <?php if (count($news_types) > 1) {
-                    $action = '<i class="fa fa-plus"></i> Добавить новость';
+                <?php
+                $action = '<i class="fa fa-plus"></i> Добавить новость';
+                if (count($news_types) > 1) {
                     $items = array();
                     foreach ($news_types as $type) {
                         $items[] = [
@@ -39,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]
                     ]);
                 } else {
-                    echo Html::a($action, ['', 'news' => 'add', 'news_types_id' => 1]);
+                    echo Html::a($action, ['', 'news' => 'add', 'news_types_id' => 1], ['class' => 'btn btn-sm btn-default btn-flat']);
                 }?>
 
                 <div class="box-tools pull-right">

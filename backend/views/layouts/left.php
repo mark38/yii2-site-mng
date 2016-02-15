@@ -37,6 +37,12 @@ foreach (Categories::find()->where(['visible' => 1])->orderBy(['seq' => SORT_ASC
                         'url' => ['/news/list'],
                         'active' => $this->context->module->id == 'news' ? true : false,
                     ],
+                    [
+                        'label' => 'Фотогалерея',
+                        'icon' => 'fa fa-newspaper-o',
+                        'url' => ['/gallery/list'],
+                        'active' => $this->context->module->id == 'news' ? true : false,
+                    ],
                     ['label' => 'Menu Yii2 framework', 'options' => ['class' => 'header']],
                     ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii']],
                     ['label' => 'Debug', 'icon' => 'fa fa-dashboard', 'url' => ['/debug']],

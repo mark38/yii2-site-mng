@@ -15,6 +15,8 @@ use Yii;
  * @property integer $small_height
  * @property integer $large_width
  * @property integer $large_height
+ * @property integer $quality
+ * @property integer $visible
  *
  * @property GalleryGroups[] $galleryGroups
  */
@@ -34,7 +36,7 @@ class GalleryTypes extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['small_width', 'small_height', 'large_width', 'large_height'], 'integer'],
+            [['small_width', 'small_height', 'large_width', 'large_height', 'quality', 'visible'], 'integer'],
             [['name', 'comment', 'destination'], 'string', 'max' => 255]
         ];
     }
@@ -53,6 +55,8 @@ class GalleryTypes extends \yii\db\ActiveRecord
             'small_height' => 'Small Height',
             'large_width' => 'Large Width',
             'large_height' => 'Large Height',
+            'quality' => 'Quality',
+            'visible' => 'Visible',
         ];
     }
 
