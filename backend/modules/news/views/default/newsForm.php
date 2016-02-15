@@ -50,13 +50,13 @@ $link_close = [''];
                     'label' => 'Основные параметры',
                     'content' => '<p>' .
                         $form->field($link, 'state')->checkbox() .
-                        $form->field($news, 'news_types_id')->dropDownList(ArrayHelper::map(NewsTypes::find()->orderBy(['name' => SORT_ASC])->all(), 'id', 'name')) .
                         $form->field($link, 'anchor')->label('Заголовок новости') .
                         $form->field($link, 'title')->label('Заголовок страницы (опционально)') .
                         $form->field($news, 'date')->widget(DatePicker::className(), [
                             'options' => [
                                 'placeholder' => '___.___.______',
                             ],
+                            'type' => DatePicker::TYPE_COMPONENT_PREPEND,
                             'pluginOptions' => [
                                 'autoclose' => true,
                                 'format' => 'dd.mm.yyyy'
@@ -77,6 +77,12 @@ $link_close = [''];
                 [
                     'label' => 'Дополнительно (системные параметры)',
                     'content' => '<p>' .
+<<<<<<< HEAD
+=======
+                        //$form->field($news, 'news_types_id')->hiddenInput($news_type->id) .
+                        $form->field($link, 'layouts_id')->dropDownList(ArrayHelper::map(Layouts::find()->orderBy(['seq' => SORT_ASC])->all(), 'id', 'comment')) .
+                        $form->field($link, 'views_id')->dropDownList(ArrayHelper::map(Views::find()->orderBy(['seq' => SORT_ASC])->all(), 'id', 'comment')) .
+>>>>>>> fba6746686e82b9dd8ec342b1a9bc96a7bf14c6b
                         $form->field($link, 'url')->staticControl() .
                         $form->field($link, 'name') .
                         '</p>',

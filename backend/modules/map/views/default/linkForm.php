@@ -51,7 +51,7 @@ $link_close = ['/map/links', 'categories_id' => Yii::$app->request->get('categor
                         $form->field($link, 'title') .
                         $form->field($link, 'gallery_images_id')->widget(GalleryManager::className(), [
                             'group' => false,
-                            'gallery_groups_id' => 3,
+                            'gallery_groups_id' => 1,
                             'pluginOptions' => [
                                 'type' => 'links',
                                 'apiUrl' => 'gallery-manager',

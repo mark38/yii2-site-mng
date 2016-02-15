@@ -11,31 +11,6 @@ var galleryManager = {
 
     init : function(e, options) {
         this.options = options;
-
-        /*var data = new FormData();
-
-        data.append('group', this.options.group);
-        data.append('route', this.options.route);
-        data.append('action', 'get_gallery_test');
-        data.append('gallery_types_id', this.options.gallery_types_id);
-        data.append('gallery_groups_id', this.options.gallery_groups_id);
-        data.append('gallery_images_id', this.options.gallery_images_id);
-
-        $.ajax({
-            type: 'POST',
-            url: galleryManager.options.url,
-            processData: false,
-            contentType: false,
-            data: data,
-            dataType: 'json',
-            success: function(jsonData) {
-                alert('OK');
-                $('.gallery-manager').html(jsonData.gallery);
-            },
-            error: function() {
-                alert('Server error');
-            }
-        });*/
     },
 
     prepareUpload : function(e) {
@@ -127,6 +102,34 @@ var galleryManager = {
                 alert('Server error');
             }
         });
+    },
+    
+    deleteImage : function (gallery_images_id) {
+        var data = new FormData();
+
+        data.append('group', this.options.group);
+        data.append('route', this.options.route);
+        data.append('action', 'delete_image');
+        data.append('gallery_types_id', this.options.gallery_types_id);
+        data.append('gallery_groups_id', this.options.gallery_groups_id);
+        data.append('gallery_images_id', gallery_images_id);
+
+        $.ajax({
+            type: 'POST',
+            url: galleryManager.options.url,
+            processData: false,
+            contentType: false,
+            data: data,
+            dataType: 'json',
+            success: function(jsonData) {
+                if (galleryManager.options.group == 0) {
+                    $('#input-'+galleryManager.options.widget_id+' input[type="hidden"]').val('');
+                }
+            },
+            error: function() {
+                alert('Server error');
+            }
+        })
     }
 };
 

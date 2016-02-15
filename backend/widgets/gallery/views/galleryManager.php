@@ -18,7 +18,7 @@ if ($gallery_groups_id) {
         $items[] = [
             'content' => Html::tag('div', Html::button(null, [
                 'class' => 'btn btn-default btn-xs glyphicon glyphicon-remove btn-flat btn-sm',
-                'onclick' => 'galleryManager.removeImage("'.$image['id'].'")',
+                'onclick' => 'galleryManager.deleteImage("'.$image['id'].'")',
             ]), [
                 'style' => 'background:url("'.$image['small'].'") 50% 50% no-repeat; background-size:cover;',
                 'class' => 'upload-image',

@@ -24,7 +24,11 @@ MapAsset::register($this);
             <div class="box-header with-border">
                 <h3 class="box-title">Параметры ссылки</h3> <?=Html::a('<i class="fa fa-external-link"></i>', $link->url, ['target' => '_blank'])?>
                 <div class="box-tools pull-right">
+<<<<<<< HEAD
                     <?/*=Html::a('<i class="fa fa-times"></i>', $link_close, ['class' => 'btn btn-box-tool'])*/?>
+=======
+
+>>>>>>> fba6746686e82b9dd8ec342b1a9bc96a7bf14c6b
                 </div>
             </div>
             <div class="box-body">
@@ -62,11 +66,6 @@ MapAsset::register($this);
                                 Html::tag('dt', $link->getAttributeLabel('priority')).Html::tag('dd', $link->priority) .
                                 '</dl>' .
                                 '</p>',
-                            /*'content' => '<p>' .
-                                $form->field($link, 'keywords')->textarea() .
-                                $form->field($link, 'description')->textarea() .
-                                $form->field($link, 'priority') .
-                                '</p>',*/
                         ]
                     ]
                 ])?>
@@ -83,15 +82,27 @@ MapAsset::register($this);
         echo $form->field($contents[$index], 'text')->widget(CKEditor::className(), [
             'options' => ['rows' => 6, 'name' => 'content-'.$index, 'id' => 'content-'.$index],
             'preset' => 'full'
+            /*'preset' => 'custom',
+            'clientOptions' => [
+                'height' => 400,
+                'toolbarGroups' => [
+                    ['name' => 'clipboard', 'groups' => ['cut', 'copy', 'paste', 'pastetext', 'pastefrowword', '-', 'undo', 'redo']],
+                    ['name' => 'editing', 'group' => ['scayt']],
+                    ['name' => 'links', 'group' => ['link', 'unlink', 'anchor']],
+                    ['name' => 'insert', 'group' => ['image', 'table', 'horizontalrule', 'specialchar']],
+                    ['name' => 'document', 'group' => ['source']],
+                ],
+            ],*/
         ])->label(false);
+
+        echo Html::submitButton('Сохранить', [
+            'class' => 'btn btn-sm btn-primary btn-flat'
+        ]);
+
         ActiveForm::end();
     }
     ?>
 </div>
-
-<?php if (count($contents) > 0) {?>
-    <blockquote><p>Внесение изменений и сохранение необходимо осуществлять для каждого из блоков поочерёдно.</p></blockquote>
-<?php }?>
 
 
 <?php
