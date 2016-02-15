@@ -78,8 +78,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'news_type' => $news_type,
                 'news' => $news,
                 'link' => $link,
-                'prev_news' => $prev_news,
-                'full_news' => $full_news,
             ])?>
         </div>
     <?php }?>

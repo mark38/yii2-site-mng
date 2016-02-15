@@ -9,8 +9,6 @@ use kartik\date\DatePicker;
 use backend\widgets\gallery\GalleryManager;
 use backend\widgets\ckeditor\CKEditor;
 use iutbay\yii2kcfinder\KCFinder;
-use common\models\main\Layouts;
-use common\models\main\Views;
 
 /** @var $this \yii\web\View */
 /** @var $news_type NewsTypes */
@@ -41,7 +39,7 @@ $link_close = [''];
     <div class="box-header with-border">
         <h3 class="box-title"><?=Yii::$app->request->get('news') == 'add' ? 'Новая новость ('.$news_type->name.')' : 'Редактирование новости ('.$news_type->name.')'?></h3>
         <div class="box-tools pull-right">
-            <?=Html::a('<i class="fa fa-times"></i>', $link_close, ['class' => 'btn btn-box-tool'])?>
+            <?/*=Html::a('<i class="fa fa-times"></i>', $link_close, ['class' => 'btn btn-box-tool'])*/?>
         </div>
     </div>
     <div class="box-body">
@@ -79,8 +77,6 @@ $link_close = [''];
                 [
                     'label' => 'Дополнительно (системные параметры)',
                     'content' => '<p>' .
-                        $form->field($link, 'layouts_id')->dropDownList(ArrayHelper::map(Layouts::find()->orderBy(['seq' => SORT_ASC])->all(), 'id', 'comment')) .
-                        $form->field($link, 'views_id')->dropDownList(ArrayHelper::map(Views::find()->orderBy(['seq' => SORT_ASC])->all(), 'id', 'comment')) .
                         $form->field($link, 'url')->staticControl() .
                         $form->field($link, 'name') .
                         '</p>',
@@ -93,7 +89,7 @@ $link_close = [''];
                         $form->field($link, 'priority') .
                         '</p>',
                 ]
-            ],
+            ]
         ])?>
 
     </div>

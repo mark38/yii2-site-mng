@@ -15,6 +15,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Управление ссылка�
 $this->params['breadcrumbs'][] = $this->title;
 
 MapAsset::register($this);
+
 ?>
 
 <div class="row">
@@ -23,7 +24,7 @@ MapAsset::register($this);
             <div class="box-header with-border">
                 <h3 class="box-title">Параметры ссылки</h3> <?=Html::a('<i class="fa fa-external-link"></i>', $link->url, ['target' => '_blank'])?>
                 <div class="box-tools pull-right">
-                    <?=Html::a('<i class="fa fa-times"></i>', $link_close, ['class' => 'btn btn-box-tool'])?>
+                    <?/*=Html::a('<i class="fa fa-times"></i>', $link_close, ['class' => 'btn btn-box-tool'])*/?>
                 </div>
             </div>
             <div class="box-body">
