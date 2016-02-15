@@ -23,13 +23,7 @@ MapAsset::register($this);
         <div class="box box-default">
             <div class="box-header with-border">
                 <h3 class="box-title">Параметры ссылки</h3> <?=Html::a('<i class="fa fa-external-link"></i>', $link->url, ['target' => '_blank'])?>
-                <div class="box-tools pull-right">
-<<<<<<< HEAD
-                    <?/*=Html::a('<i class="fa fa-times"></i>', $link_close, ['class' => 'btn btn-box-tool'])*/?>
-=======
-
->>>>>>> fba6746686e82b9dd8ec342b1a9bc96a7bf14c6b
-                </div>
+                <div class="box-tools pull-right"></div>
             </div>
             <div class="box-body">
                 <?= Tabs::widget([
@@ -78,21 +72,18 @@ MapAsset::register($this);
 <div>
     <?php
     foreach ($contents as $index => $content) {
-        $form = ActiveForm::begin();
+        $form = ActiveForm::begin([
+            'options' => [
+                'style' => 'margin-bottom: 30px;'
+            ]
+        ]);
         echo $form->field($contents[$index], 'text')->widget(CKEditor::className(), [
-            'options' => ['rows' => 6, 'name' => 'content-'.$index, 'id' => 'content-'.$index],
+            'options' => [
+                'rows' => 6,
+                'name' => 'content-'.$index,
+                'id' => 'content-'.$index
+            ],
             'preset' => 'full'
-            /*'preset' => 'custom',
-            'clientOptions' => [
-                'height' => 400,
-                'toolbarGroups' => [
-                    ['name' => 'clipboard', 'groups' => ['cut', 'copy', 'paste', 'pastetext', 'pastefrowword', '-', 'undo', 'redo']],
-                    ['name' => 'editing', 'group' => ['scayt']],
-                    ['name' => 'links', 'group' => ['link', 'unlink', 'anchor']],
-                    ['name' => 'insert', 'group' => ['image', 'table', 'horizontalrule', 'specialchar']],
-                    ['name' => 'document', 'group' => ['source']],
-                ],
-            ],*/
         ])->label(false);
 
         echo Html::submitButton('Сохранить', [
