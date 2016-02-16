@@ -3,7 +3,6 @@ use yii\bootstrap\Html;
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Tabs;
 use yii\bootstrap\Modal;
-use yii\helpers\ArrayHelper;
 use common\models\news\NewsTypes;
 use kartik\date\DatePicker;
 use backend\widgets\gallery\GalleryManager;
@@ -128,7 +127,6 @@ $link_close = [''];
         <?= Html::submitButton(($link->id ? 'Изменить' : 'Добавить'), [
             'class' => 'btn btn-primary btn-flat btn-sm',
             'name' => 'signup-button',
-            'value' => 'Добавить',
         ])?>
         <?php if ($link->id) {
             Modal::begin([

@@ -46,14 +46,14 @@ class GalleryGroups extends \yii\db\ActiveRecord
             'id' => 'ID',
             'gallery_types_id' => 'Gallery Types ID',
             'gallery_images_id' => 'Gallery Images ID',
-            'name' => 'Name',
+            'name' => 'Наименование группы',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getGalleryImages()
+    public function getGalleryImage()
     {
         return $this->hasOne(GalleryImages::className(), ['id' => 'gallery_images_id']);
     }
@@ -61,7 +61,7 @@ class GalleryGroups extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getGalleryTypes()
+    public function getGalleryType()
     {
         return $this->hasOne(GalleryTypes::className(), ['id' => 'gallery_types_id']);
     }
@@ -69,7 +69,7 @@ class GalleryGroups extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getGalleryImages0()
+    public function getGalleryImages()
     {
         return $this->hasMany(GalleryImages::className(), ['gallery_groups_id' => 'id']);
     }

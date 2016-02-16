@@ -1,8 +1,11 @@
 <?php
 use yii\bootstrap\Html;
 use yii\bootstrap\ButtonDropdown;
+use common\models\gallery\GalleryTypes;
 
 /** @var $gallery_types \common\models\gallery\GalleryTypes */
+/** @var $gallery_group \common\models\gallery\GalleryGroups */
+/** @var $gallery_groups \common\models\gallery\GalleryGroups */
 
 $this->title = 'Галереи изображений на сайте';
 ?>
@@ -20,7 +23,7 @@ $this->title = 'Галереи изображений на сайте';
                     foreach ($gallery_types as $type) {
                         $items[] = [
                             'label' => $type->comment,
-                            'url' => ['', 'gallery_group' => 'add', 'gallery_types_id' => $type->id],
+                            'url' => ['', 'action' => 'add', 'gallery_types_id' => $type->id],
                         ];
                     }
                     echo ButtonDropdown::widget([
@@ -32,7 +35,7 @@ $this->title = 'Галереи изображений на сайте';
                         ]
                     ]);
                 } else {
-                    echo Html::a($action, ['', 'gallery_group' => 'add', 'gallery_types_id' => 1], ['class' => 'btn btn-sm btn-default btn-flat']);
+                    echo Html::a($action, ['', 'action' => 'add', 'gallery_types_id' => 1], ['class' => 'btn btn-sm btn-default btn-flat']);
                 }?>
 
                 <div class="box-tools pull-right">
@@ -44,18 +47,29 @@ $this->title = 'Галереи изображений на сайте';
             </div><!-- /.box-header -->
 
             <div class="box-body">
-
+                <?php if ($gallery_groups) {?>
+                    <table class="table">
+                        <tbody>
+                        <?php foreach($gallery_groups as $group) {
+                            $image = $group->gallery_images_id ? Html::img($group->galleryImage->small, ['width' => 64, 'class' => 'img-rounded']) : '';
+                            echo '<tr>' .
+                                    '<td>'.$image.'</td>' .
+                                    '<td>'.$group->name.'</td>' .
+                                    '<td>'.Html::a('<i class="fa fa-pencil-square-o"></i>', ['', 'action' => 'ch', 'gallery_groups_id' => $group->id]).'</td>' .
+                                 '</tr>';
+                        }?>
+                        </tbody>
+                    </table>
+                <?php }?>
             </div><!-- /.box-body -->
         </div><!-- /.box -->
 
     </div>
 
-    <?php if (Yii::$app->request->get('news')) {?>
+    <?php if ($gallery_group) {?>
         <div class="col-sm-7">
-            <?= $this->render('newsForm', [
-                'news_type' => $news_type,
-                'news' => $news,
-                'link' => $link,
+            <?= $this->render('galleryForm', [
+                'gallery_group' => $gallery_group,
             ])?>
         </div>
     <?php }?>

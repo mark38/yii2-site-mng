@@ -50,6 +50,8 @@ class GalleryManagerAction extends Action
             Yii::$app->request->post('gallery_groups_id')
         );
 
+        (new Gallery())->changeDefaultImage(Yii::$app->request->post('gallery_groups_id'));
+
         if (Yii::$app->request->post('group') == 0 && Yii::$app->request->post('gallery_images_id') && $result['success']) {
             (new Gallery())->deleteImage(
                 Yii::$app->request->post('route'),
@@ -80,6 +82,8 @@ class GalleryManagerAction extends Action
             Yii::$app->request->post('route'),
             Yii::$app->request->post('gallery_images_id')
         );
+
+        (new Gallery())->changeDefaultImage(Yii::$app->request->post('gallery_groups_id'));
 
         return [
             'success' => 'true'

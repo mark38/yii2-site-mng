@@ -103,7 +103,29 @@ class Gallery extends Model
         ];
     }
 
-    public function getSize($src_file, $type) {
+    public function changeDefaultImage($gallery_groups_id)
+    {
+        $default_image = (new Query())->select('*')
+            ->from($this->tableImages)
+            ->where(['gallery_groups_id' => $gallery_groups_id, 'seq' => 1])
+            ->createCommand()
+            ->queryOne();
+
+        $group = (new Query())->select('*')
+            ->from($this->tableGroups)
+            ->where(['id' => $gallery_groups_id, 'gallery_images_id' => $default_image['id']])
+            ->createCommand()
+            ->queryOne();
+
+        if (!isset($group['id'])) {
+            Yii::$app->db->createCommand()->update($this->tableGroups, ['gallery_images_id' => $default_image['id']], 'id = '.$gallery_groups_id)->execute();
+        }
+
+        return true;
+    }
+
+    public function getSize($src_file, $type)
+    {
         list($img_w,$img_h) = getimagesize($src_file);
         $small_width = $type['small_width'];
         $small_height = $type['small_height'];
