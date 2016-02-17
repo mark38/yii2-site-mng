@@ -2,13 +2,12 @@
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Tabs;
 use yii\helpers\ArrayHelper;
-use common\models\main\Categories;
 use common\models\main\Layouts;
 use common\models\main\Views;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\Modal;
-use backend\widgets\gallery\GalleryManager;
+use mark38\galleryManager\GalleryManager;
 
 /** @var $link \common\models\main\Links */
 

@@ -7,7 +7,7 @@ use yii\web\Controller;
 use common\models\main\Categories;
 use common\models\main\Links;
 use common\models\main\Contents;
-use backend\widgets\gallery\GalleryManagerAction;
+use mark38\galleryManager\GalleryManagerAction;
 
 class DefaultController extends Controller
 {
