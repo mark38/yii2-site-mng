@@ -30,7 +30,9 @@
         "kartik-v/yii2-nav-x": "^1.2",
         "uran1980/yii2-scroll-to-top": "^0.0.2",
         "kartik-v/yii2-widget-typeahead": "^1.0",
-        "mark38/yii2-gallery-manager": "dev-master"
+        "mark38/yii2-gallery-manager": "dev-master",
+        "newerton/yii2-fancybox": "dev-master",
+        "evgeniyrru/yii2-slick": "^1.0"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

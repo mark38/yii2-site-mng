@@ -4,7 +4,7 @@ namespace backend\modules\gallery\controllers;
 
 use Yii;
 use yii\web\Controller;
-use backend\widgets\gallery\GalleryManagerAction;
+use mark38\galleryManager\GalleryManagerAction;
 use common\models\gallery\GalleryTypes;
 use common\models\gallery\GalleryGroups;
 use common\models\gallery\GalleryImages;

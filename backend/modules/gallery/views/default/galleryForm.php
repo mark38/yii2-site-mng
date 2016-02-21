@@ -3,7 +3,7 @@ use yii\bootstrap\Html;
 use yii\helpers\Url;
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Modal;
-use backend\widgets\gallery\GalleryManager;
+use mark38\galleryManager\GalleryManager;
 
 /** @var $this \yii\web\View */
 /** @var $gallery_group \common\models\gallery\GalleryGroups */
@@ -63,14 +63,6 @@ $link_close = Url::to([]);
     </div>
     <?php if (Yii::$app->request->get('action') == 'ch') {?>
         <div class="box-footer">
-            <?/*= GalleryManager::widget([
-                'gallery_groups_id' => $gallery_group->id,
-                'pluginOptions' => [
-                    'type' => $gallery_group->galleryType->name,
-                    'apiUrl' => 'gallery-manager',
-                    'webRoute' => Yii::getAlias('@frontend/web'),
-                ]
-            ])*/?>
             <?= $form->field($gallery_group, 'id', [
                 'template' => '<div class="col-sm-12">{input}</div>'
             ])->widget(GalleryManager::className(), [

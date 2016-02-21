@@ -83,7 +83,8 @@ MapAsset::register($this);
                 'name' => 'content-'.$index,
                 'id' => 'content-'.$index
             ],
-            'preset' => 'full'
+            'preset' => 'full',
+            'clientOptions' => ['config.extraPlugins' => 'codeSnippet']
         ])->label(false);
 
         echo Html::submitButton('Сохранить', [

@@ -54,7 +54,7 @@ $this->title = 'Галереи изображений на сайте';
                             $image = $group->gallery_images_id ? Html::img($group->galleryImage->small, ['width' => 64, 'class' => 'img-rounded']) : '';
                             echo '<tr>' .
                                     '<td>'.$image.'</td>' .
-                                    '<td>'.$group->name.'</td>' .
+                                    '<td>'.$group->name.'<br><small class="text-muted">('.$group->galleryType->comment.')</small></td>' .
                                     '<td>'.Html::a('<i class="fa fa-pencil-square-o"></i>', ['', 'action' => 'ch', 'gallery_groups_id' => $group->id]).'</td>' .
                                  '</tr>';
                         }?>
