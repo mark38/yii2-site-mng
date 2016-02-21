@@ -63,17 +63,18 @@ class TorAds extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'links_id' => 'Links ID',
+            'Категория' => 'Links ID',
             'user_id' => 'User ID',
             'region_id' => 'Region ID',
-            'city_id' => 'City ID',
-            'gallery_groups_id' => 'Gallery Groups ID',
+            'city_id' => 'Город',
+            'Фото' => 'Gallery Groups ID',
             'price' => 'Price',
             'reward' => 'Reward',
-            'name' => 'Name',
-            'description' => 'Description',
+            'name' => 'Наименование',
+            'description' => 'Описание',
             'views' => 'Views',
             'created_at' => 'Created At',
+            'geobase_city' => 'Город'
         ];
     }
 
