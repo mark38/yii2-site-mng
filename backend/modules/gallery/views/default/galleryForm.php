@@ -8,8 +8,7 @@ use mark38\galleryManager\GalleryManager;
 /** @var $this \yii\web\View */
 /** @var $gallery_group \common\models\gallery\GalleryGroups */
 
-//$link_close = Url::to(['']);
-$link_close = '';
+$link_close = Url::to([]);
 ?>
 
 <?php $form = ActiveForm::begin([
