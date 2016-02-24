@@ -36,28 +36,7 @@ $link_close = Url::to([]);
 
         <?= $form->field($gallery_group, 'name')?>
 
-        <div class="form-group">
-            <div class="col-sm-5 col-sm-offset-4">
-                <?= Html::a('Отменить', [], [
-                    'class' => 'btn btn-default btn-flat btn-sm',
-                ])?>
-                <?= Html::submitButton(Yii::$app->request->get('action') == 'add' ? 'Добавить' : 'Изменить', [
-                    'class' => 'btn btn-primary btn-flat btn-sm',
-                    /*'name' => 'signup-button'*/
-                ])?>
-
-                <?php if (Yii::$app->request->get('action') == 'ch') {
-                    Modal::begin([
-                        'header' => $gallery_group->name,
-                        'toggleButton' => ['label' => 'Удалить', 'class' => 'btn btn-danger btn-flat btn-sm'],
-                        'footer' => Html::a('Отмена', '#', ['data-dismiss' => 'modal', 'class' => 'btn btn-default btn-flat btn-sm']) .
-                            Html::a('Удалить', ['gallery-del', 'gallery_groups_id' => $gallery_group->id], ['class' => 'btn btn-danger btn-flat btn-sm']),
-                    ]);
-                    echo '<p>Действительно удалить галерею?</p>';
-                    Modal::end();
-                }?>
-            </div>
-        </div>
+        
 
     </div>
 </div>
