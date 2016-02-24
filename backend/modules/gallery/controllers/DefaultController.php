@@ -4,10 +4,9 @@ namespace backend\modules\gallery\controllers;
 
 use Yii;
 use yii\web\Controller;
-use mark38\galleryManager\GalleryManagerAction;
 use common\models\gallery\GalleryTypes;
 use common\models\gallery\GalleryGroups;
-use common\models\gallery\GalleryImages;
+use mark38\galleryManager\GalleryManagerAction;
 
 class DefaultController extends Controller
 {
