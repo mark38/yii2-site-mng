@@ -8,8 +8,7 @@ use mark38\galleryManager\GalleryManager;
 /** @var $this \yii\web\View */
 /** @var $gallery_group \common\models\gallery\GalleryGroups */
 
-//$link_close = Url::to([]);
-$link_close = '';
+$link_close = [''];
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -39,12 +38,11 @@ $link_close = '';
 
             <div class="form-group">
                 <div class="col-sm-5 col-sm-offset-4">
-                    <?= Html::a('Отменить', [], [
+                    <?= Html::a('Отменить', $link_close, [
                         'class' => 'btn btn-default btn-flat btn-sm',
                     ])?>
                     <?= Html::submitButton(Yii::$app->request->get('action') == 'add' ? 'Добавить' : 'Изменить', [
                         'class' => 'btn btn-primary btn-flat btn-sm',
-                        /*'name' => 'signup-button'*/
                     ])?>
 
                     <?php if (Yii::$app->request->get('action') == 'ch') {
