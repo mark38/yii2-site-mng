@@ -68,9 +68,6 @@ $this->title = 'Галереи изображений на сайте';
 
     <?php if ($gallery_group) {?>
         <div class="col-sm-7">
-            <?php
-            print_r($gallery_group);
-            ?>
             <?= $this->render('galleryForm', [
                 'gallery_group' => $gallery_group,
             ])?>
