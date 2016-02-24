@@ -71,9 +71,9 @@ $this->title = 'Галереи изображений на сайте';
             <?php
             print_r($gallery_group);
             ?>
-            <?/*= $this->render('galleryForm', [
+            <?= $this->render('galleryForm', [
                 'gallery_group' => $gallery_group,
-            ])*/?>
+            ])?>
         </div>
     <?php }?>
 
