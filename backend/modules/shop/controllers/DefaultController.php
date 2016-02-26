@@ -17,7 +17,7 @@ class DefaultController extends Controller
     public function action1cExchange()
     {
         $this->layout = false;
-        
+
         if ( $_SERVER['PHP_AUTH_USER'] != Yii::$app->params['shop']['phpAuthUser'] || $_SERVER['PHP_AUTH_PW'] != Yii::$app->params['shop']['phpAuthPw'] ) {
             echo "failure";
             return false;
@@ -35,6 +35,8 @@ class DefaultController extends Controller
             echo "zip=yes\nfile_limit=314572800";
         } elseif (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('filename')) {
             if ( $postdata = file_get_contents( "php://input" ) ) {
+                echo "success";
+                
                 $zip_file = Yii::getAlias('@app').$this->upload_dir.'/1cbitrix.zip';
                 $unzip_dir = Yii::getAlias('@app').$this->upload_dir.'/1cbitrix';
                 exec( 'rm -r '.$unzip_dir );
