@@ -47,10 +47,10 @@ class DefaultController extends Controller
                 exec ("export LC_ALL=ru_RU.UTF-8 && find ".$unzip_dir."/. -type f -exec sh -c 'np=`echo {} | iconv -f cp1252 -t cp850| iconv -f cp866`; mv \"{}\" \"\$np\"' \;");
                 echo "success";
             } elseif (Yii::$app->request->get('filename') == 'import.xml') {
-                exec('php '.Yii::getAlias('@app').'/../yii shop/import '.Yii::getAlias('@app').$this->upload_dir.'/1cbitrix/import.xml');
+                //exec('php '.Yii::getAlias('@app').'/../yii shop/import '.Yii::getAlias('@app').$this->upload_dir.'/1cbitrix/import.xml');
                 echo "success";
             } elseif (Yii::$app->request->get('filename') == 'offers.xml') {
-                exec('php '.Yii::getAlias('@app').'/../yii shop/offers '.Yii::getAlias('@app').$this->upload_dir.'/1cbitrix/offers.xml');
+                //exec('php '.Yii::getAlias('@app').'/../yii shop/offers '.Yii::getAlias('@app').$this->upload_dir.'/1cbitrix/offers.xml');
                 echo "success";
             }
         }
