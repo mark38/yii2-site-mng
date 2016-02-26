@@ -35,7 +35,7 @@ $this->title = 'Галереи изображений на сайте';
                         ]
                     ]);
                 } else {
-                    echo Html::a($action, ['', 'action' => 'add', 'gallery_types_id' => 1], ['class' => 'btn btn-sm btn-default btn-flat']);
+                    echo Html::a($action, ['', 'action' => 'add', 'gallery_types_id' => $gallery_types[0]->id], ['class' => 'btn btn-sm btn-default btn-flat']);
                 }?>
 
                 <div class="box-tools pull-right">
