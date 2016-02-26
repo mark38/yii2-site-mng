@@ -8,7 +8,7 @@ class MapAsset extends AssetBundle
     /**
      * @inheritdoc
      */
-    public $sourcePath = '@backend/modules/map/assets';
+    public $sourcePath = '@app/modules/map/assets';
     /**
      * @inheritdoc
      */

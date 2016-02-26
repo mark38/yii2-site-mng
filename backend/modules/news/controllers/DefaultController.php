@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\modules\news\controllers;
+namespace app\modules\news\controllers;
 
 use common\models\main\Contents;
 use common\models\main\Links;

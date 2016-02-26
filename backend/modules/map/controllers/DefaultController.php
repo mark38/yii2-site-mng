@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\modules\map\controllers;
+namespace app\modules\map\controllers;
 
 use Yii;
 use yii\web\Controller;

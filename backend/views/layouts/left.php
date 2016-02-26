@@ -39,9 +39,15 @@ foreach (Categories::find()->where(['visible' => 1])->orderBy(['seq' => SORT_ASC
                     ],
                     [
                         'label' => 'Фотогалерея',
-                        'icon' => 'fa fa-newspaper-o',
+                        'icon' => 'fa fa-file-image-o',
                         'url' => ['/gallery/list'],
-                        'active' => $this->context->module->id == 'news' ? true : false,
+                        'active' => $this->context->module->id == 'gallery' ? true : false,
+                    ],
+                    [
+                        'label' => 'Интернет-магазин',
+                        'icon' => 'fa fa-shopping-cart',
+                        'url' => ['/shop/index'],
+                        'active' => $this->context->module->id == 'shop' ? true : false,
                     ],
                     ['label' => 'Menu Yii2 framework', 'options' => ['class' => 'header']],
                     ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii']],

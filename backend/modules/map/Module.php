@@ -1,10 +1,10 @@
 <?php
 
-namespace backend\modules\map;
+namespace app\modules\map;
 
 class Module extends \yii\base\Module
 {
-    public $controllerNamespace = 'backend\modules\map\controllers';
+    public $controllerNamespace = 'app\modules\map\controllers';
 
     public function init()
     {

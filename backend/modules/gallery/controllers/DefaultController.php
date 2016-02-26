@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\modules\gallery\controllers;
+namespace app\modules\gallery\controllers;
 
 use Yii;
 use yii\web\Controller;

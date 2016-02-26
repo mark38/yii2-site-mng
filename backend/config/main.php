@@ -13,13 +13,16 @@ return [
     'bootstrap' => ['log'],
     'modules' => [
         'map' => [
-            'class' => 'backend\modules\map\Module',
+            'class' => 'app\modules\map\Module',
         ],
         'news' => [
-            'class' => 'backend\modules\news\Module',
+            'class' => 'app\modules\news\Module',
         ],
         'gallery' => [
-            'class' => 'backend\modules\gallery\Module',
+            'class' => 'app\modules\gallery\Module',
+        ],
+        'shop' => [
+            'class' => 'app\modules\shop\Module',
         ],
     ],
     'components' => [
