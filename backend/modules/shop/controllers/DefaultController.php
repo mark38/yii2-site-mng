@@ -34,10 +34,9 @@ class DefaultController extends Controller
         } elseif (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('mode') == 'init') {
             echo "zip=yes\nfile_limit=314572800";
         } elseif (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('filename')) {
+            echo "success";
+            return true;
             if ( $postdata = file_get_contents( "php://input" ) ) {
-                echo "success";
-                return true;
-                
                 $zip_file = Yii::getAlias('@app').$this->upload_dir.'/1cbitrix.zip';
                 $unzip_dir = Yii::getAlias('@app').$this->upload_dir.'/1cbitrix';
                 exec( 'rm -r '.$unzip_dir );
