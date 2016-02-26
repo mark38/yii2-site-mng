@@ -16,6 +16,8 @@ class DefaultController extends Controller
 
     public function action1cExchange()
     {
+        $this->layout = false;
+        
         if ( $_SERVER['PHP_AUTH_USER'] != Yii::$app->params['shop']['phpAuthUser'] || $_SERVER['PHP_AUTH_PW'] != Yii::$app->params['shop']['phpAuthPw'] ) {
             echo "failure";
             return false;
