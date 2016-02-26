@@ -36,6 +36,7 @@ class DefaultController extends Controller
         } elseif (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('filename')) {
             if ( $postdata = file_get_contents( "php://input" ) ) {
                 echo "success";
+                return true;
                 
                 $zip_file = Yii::getAlias('@app').$this->upload_dir.'/1cbitrix.zip';
                 $unzip_dir = Yii::getAlias('@app').$this->upload_dir.'/1cbitrix';
