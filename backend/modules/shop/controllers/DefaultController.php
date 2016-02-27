@@ -17,6 +17,7 @@ class DefaultController extends Controller
     public function action1cExchange()
     {
         $upload_log = fopen(Yii::getAlias('@app').$this->upload_dir.'/upload.log', 'a');
+        fwrite($upload_log, '0. Начало загрузки'."\n");
 
         if ( $_SERVER['PHP_AUTH_USER'] != Yii::$app->params['shop']['phpAuthUser'] || $_SERVER['PHP_AUTH_PW'] != Yii::$app->params['shop']['phpAuthPw'] ) {
             echo "failure";
@@ -37,7 +38,7 @@ class DefaultController extends Controller
         } elseif (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('mode') == 'init') {
             echo "zip=yes\nfile_limit=314572800";
             fwrite($upload_log, '3. Определение file_limit'."\n");
-        } elseif (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('filename')) {
+        } elseif (Yii::$app->request->post('type') == 'catalog' && Yii::$app->request->post('filename')) {
             fwrite($upload_log, '4. Начало загрузки файлов'."\n");
             if ( $postdata = file_get_contents( "php://input" ) ) {
                 $zip_file = Yii::getAlias('@app').$this->upload_dir.'/1cbitrix.zip';
