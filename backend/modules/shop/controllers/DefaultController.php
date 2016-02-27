@@ -26,13 +26,13 @@ class DefaultController extends Controller
         fwrite($upload_log, '1. Авторизация пройдена'."\n");
 
         if (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('mode') == 'checkauth') {
+            fwrite($upload_log, '2. Отправка Hello1C'."\n");
             if (!isset(Yii::$app->request->cookies['Hello1C'])) {
                 Yii::$app->response->cookies->add(new \yii\web\Cookie([
                     'name' => 'Hello1C',
                     'value' => 'Hello'
                 ]));
                 echo "success\nHello1C".Yii::$app->request->cookies['Hello1C'];
-                fwrite($upload_log, '2. Отправка Hello1C'."\n");
             }
         } elseif (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('mode') == 'init') {
             echo "zip=yes\nfile_limit=314572800";
