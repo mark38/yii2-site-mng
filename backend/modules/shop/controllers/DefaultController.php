@@ -34,7 +34,7 @@ class DefaultController extends Controller
                     'name' => 'Hello1C',
                     'value' => 'Hello'
                 ]));
-                echo "success\nHello1C".Yii::$app->request->cookies->getValue('Hello1C');
+                echo "success\nHello1C\nHello";
                 fwrite($upload_log, '1.1 Установка Cookie '.Yii::$app->request->cookies->getValue('Hello1C')."\n");
             }
         } elseif (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('mode') == 'init') {
