@@ -24,7 +24,6 @@ class DefaultController extends Controller
         }
 
         if (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('mode') == 'checkauth') {
-            return false;
             if (!isset(Yii::$app->request->cookies['Hello1C'])) {
                 Yii::$app->response->cookies->add(new \yii\web\Cookie([
                     'name' => 'Hello1C',
@@ -34,6 +33,7 @@ class DefaultController extends Controller
             }
         } elseif (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('mode') == 'init') {
             echo "zip=yes\nfile_limit=314572800";
+            return false;
         } elseif (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('filename')) {
             if ( $postdata = file_get_contents( "php://input" ) ) {
                 $zip_file = Yii::getAlias('@app').$this->upload_dir.'/1cbitrix.zip';
