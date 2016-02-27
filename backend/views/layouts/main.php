@@ -41,10 +41,10 @@ if (Yii::$app->controller->action->id === 'login') {
     <?php $this->beginBody() ?>
     <div class="wrapper">
 
-        <?/*= $this->render(
+        <?= $this->render(
             'header.php',
             ['directoryAsset' => $directoryAsset]
-        ) */?>
+        ) ?>
 
         <?= $this->render(
             'left.php',

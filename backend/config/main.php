@@ -44,8 +44,8 @@ return [
             'showScriptName' => false,
             'rules' => [
                 '/' => '/site/index',
-                '/<module>/<action>' => '/<module>/default/<action>',
                 '/<action>' => '/site/<action>',
+                '/<module>/<action>' => '/<module>/default/<action>',
                 '/<controller>/<action>' => '/<controller>/<action>',
             ],
         ],

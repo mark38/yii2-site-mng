@@ -3,12 +3,27 @@
 namespace app\modules\shop\controllers;
 
 use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\Cookie;
 
 class DefaultController extends Controller
 {
     public $upload_dir = '/web/upload/shop';
+
+    /**
+     * @inheritdoc
+     */
+    public function actions()
+    {
+        if (Yii::$app->request->isPost && Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('mode') == 'file')  $this->enableCsrfValidation = false;
+        return [
+            'error' => [
+                'class' => 'yii\web\ErrorAction',
+            ],
+        ];
+    }
 
     public function actionIndex()
     {
@@ -17,6 +32,8 @@ class DefaultController extends Controller
 
     public function action1cExchange()
     {
+        $this->layout = false;
+
         $upload_log = fopen(Yii::getAlias('@app').$this->upload_dir.'/upload.log', 'a');
         fwrite($upload_log, '0. Начало загрузки'."\n");
 
@@ -24,8 +41,6 @@ class DefaultController extends Controller
             echo "failure";
             return false;
         }
-
-        fwrite($upload_log, '1. Авторизация пройдена'."\n");
 
         if (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('mode') == 'checkauth') {
             fwrite($upload_log, '2. Отправка Hello1C'."\n");
@@ -35,25 +50,23 @@ class DefaultController extends Controller
                     'value' => 'Hello'
                 ]));
                 echo "success\nHello1C\nHello";
-                fwrite($upload_log, '1.1 Установка Cookie '.Yii::$app->request->cookies->getValue('Hello1C')."\n");
             }
         } elseif (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('mode') == 'init') {
             echo "zip=yes\nfile_limit=314572800";
-            fwrite($upload_log, '3. Определение file_limit'."\n");
         } elseif (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('filename')) {
-            fwrite($upload_log, '4. Начало загрузки файлов'."\n");
             if ( $postdata = file_get_contents( "php://input" ) ) {
                 $zip_file = Yii::getAlias('@app').$this->upload_dir.'/1cbitrix.zip';
                 $unzip_dir = Yii::getAlias('@app').$this->upload_dir.'/1cbitrix';
-                exec( 'rm -r '.$unzip_dir );
-                mkdir( $unzip_dir );
+
                 $upload_zip = fopen( $zip_file, 'w' );
                 fwrite($upload_zip, $postdata);
-                fclose( $upload_zip );
-                $unzip_command = exec( '/usr/bin/which unzip' );
-                exec( "{$unzip_command} {$zip_file} -d {$unzip_dir}" );
-                //exec( "export LC_ALL=ru_RU.UTF-8 && {$unzip_command} {$zip_file} -d {$unzip_dir}" );
-                //exec( "sh ".Yii::getAlias('@app').'/web/files/convmv.sh' );
+
+                $zip = new \ZipArchive();
+                $res = $zip->open($zip_file);
+                if ($res === true) {
+                    $zip->extractTo($unzip_dir);
+                    $zip->close();
+                }
                 exec ("export LC_ALL=ru_RU.UTF-8 && find ".$unzip_dir."/. -type f -exec sh -c 'np=`echo {} | iconv -f cp1252 -t cp850| iconv -f cp866`; mv \"{}\" \"\$np\"' \;");
                 echo "success";
             } elseif (Yii::$app->request->get('filename') == 'import.xml') {
@@ -65,8 +78,27 @@ class DefaultController extends Controller
             }
         }
 
-        fwrite($upload_log, 'Close log file'."\n");
         fclose($upload_log);
+
+        return false;
+    }
+
+    public function actionHandImport($import='import.xml')
+    {
+        $import_file = Yii::getAlias('@app').'/web/files/1cbitrix/'.$import;
+
+        $model = new Import();
+        $model->parser($import_file);
+
+        return false;
+    }
+
+    public function actionHandOffers($offers='offers.xml')
+    {
+        $offers = Yii::getAlias('@app').'/web/files/1cbitrix/'.$offers;
+
+        $model = new Offers();
+        $model->parser($offers);
 
         return false;
     }
