@@ -35,7 +35,7 @@ class DefaultController extends Controller
                 echo "success\nHello1C".Yii::$app->request->cookies['Hello1C'];
             }
         } elseif (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('mode') == 'init') {
-            echo "zip=yes\nfile_limit=314572800";
+            echo "zip=no\nfile_limit=3145728000";
             fwrite($upload_log, '3. Определение file_limit'."\n");
         } elseif (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('filename')) {
             fwrite($upload_log, '4. Начало загрузки файлов'."\n");
