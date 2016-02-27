@@ -32,6 +32,7 @@ class DefaultController extends Controller
                     'value' => 'Hello'
                 ]));
                 echo "success\nHello1C".Yii::$app->request->cookies['Hello1C'];
+                fwrite($upload_log, '2. Отправка Hello1C'."\n");
             }
         } elseif (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('mode') == 'init') {
             echo "zip=yes\nfile_limit=314572800";
