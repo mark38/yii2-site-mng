@@ -16,7 +16,7 @@ class DefaultController extends Controller
 
     public function action1cExchange()
     {
-        $upload_log = fopen(Yii::getAlias('@app').$this->upload_dir.'/upload.log', 'ф');
+        $upload_log = fopen(Yii::getAlias('@app').$this->upload_dir.'/upload.log', 'a');
 
         if ( $_SERVER['PHP_AUTH_USER'] != Yii::$app->params['shop']['phpAuthUser'] || $_SERVER['PHP_AUTH_PW'] != Yii::$app->params['shop']['phpAuthPw'] ) {
             echo "failure";
