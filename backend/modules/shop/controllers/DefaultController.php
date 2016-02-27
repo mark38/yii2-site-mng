@@ -3,10 +3,9 @@
 namespace app\modules\shop\controllers;
 
 use Yii;
-use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\Cookie;
+use app\models\Helpers;
 
 class DefaultController extends Controller
 {
@@ -35,7 +34,6 @@ class DefaultController extends Controller
         $this->layout = false;
 
         $upload_log = fopen(Yii::getAlias('@app').$this->upload_dir.'/upload.log', 'a');
-        fwrite($upload_log, '0. Начало загрузки'."\n");
 
         if ( $_SERVER['PHP_AUTH_USER'] != Yii::$app->params['shop']['phpAuthUser'] || $_SERVER['PHP_AUTH_PW'] != Yii::$app->params['shop']['phpAuthPw'] ) {
             echo "failure";
@@ -58,7 +56,10 @@ class DefaultController extends Controller
                 $zip_file = Yii::getAlias('@app').$this->upload_dir.'/1cbitrix.zip';
                 $unzip_dir = Yii::getAlias('@app').$this->upload_dir.'/1cbitrix';
 
-                $upload_zip = fopen( $zip_file, 'w' );
+                (new Helpers())->removeDirectory($unzip_dir);
+                mkdir($unzip_dir);
+
+                $upload_zip = fopen($zip_file, 'w');
                 fwrite($upload_zip, $postdata);
 
                 $zip = new \ZipArchive();
