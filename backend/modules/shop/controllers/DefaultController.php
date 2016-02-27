@@ -4,6 +4,7 @@ namespace app\modules\shop\controllers;
 
 use Yii;
 use yii\web\Controller;
+use yii\web\Cookie;
 
 class DefaultController extends Controller
 {
@@ -29,16 +30,17 @@ class DefaultController extends Controller
         if (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('mode') == 'checkauth') {
             fwrite($upload_log, '2. Отправка Hello1C'."\n");
             if (!isset(Yii::$app->request->cookies['Hello1C'])) {
-                Yii::$app->response->cookies->add(new \yii\web\Cookie([
+                Yii::$app->response->cookies->add(new Cookie([
                     'name' => 'Hello1C',
                     'value' => 'Hello'
                 ]));
-                echo "success\nHello1C".Yii::$app->request->cookies['Hello1C'];
+                echo "success\nHello1C".Yii::$app->request->cookies->getValue('Hello1C');
+                fwrite($upload_log, '1.1 Установка Cookie '.Yii::$app->request->cookies->getValue('Hello1C')."\n");
             }
         } elseif (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('mode') == 'init') {
             echo "zip=yes\nfile_limit=314572800";
             fwrite($upload_log, '3. Определение file_limit'."\n");
-        } elseif (Yii::$app->request->post('type') == 'catalog' && Yii::$app->request->post('filename')) {
+        } elseif (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('filename')) {
             fwrite($upload_log, '4. Начало загрузки файлов'."\n");
             if ( $postdata = file_get_contents( "php://input" ) ) {
                 $zip_file = Yii::getAlias('@app').$this->upload_dir.'/1cbitrix.zip';
