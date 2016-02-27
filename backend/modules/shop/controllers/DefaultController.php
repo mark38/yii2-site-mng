@@ -16,12 +16,14 @@ class DefaultController extends Controller
 
     public function action1cExchange()
     {
-        $this->layout = false;
+        $upload_log = fopen(Yii::getAlias('@app').$this->upload_dir.'/upload.log', 'w+');
 
         if ( $_SERVER['PHP_AUTH_USER'] != Yii::$app->params['shop']['phpAuthUser'] || $_SERVER['PHP_AUTH_PW'] != Yii::$app->params['shop']['phpAuthPw'] ) {
             echo "failure";
             return false;
         }
+
+        fwrite($upload_log, '1. Авторизация пройдена'."\n");
 
         if (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('mode') == 'checkauth') {
             if (!isset(Yii::$app->request->cookies['Hello1C'])) {
@@ -57,6 +59,8 @@ class DefaultController extends Controller
                 echo "success";
             }
         }
+
+        fclose($upload_log);
 
         return false;
     }
