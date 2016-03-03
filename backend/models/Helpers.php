@@ -8,11 +8,13 @@ class Helpers extends Model
 {
     public function removeDirectory($dir)
     {
-        if ($objs = glob($dir."/*")) {
-            foreach($objs as $obj) {
-                is_dir($obj) ? $this->removeDirectory($obj) : unlink($obj);
+        if (file_exists($dir)) {
+            if ($objs = glob($dir."/*")) {
+                foreach($objs as $obj) {
+                    is_dir($obj) ? $this->removeDirectory($obj) : unlink($obj);
+                }
             }
+            rmdir($dir);
         }
-        rmdir($dir);
     }
 }

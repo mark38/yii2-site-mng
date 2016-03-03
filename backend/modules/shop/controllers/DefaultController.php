@@ -6,11 +6,10 @@ use Yii;
 use yii\web\Controller;
 use yii\web\Cookie;
 use app\models\Helpers;
+use app\modules\shop\models\Import;
 
 class DefaultController extends Controller
 {
-    public $upload_dir = '/web/upload/shop';
-
     /**
      * @inheritdoc
      */
@@ -33,7 +32,7 @@ class DefaultController extends Controller
     {
         $this->layout = false;
 
-        $upload_log = fopen(Yii::getAlias('@app').$this->upload_dir.'/upload.log', 'a');
+        $upload_log = fopen(Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/upload.log', 'a');
 
         if ( $_SERVER['PHP_AUTH_USER'] != Yii::$app->params['shop']['phpAuthUser'] || $_SERVER['PHP_AUTH_PW'] != Yii::$app->params['shop']['phpAuthPw'] ) {
             echo "failure";
@@ -53,8 +52,8 @@ class DefaultController extends Controller
             echo "zip=yes\nfile_limit=314572800";
         } elseif (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('filename')) {
             if ( $postdata = file_get_contents( "php://input" ) ) {
-                $zip_file = Yii::getAlias('@app').$this->upload_dir.'/1cbitrix.zip';
-                $unzip_dir = Yii::getAlias('@app').$this->upload_dir.'/1cbitrix';
+                $zip_file = Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/1cbitrix.zip';
+                $unzip_dir = Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/1cbitrix';
 
                 (new Helpers())->removeDirectory($unzip_dir);
                 mkdir($unzip_dir);
@@ -71,10 +70,13 @@ class DefaultController extends Controller
                 exec ("export LC_ALL=ru_RU.UTF-8 && find ".$unzip_dir."/. -type f -exec sh -c 'np=`echo {} | iconv -f cp1252 -t cp850| iconv -f cp866`; mv \"{}\" \"\$np\"' \;");
                 echo "success";
             } elseif (Yii::$app->request->get('filename') == 'import.xml') {
-                //exec('php '.Yii::getAlias('@app').'/../yii shop/import '.Yii::getAlias('@app').$this->upload_dir.'/1cbitrix/import.xml');
+                //exec('php '.Yii::getAlias('@app').'/../yii shop/import '.Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/1cbitrix/import.xml');
+                $import = new Import();
+                $import->parser(Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/1cbitrix/import.xml');
+
                 echo "success";
             } elseif (Yii::$app->request->get('filename') == 'offers.xml') {
-                //exec('php '.Yii::getAlias('@app').'/../yii shop/offers '.Yii::getAlias('@app').$this->upload_dir.'/1cbitrix/offers.xml');
+                //exec('php '.Yii::getAlias('@app').'/../yii shop/offers '.Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/1cbitrix/offers.xml');
                 echo "success";
             }
         }
@@ -84,9 +86,11 @@ class DefaultController extends Controller
         return false;
     }
 
-    public function actionHandImport($import='import.xml')
+    public function actionHandImport()
     {
-        $import_file = Yii::getAlias('@app').'/web/files/1cbitrix/'.$import;
+        $this->layout = false;
+
+        $import_file = Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/1cbitrix/import.xml';
 
         $model = new Import();
         $model->parser($import_file);

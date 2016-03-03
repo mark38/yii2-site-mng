@@ -21,6 +21,10 @@ use yii\helpers\Html;
 
                 <!-- User Account: style can be found in dropdown.less -->
 
+                <li>
+                    <a href="/" target="_blank">Перейти на сайт</a>
+                </li>
+
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="user-image" alt="User Image"/>

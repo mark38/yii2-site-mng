@@ -2,6 +2,7 @@
 
 namespace common\models\main;
 
+use common\models\gallery\GalleryGroups;
 use common\models\gallery\GalleryImages;
 use common\models\gl\GlGroups;
 use Yii;
@@ -160,6 +161,11 @@ class Links extends \yii\db\ActiveRecord
     public function getGalleryImage()
     {
         return $this->hasOne(GalleryImages::className(), ['id' => 'gallery_images_id']);
+    }
+
+    public function getGalleryGroup()
+    {
+        return $this->hasOne(GalleryGroups::className(), ['id' => 'gallery_groups_id'])->via('galleryImage');
     }
 
     /**
