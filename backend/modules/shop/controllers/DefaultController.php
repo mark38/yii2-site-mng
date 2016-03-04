@@ -107,4 +107,14 @@ class DefaultController extends Controller
 
         return false;
     }
+
+    public function actionIconv($dir)
+    {
+        $dir = Yii::getAlias('@backend/web'.$dir);
+        foreach (scandir($dir) as $key => $value) {
+            if (!in_array($value, array('.', '..'))) {
+                echo iconv('utf8', 'cp1251', $value).'<br>';
+            }
+        }
+    }
 }
