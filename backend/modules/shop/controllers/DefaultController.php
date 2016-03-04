@@ -67,7 +67,7 @@ class DefaultController extends Controller
                     $zip->extractTo($unzip_dir);
                     $zip->close();
                 }
-                exec ("export LC_ALL=ru_RU.UTF-8 && find ".$unzip_dir."/. -type f -exec sh -c 'np=`echo {} | iconv -f cp1252 -t cp850| iconv -f cp866`; mv \"{}\" \"\$np\"' \;");
+                //exec ("export LC_ALL=ru_RU.UTF-8 && find ".$unzip_dir."/. -type f -exec sh -c 'np=`echo {} | iconv -f cp1252 -t cp850| iconv -f cp866`; mv \"{}\" \"\$np\"' \;");
                 echo "success";
             } elseif (Yii::$app->request->get('filename') == 'import.xml') {
                 //exec('php '.Yii::getAlias('@app').'/../yii shop/import '.Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/1cbitrix/import.xml');
