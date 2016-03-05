@@ -69,7 +69,7 @@ class DefaultController extends Controller
                 }
 
                 //exec ("export LC_ALL=ru_RU.UTF-8 && find ".$unzip_dir."/. -type f -exec sh -c 'np=`echo {} | iconv -f cp1252 -t cp850| iconv -f cp866`; mv \"{}\" \"\$np\"' \;");
-                exec ("convmv -r -f cp866 -t utf-8 --notest {$unzip_dir}");
+                //exec ("convmv -r -f cp866 -t utf-8 --notest {$unzip_dir}");
 
                 echo "success";
             } elseif (Yii::$app->request->get('filename') == 'import.xml') {
