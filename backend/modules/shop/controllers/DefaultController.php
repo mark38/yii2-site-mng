@@ -113,18 +113,6 @@ class DefaultController extends Controller
 
     public function actionIconv($dir)
     {
-        $dir = Yii::getAlias('@backend/web'.$dir);
-        //convmv -f cp1252 -t cp850 * --notest  && convmv -f cp866 -t utf-8 * --notest
-        foreach (scandir($dir) as $key => $value) {
-            if (!in_array($value, array('.', '..'))) {
-                //echo iconv("CP866", "UTF-8", $value).' -> ';
-                echo $value.'<br>';
-                $value = iconv("CP1252", "CP1251", $value);
-                echo $value.'<br>';
-                echo iconv("CP850", "UTF-8", $value).'<br>';
-
-                echo '<hr>';
-            }
-        }
+        return $this->render('index', ['dir' => $dir]);
     }
 }

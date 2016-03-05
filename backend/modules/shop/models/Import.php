@@ -24,6 +24,8 @@ class Import extends Model
 
     public function parser($import_file)
     {
+        //exec ("convmv -r -f cp866 -t utf-8 --notest {$unzip_dir}");
+
         $this->import_file = $import_file;
         $sxe = simplexml_load_file($this->import_file);
 
