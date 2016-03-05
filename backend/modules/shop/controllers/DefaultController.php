@@ -67,7 +67,10 @@ class DefaultController extends Controller
                     $zip->extractTo($unzip_dir);
                     $zip->close();
                 }
+
                 //exec ("export LC_ALL=ru_RU.UTF-8 && find ".$unzip_dir."/. -type f -exec sh -c 'np=`echo {} | iconv -f cp1252 -t cp850| iconv -f cp866`; mv \"{}\" \"\$np\"' \;");
+                exec ("convmv -r -f cp866 -t utf-8 --notest {$unzip_dir}");
+
                 echo "success";
             } elseif (Yii::$app->request->get('filename') == 'import.xml') {
                 //exec('php '.Yii::getAlias('@app').'/../yii shop/import '.Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/1cbitrix/import.xml');
@@ -111,9 +114,16 @@ class DefaultController extends Controller
     public function actionIconv($dir)
     {
         $dir = Yii::getAlias('@backend/web'.$dir);
+        //convmv -f cp1252 -t cp850 * --notest  && convmv -f cp866 -t utf-8 * --notest
         foreach (scandir($dir) as $key => $value) {
             if (!in_array($value, array('.', '..'))) {
-                echo iconv('utf8', 'cp1251', $value).'<br>';
+                //echo iconv("CP866", "UTF-8", $value).' -> ';
+                echo $value.'<br>';
+                $value = iconv("CP1252", "CP1251", $value);
+                echo $value.'<br>';
+                echo iconv("CP850", "UTF-8", $value).'<br>';
+
+                echo '<hr>';
             }
         }
     }
