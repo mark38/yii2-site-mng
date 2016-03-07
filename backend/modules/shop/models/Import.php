@@ -4,7 +4,6 @@ namespace app\modules\shop\models;
 
 use Yii;
 use yii\base\Model;
-use yii\helpers\ArrayHelper;
 use yii\imagine\Image;
 use mark38\galleryManager\Gallery;
 use common\models\main\Contents;
@@ -14,6 +13,7 @@ use common\models\shop\ShopGoods;
 use common\models\shop\ShopGroups;
 use common\models\shop\ShopItemCharacteristics;
 use common\models\shop\ShopItems;
+use common\models\shop\ShopGoodGallery;
 use common\models\gallery\GalleryGroups;
 use common\models\gallery\GalleryImages;
 use common\models\gallery\GalleryTypes;
@@ -24,8 +24,6 @@ class Import extends Model
 
     public function parser($import_file)
     {
-        //exec ("convmv -r -f cp866 -t utf-8 --notest {$unzip_dir}");
-
         $this->import_file = $import_file;
         $sxe = simplexml_load_file($this->import_file);
 
@@ -68,10 +66,11 @@ class Import extends Model
             $link->updated_at = time();
             $link->state = $item->{'НеПубликуетсяНаСайте'} == 'истина' ? 0 : 1;
             $link->layouts_id = Yii::$app->params['shop']['group_layouts_id'];
+            $link->views_id = Yii::$app->params['shop']['goods_views_id'];
             $link->save();
 
             if ($item->{'Картинки'} && $item->{'Картинки'}->{'Картинка'}) {
-                //$this->addImage($item->{'Картинки'}->{'Картинка'}, Yii::$app->params['shop']['gallery']['group'], $link->id);
+                $this->addImage($item->{'Картинки'}->{'Картинка'}, Yii::$app->params['shop']['gallery']['group'], $link->id);
             }
 
             if (!Contents::findOne(['links_id' => $link->id])) {
@@ -169,6 +168,7 @@ class Import extends Model
         $link->updated_at = time();
         $link->state = $item->{'НеПубликуетсяНаСайте'} == 'истина' ? 0 : 1;
         $link->layouts_id = Yii::$app->params['shop']['good_layouts_id'];
+        $link->views_id = Yii::$app->params['shop']['good_views_id'];
         $link->save();
 
         $content = Contents::findOne(['links_id' => $link->id]);
@@ -215,23 +215,25 @@ class Import extends Model
             $item_characteristic->save();
         }
 
-        foreach ($item_sxe->{'ХарактеристикиТовара'}->{'ХарактеристикаТовара'} as $characteristic_sxe) {
-            $characteristic = ShopCharacteristics::findOne(['name' => strval($characteristic_sxe->{'Наименование'})]);
-            if (!$characteristic) {
-                $characteristic = new ShopCharacteristics();
-                $characteristic->name = strval($characteristic_sxe->{'Наименование'});
-                $characteristic->save();
-            }
+        if (isset($item_sxe->{'ХарактеристикиТовара'})) {
+            foreach ($item_sxe->{'ХарактеристикиТовара'}->{'ХарактеристикаТовара'} as $characteristic_sxe) {
+                $characteristic = ShopCharacteristics::findOne(['name' => strval($characteristic_sxe->{'Наименование'})]);
+                if (!$characteristic) {
+                    $characteristic = new ShopCharacteristics();
+                    $characteristic->name = strval($characteristic_sxe->{'Наименование'});
+                    $characteristic->save();
+                }
 
-            $item_characteristic = ShopItemCharacteristics::findOne(['shop_items_id' => $item->id, 'shop_characteristics_id' => $characteristic->id]);
-            if (!$item_characteristic) {
-                $item_characteristic = new ShopItemCharacteristics();
-                $item_characteristic->shop_items_id = $item->id;
-                $item_characteristic->shop_characteristics_id = $characteristic->id;
+                $item_characteristic = ShopItemCharacteristics::findOne(['shop_items_id' => $item->id, 'shop_characteristics_id' => $characteristic->id]);
+                if (!$item_characteristic) {
+                    $item_characteristic = new ShopItemCharacteristics();
+                    $item_characteristic->shop_items_id = $item->id;
+                    $item_characteristic->shop_characteristics_id = $characteristic->id;
+                }
+                $item_characteristic->name = strval($characteristic_sxe->{'Значение'});
+                $item_characteristic->state = 1;
+                $item_characteristic->save();
             }
-            $item_characteristic->name = strval($characteristic_sxe->{'Значение'});
-            $item_characteristic->state = 1;
-            $item_characteristic->save();
         }
 
         return [
@@ -249,57 +251,111 @@ class Import extends Model
             $src_image = pathinfo($this->import_file)['dirname'].'/'.strval($image_sxe->{'ПутьКИзображению'});
             if (!is_file($src_image)) continue;
 
-            preg_match('/_(.+)\s\[(.+)\]/', $basename_src, $matches);
-            if ($matches) {
-                $gallery_types_id = isset(Yii::$app->params['shop']['gallery'][$matches[1]]) ? Yii::$app->params['shop']['gallery'][$matches[1]] : $src_gallery_types_id;
-                $alt = $matches[2];
-            } else {
-                $gallery_types_id = $src_gallery_types_id;
-                $alt = '';
+            $gallery_types_id = false;
+            $alt = '';
+            foreach (Yii::$app->params['shop']['gallery'] as $name => $id) {
+                if (!$gallery_types_id && strripos($basename_src, '_'.$name) !== false) {
+                    $gallery_types_id = $id;
+                    preg_match('/\[(.+)\]/', $basename_src, $matches);
+                    $alt = $matches[1];
+                }
             }
+            if (!$gallery_types_id) $gallery_types_id = $src_gallery_types_id;
 
-            $gallery_type = GalleryTypes::findOne($gallery_types_id);
-            $this_image_link = false;
-
-            if (in_array($gallery_types_id, Yii::$app->params['shop']['gallery_link'])) {
-                $link = Links::findOne($links_id);
-                $gallery_groups[$gallery_types_id] = $link->galleryGroup;
-                $this_image_link = true;
+            if (GalleryTypes::findOne($gallery_types_id)) {
+                $gallery_groups[$gallery_types_id][] = [
+                    'name' => $basename_src,
+                    'src_image' => $src_image,
+                    'alt' => $alt,
+                    'default' => $image_sxe->{'ОсновноеИзображение'} == 1 ? 1 : 0
+                ];
             }
+        }
 
-            if (!GalleryImages::findOne(['name' => $basename_src])) {
-                if (!isset($gallery_groups[$gallery_types_id])) {
+        if (!$gallery_groups) return false;
+
+        $link = Links::findOne($links_id);
+
+        foreach ($gallery_groups as $gallery_types_id => $images) {
+            $gallery_group = false;
+            if ($shop_goods_id) {
+                $good_gallery = ShopGoodGallery::findOne(['shop_goods_id' => $shop_goods_id, 'gallery_types_id' => $gallery_types_id]);
+                if (!$good_gallery) {
                     $gallery_group = new GalleryGroups();
-                    $gallery_group->gallery_types_id = $gallery_type->id;
+                    $gallery_group->gallery_types_id = $gallery_types_id;
                     $gallery_group->save();
-                    $gallery_groups[$gallery_types_id] = $gallery_group;
-                }
 
-                $image = $this->saveImage($src_image, $gallery_types_id, $gallery_groups[$gallery_types_id]->id);
-                if (isset($image['small']) && isset($image['large'])) {
-                    $gallery_image = new GalleryImages();
-                    $gallery_image->gallery_groups_id = $gallery_groups[$gallery_types_id]->id;
-                    $gallery_image->small = $image['small'];
-                    $gallery_image->large = $image['large'];
-                    $gallery_image->name = $basename_src;
-                    $gallery_image->alt = $alt;
-                    $gallery_image->seq = $image['seq'];
-                    $gallery_image->save();
+                    $good_gallery = new ShopGoodGallery();
+                    $good_gallery->shop_goods_id = $shop_goods_id;
+                    $good_gallery->gallery_types_id = $gallery_types_id;
+                    $good_gallery->gallery_groups_id = $gallery_group->id;
+                    $good_gallery->save();
+                } else {
+                    $gallery_group = GalleryGroups::findOne($good_gallery->gallery_groups_id);
                 }
-            } else {
-                $gallery_image = GalleryImages::findOne(['name' => $basename_src]);
-                $gallery_groups[$gallery_types_id] = GalleryGroups::findOne($gallery_image->gallery_groups_id);
+            } elseif (in_array($gallery_types_id, Yii::$app->params['shop']['gallery_link'])) {
+                if (!$link->gallery_images_id) {
+                    $gallery_group = new GalleryGroups();
+                    $gallery_group->gallery_types_id = $gallery_types_id;
+                    $gallery_group->save();
+                } else {
+                    $gallery_group = GalleryGroups::findOne($link->galleryImage->gallery_groups_id);
+                }
             }
 
-            if ($image_sxe->{'ОсновноеИзображение'} == 1) {
-                if ($gallery_groups[$gallery_types_id]->gallery_images_id != $gallery_image->id) {
-                    $gallery_groups[$gallery_types_id]->gallery_images_id = $gallery_image->id;
-                    $gallery_groups[$gallery_types_id]->save();
+            if ($gallery_group) {
+                foreach ($images as $index => $image) {
+                    $gallery_image = GalleryImages::findOne(['gallery_groups_id' => $gallery_group->id, 'name' => $image['name']]);
+                    if (!$gallery_image) {
+                        $new_image = $this->saveImage($image['src_image'], $gallery_types_id, $gallery_group->id);
+                        if (isset($new_image['small']) && isset($new_image['large'])) {
+                            $gallery_image = new GalleryImages();
+                            $gallery_image->gallery_groups_id = $gallery_group->id;
+                            $gallery_image->small = $new_image['small'];
+                            $gallery_image->large = $new_image['large'];
+                            $gallery_image->name = $image['name'];
+                            $gallery_image->alt = $image['alt'];
+                            $gallery_image->seq = $new_image['seq'];
+                            $gallery_image->save();
+                        }
+                    } else {
+                        if ($gallery_image->alt != $image['alt']) {
+                            $gallery_image->alt = $image['alt'];
+                            $gallery_image->update();
+                        }
+                    }
+
+                    if ($image['default'] == 1) {
+                        if ($gallery_group->gallery_images_id != $gallery_image->id) {
+                            $gallery_group->gallery_images_id = $gallery_image->id;
+                            $gallery_group->update();
+                        }
+
+                        if ($link->gallery_images_id != $gallery_image->id) {
+                            $link->gallery_images_id = $gallery_image->id;
+                            $link->update();
+                        }
+                    }
                 }
 
-                if ($this_image_link && $link->gallery_images_id != $gallery_image->id) {
-                    $link->gallery_images_id = $gallery_image->id;
-                    $link->save();
+                $gallery_images = GalleryImages::find()->where(['gallery_groups_id' => $gallery_group->id])->orderBy(['seq' => SORT_ASC])->all();
+                $resort_images = false;
+                foreach ($gallery_images as $gallery_image) {
+                    $delete_image = true;
+                    foreach ($images as $index => $image) {
+                        if ($image['name'] == $gallery_image->name) $delete_image = false;
+                    }
+
+                    if ($delete_image) {
+                        $resort_images = true;
+                        GalleryImages::findOne($gallery_image->id)->delete();
+                        unlink(Yii::getAlias('@frontend/web').$gallery_image->small);
+                        unlink(Yii::getAlias('@frontend/web').$gallery_image->large);
+                    }
+                }
+                if ($resort_images) {
+                    $gallery = new Gallery();
+                    $gallery->resortImages($gallery_group->id);
                 }
             }
         }
@@ -325,5 +381,21 @@ class Import extends Model
             'large' => $type['destination'].'/'.$image_large.'.'.$file_info->getExtension(),
             'seq' => ($gallery->getLastSequence($gallery_groups_id) + 1)
         ];
+    }
+
+    public function decodeImageName($dir)
+    {
+        foreach (scandir($dir) as $key => $value) {
+            if (in_array($value, array('.', '..'))) continue;
+
+            if (is_dir($dir.'/'.$value)) {
+                $this->decodeImageName($dir.'/'.$value);
+            } else {
+                if (exif_imagetype($dir.'/'.$value) > 0) {
+                    $new_name = iconv("CP866", "UTF-8", $value);
+                    if ($new_name != $value) rename($dir.'/'.$value, $dir.'/'.$new_name);
+                }
+            }
+        }
     }
 }

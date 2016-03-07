@@ -2,6 +2,7 @@
 
 namespace common\models\shop;
 
+use common\models\gallery\GalleryImages;
 use common\models\main\Links;
 use Yii;
 
@@ -79,12 +80,22 @@ class ShopGoods extends \yii\db\ActiveRecord
         return $this->hasOne(Links::className(), ['id' => 'links_id']);
     }
 
+    public function getGalleryImage()
+    {
+        return $this->hasOne(GalleryImages::className(), ['id' => 'gallery_images_id'])->via('link');
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getShopItems()
     {
         return $this->hasMany(ShopItems::className(), ['shop_goods_id' => 'id']);
+    }
+
+    public function getCharacteristics()
+    {
+        return $this->hasMany(ShopItemCharacteristics::className(), ['shop_items_id' => 'id'])->groupBy(['name'])->orderBy(['name' => SORT_ASC])->via('shopItems');
     }
 
     /**

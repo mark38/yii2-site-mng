@@ -7,6 +7,7 @@ use yii\web\Controller;
 use yii\web\Cookie;
 use app\models\Helpers;
 use app\modules\shop\models\Import;
+use app\modules\shop\models\Offers;
 
 class DefaultController extends Controller
 {
@@ -71,6 +72,9 @@ class DefaultController extends Controller
                 //exec ("export LC_ALL=ru_RU.UTF-8 && find ".$unzip_dir."/. -type f -exec sh -c 'np=`echo {} | iconv -f cp1252 -t cp850| iconv -f cp866`; mv \"{}\" \"\$np\"' \;");
                 //exec ("convmv -r -f cp866 -t utf-8 --notest {$unzip_dir}");
 
+                $import = new Import();
+                $import->decodeImageName($unzip_dir);
+
                 echo "success";
             } elseif (Yii::$app->request->get('filename') == 'import.xml') {
                 //exec('php '.Yii::getAlias('@app').'/../yii shop/import '.Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/1cbitrix/import.xml');
@@ -80,6 +84,9 @@ class DefaultController extends Controller
                 echo "success";
             } elseif (Yii::$app->request->get('filename') == 'offers.xml') {
                 //exec('php '.Yii::getAlias('@app').'/../yii shop/offers '.Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/1cbitrix/offers.xml');
+                $offers = new Offers();
+                $offers->parser(Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/1cbitrix/offers.xml');
+
                 echo "success";
             }
         }
@@ -103,7 +110,7 @@ class DefaultController extends Controller
 
     public function actionHandOffers($offers='offers.xml')
     {
-        $offers = Yii::getAlias('@app').'/web/files/1cbitrix/'.$offers;
+        $offers = Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/1cbitrix/offers.xml';
 
         $model = new Offers();
         $model->parser($offers);
@@ -111,8 +118,11 @@ class DefaultController extends Controller
         return false;
     }
 
-    public function actionIconv($dir)
+    public function actionDecodeImageName()
     {
-        return $this->render('index', ['dir' => $dir]);
+        $unzip_dir = Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/1cbitrix';
+
+        $import = new Import();
+        $import->decodeImageName($unzip_dir);
     }
 }
