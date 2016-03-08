@@ -98,7 +98,7 @@ $link_close = ['/map/links', 'categories_id' => Yii::$app->request->get('categor
                 'header' => $link->anchor.' '.Html::a('<i class="fa fa-external-link"></i>', $link->url, ['target' => '_blank']),
                 'toggleButton' => ['label' => 'Удалить', 'class' => 'btn btn-danger btn-flat btn-sm'],
                 'footer' => Html::a('Отмена', '#', ['data-dismiss' => 'modal', 'class' => 'btn btn-default btn-flat btn-sm']) .
-                    Html::a('Удалить', ['/map/link-del', 'categories_id' => Yii::$app->request->get('categories_id'), 'links_id' => $link->id], ['class' => 'btn btn-danger btn-flat btn-sm']),
+                            Html::a('Удалить', ['/map/link-del', 'categories_id' => Yii::$app->request->get('categories_id'), 'links_id' => $link->id], ['class' => 'btn btn-danger btn-flat btn-sm']),
             ]);
             echo '<p>Ссылка будет удалена со всем содержимым, в том числе контент страницы, а также дочерние ссылки, если такие имеются.</p><p>Действительно удалить ссылку?</p>';
             Modal::end();
