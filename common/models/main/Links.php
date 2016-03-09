@@ -5,6 +5,7 @@ namespace common\models\main;
 use common\models\gallery\GalleryGroups;
 use common\models\gallery\GalleryImages;
 use common\models\gl\GlGroups;
+use common\models\tor\TorAds;
 use Yii;
 use common\models\gl\GlImgs;
 
@@ -116,7 +117,7 @@ class Links extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @return \yii\db\`ctiveQuery
      */
     public function getLayout()
     {
@@ -153,6 +154,20 @@ class Links extends \yii\db\ActiveRecord
     public function getLinks()
     {
         return $this->hasMany(Links::className(), ['parent' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAds()
+    {
+        $allAds = TorAds::find()->where(['links_id' => $this->id])->count();
+        if ($this->child_exist) {
+            foreach ($this->links as $link) {
+                $allAds += $link->ads;
+            }
+        }
+        return $allAds;
     }
 
     /**
