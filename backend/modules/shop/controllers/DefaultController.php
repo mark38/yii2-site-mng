@@ -98,13 +98,12 @@ class DefaultController extends Controller
 
     public function actionHandImport()
     {
-        echo 1;
-        /*$this->layout = false;
+        $this->layout = false;
 
         $import_file = Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/1cbitrix/import.xml';
 
         $model = new Import();
-        $model->parser($import_file);*/
+        $model->parser($import_file);
 
         return false;
     }
