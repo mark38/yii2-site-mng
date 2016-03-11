@@ -257,7 +257,7 @@ class Import extends Model
                 if (!$gallery_types_id && strripos($basename_src, '_'.$name) !== false) {
                     $gallery_types_id = $id;
                     preg_match('/\[(.+)\]/', $basename_src, $matches);
-                    $alt = $matches[1];
+                    $alt = isset($matches[1]) ? $matches[1] : '';
                 }
             }
             if (!$gallery_types_id) $gallery_types_id = $src_gallery_types_id;
