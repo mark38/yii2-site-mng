@@ -1,8 +1,8 @@
 php_value upload_max_filesize 512M
 php_value post_max_size 512M
-php_value memory_limit 1024M
-php_value max_input_time 102000
-php_value max_execution_time 102000
+php_value memory_limit 2048M
+php_value max_input_time 3600
+php_value max_execution_time 3600
 
 RewriteEngine on
 # Если это папка или файл, открываем его
