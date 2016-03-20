@@ -49,6 +49,26 @@ foreach (Categories::find()->where(['visible' => 1])->orderBy(['seq' => SORT_ASC
                         'url' => ['/shop/index'],
                         'active' => $this->context->module->id == 'shop' ? true : false,
                     ],
+                    [
+                        'label' => 'Недвижимости',
+                        'icon' => 'fa fa-home',
+                        'url' => '#',
+                        'items' => [
+                            [
+                                'label' => 'Объявления',
+                                'icon' => 'fa fa-circle-o',
+                                'url' => ['/realty/index'],
+                                'active' => preg_match('/\/realty\/index/', Yii::$app->request->url) ? true : false,
+                            ],
+                            [
+                                'label' => 'Справочник',
+                                'icon' => 'fa fa-circle-o',
+                                'url' => ['/realty/properties/index'],
+                                'active' => preg_match('/\/realty\/properties\/index/', Yii::$app->request->url) ? true : false,
+                            ],
+                        ]
+                        //'active' => $this->context->module->id == 'realty' ? true : false,
+                    ],
                     ['label' => 'Menu Yii2 framework', 'options' => ['class' => 'header']],
                     ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii']],
                     ['label' => 'Debug', 'icon' => 'fa fa-dashboard', 'url' => ['/debug']],

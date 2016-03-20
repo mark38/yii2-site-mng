@@ -24,6 +24,9 @@ return [
         'shop' => [
             'class' => 'app\modules\shop\Module',
         ],
+        'realty' => [
+            'class' => 'app\modules\realty\Module',
+        ],
     ],
     'components' => [
         'request' => [
