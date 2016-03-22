@@ -7,13 +7,13 @@ use Yii;
 /**
  * This is the model class for table "geobase_city".
  *
- * @property string $id
+ * @property integer $id
  * @property string $name
- * @property string $region_id
+ * @property integer $region_id
  * @property double $latitude
  * @property double $longitude
  *
- * @property TorAds[] $torAds
+ * @property GeobaseContact[] $geobaseContacts
  */
 class GeobaseCity extends \yii\db\ActiveRecord
 {
@@ -56,8 +56,8 @@ class GeobaseCity extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTorAds()
+    public function getGeobaseContacts()
     {
-        return $this->hasMany(TorAds::className(), ['city_id' => 'id']);
+        return $this->hasMany(GeobaseContact::className(), ['geobase_city_id' => 'id']);
     }
 }
