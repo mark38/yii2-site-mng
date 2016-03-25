@@ -51,6 +51,7 @@ $link_close = [''];
                         $form->field($link, 'state')->checkbox() .
                         $form->field($link, 'anchor')->label('Заголовок новости') .
                         $form->field($link, 'title')->label('Заголовок страницы (опционально)') .
+                        $form->field($news, 'url') .
                         $form->field($news, 'date')->widget(DatePicker::className(), [
                             'options' => [
                                 'placeholder' => '___.___.______',

@@ -11,6 +11,7 @@ use common\models\main\Links;
  * @property integer $id
  * @property integer $news_types_id
  * @property string $links_id
+ * @property string $url
  * @property string $date
  *
  * @property NewsTypes $newsTypes
@@ -36,7 +37,7 @@ class News extends \yii\db\ActiveRecord
     {
         return [
             [['news_types_id', 'links_id'], 'integer'],
-            [['prev_text', 'full_text'], 'string'],
+            [['url', 'prev_text', 'full_text'], 'string'],
             [['date'], 'safe']
         ];
     }
@@ -50,6 +51,7 @@ class News extends \yii\db\ActiveRecord
             'id' => 'ID',
             'news_types_id' => 'Категория новости',
             'links_id' => 'Links ID',
+            'url' => 'Внешняя ссылка',
             'date' => 'Дата новости',
             'prev_text' => 'Предварительный текст нововсти',
             'full_text' => 'Полный текст новости'
