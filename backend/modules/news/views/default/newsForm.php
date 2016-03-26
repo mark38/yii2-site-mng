@@ -42,58 +42,57 @@ $link_close = [''];
         </div>
     </div>
     <div class="box-body">
-
-        <?= Tabs::widget([
-            'items' => [
-                [
-                    'label' => 'Основные параметры',
-                    'content' => '<p>' .
-                        $form->field($link, 'state')->checkbox() .
-                        $form->field($link, 'anchor')->label('Заголовок новости') .
-                        $form->field($link, 'title')->label('Заголовок страницы (опционально)') .
-                        $form->field($news, 'url') .
-                        $form->field($news, 'date')->widget(DatePicker::className(), [
-                            'options' => [
-                                'placeholder' => '___.___.______',
-                            ],
-                            'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-                            'pluginOptions' => [
-                                'autoclose' => true,
-                                'format' => 'dd.mm.yyyy'
-                            ]
-                        ]) .
-                        $form->field($link, 'gallery_images_id')->widget(GalleryManager::className(), [
-                            'group' => false,
-                            'gallery_groups_id' => 2,
-                            'pluginOptions' => [
-                                'type' => 'news',
-                                'apiUrl' => 'gallery-manager',
-                                'webRoute' => Yii::getAlias('@frontend/web'),
-                            ]
-                        ])->label('Предварительное фото') .
-                        '</p>',
-                    'active' => true
-                ],
-                [
-                    'label' => 'Дополнительно (системные параметры)',
-                    'content' => '<p>' .
-                        $form->field($link, 'url')->staticControl() .
-                        $form->field($link, 'name') .
-                        '</p>',
-                ],
-                [
-                    'label' => 'SEO',
-                    'content' => '<p>' .
-                        $form->field($link, 'keywords')->textarea() .
-                        $form->field($link, 'description')->textarea() .
-                        $form->field($link, 'priority') .
-                        '</p>',
+        <div class="nav-tabs-custom">
+            <?= Tabs::widget([
+                'items' => [
+                    [
+                        'label' => 'Основные параметры',
+                        'content' => '<p>' .
+                            $form->field($link, 'state')->checkbox() .
+                            $form->field($link, 'anchor')->label('Заголовок новости') .
+                            $form->field($link, 'title')->label('Заголовок страницы (опционально)') .
+                            $form->field($news, 'url') .
+                            $form->field($news, 'date')->widget(DatePicker::className(), [
+                                'options' => [
+                                    'placeholder' => '___.___.______',
+                                ],
+                                'type' => DatePicker::TYPE_COMPONENT_PREPEND,
+                                'pluginOptions' => [
+                                    'autoclose' => true,
+                                    'format' => 'dd.mm.yyyy'
+                                ]
+                            ]) .
+                            $form->field($link, 'gallery_images_id')->widget(GalleryManager::className(), [
+                                'group' => false,
+                                'gallery_groups_id' => 2,
+                                'pluginOptions' => [
+                                    'type' => 'news',
+                                    'apiUrl' => 'gallery-manager',
+                                    'webRoute' => Yii::getAlias('@frontend/web'),
+                                ]
+                            ])->label('Предварительное фото') .
+                            '</p>',
+                        'active' => true
+                    ],
+                    [
+                        'label' => 'Дополнительно (системные параметры)',
+                        'content' => '<p>' .
+                            $form->field($link, 'url')->staticControl() .
+                            $form->field($link, 'name') .
+                            '</p>',
+                    ],
+                    [
+                        'label' => 'SEO',
+                        'content' => '<p>' .
+                            $form->field($link, 'keywords')->textarea() .
+                            $form->field($link, 'description')->textarea() .
+                            $form->field($link, 'priority') .
+                            '</p>',
+                    ]
                 ]
-            ]
-        ])?>
+            ])?>
+        </div>
 
-    </div>
-    <div class="box-footer">
 
         <?=$form->field($news, 'prev_text', [
             'template' => '{label}<div class="col-sm-12">{input}</div><div class="col-sm-10">{error}</div>',

@@ -47,9 +47,9 @@ class Contents extends \yii\db\ActiveRecord
             'id' => 'ID',
             'links_id' => 'Links ID',
             'parent' => 'Parent',
-            'css_class' => 'Css Class',
+            'css_class' => 'Классы стилей',
             'text' => 'Text',
-            'seq' => 'Seq',
+            'seq' => 'Порядковый номер',
         ];
     }
 
@@ -59,5 +59,20 @@ class Contents extends \yii\db\ActiveRecord
     public function getLink()
     {
         return $this->hasOne(Links::className(), ['id' => 'links_id']);
+    }
+
+    public static function findLastSequence($links_id, $parent=null)
+    {
+        $q = static::find()->where(['links_id' => $links_id, 'parent' => $parent])->orderBy(['seq' => SORT_DESC])->one();
+        return ($q ? $q->seq : 0);
+    }
+
+    public function reSort($links_id, $parent=null)
+    {
+        $contents = self::find()->where(['links_id' => $links_id, 'parent' => $parent])->orderBy(['seq' => SORT_ASC])->all();
+        foreach ($contents as $index => $content) {
+            $content->seq = $index+1;
+            $content->update();
+        }
     }
 }

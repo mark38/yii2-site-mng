@@ -21,7 +21,7 @@ class DefaultController extends Controller
         ];
     }
 
-    public function actionList($news_id=null)
+    public function actionIndex($news_id=null)
     {
         $news_type = Yii::$app->request->get('news_types_id') ? NewsTypes::findOne(Yii::$app->request->get('news_types_id')) : false;
 

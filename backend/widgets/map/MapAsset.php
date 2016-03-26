@@ -13,13 +13,13 @@ class MapAsset extends AssetBundle
      * @inheritdoc
      */
     public $css = [
-        'css/map.css',
+        'map.css',
     ];
     /**
      * @inheritdoc
      */
     public $js = [
-        'js/map.js',
+        'map.js',
     ];
     /**
      * @inheritdoc

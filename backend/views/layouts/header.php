@@ -1,5 +1,6 @@
 <?php
 use yii\helpers\Html;
+use backend\widgets\modules\Modules;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -10,10 +11,7 @@ use yii\helpers\Html;
     <?= Html::a('<span class="logo-mini">MNG</span><span class="logo-lg">' . Yii::$app->name . '</span>', Yii::$app->homeUrl, ['class' => 'logo']) ?>
 
     <nav class="navbar navbar-static-top" role="navigation">
-
-        <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
-            <span class="sr-only">Вид навигации</span>
-        </a>
+        <?=Modules::widget(['active_module' => $this->context->module])?>
 
         <div class="navbar-custom-menu">
 

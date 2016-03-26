@@ -37,51 +37,50 @@ $link_close = ['/map/links', 'categories_id' => Yii::$app->request->get('categor
         </div>
     </div>
     <div class="box-body">
-
-        <?= Tabs::widget([
-            'items' => [
-                [
-                    'label' => 'Основные параметры',
-                    'content' => '<p>' .
-                        $form->field($link, 'state')->checkbox() .
-                        $form->field($link, 'start')->checkbox() .
-                        $form->field($link, 'anchor') .
-                        $form->field($link, 'name')->hint('(не обязательно)') .
-                        $form->field($link, 'title') .
-                        $form->field($link, 'gallery_images_id')->widget(GalleryManager::className(), [
-                            'group' => false,
-                            'gallery_groups_id' => 1,
-                            'pluginOptions' => [
-                                'type' => 'links',
-                                'apiUrl' => 'gallery-manager',
-                                'webRoute' => Yii::getAlias('@frontend/web'),
-                            ],
-                            //'options' => ['id' => 'gallery-upload'],
-                        ]) .
-                        '</p>',
-                    'active' => true
-                ],
-                [
-                    'label' => 'Дополнительно (системные параметры)',
-                    'content' => '<p>' .
-                        $form->field($link, 'layouts_id')->dropDownList(ArrayHelper::map(Layouts::find()->orderBy(['seq' => SORT_ASC])->all(), 'id', 'comment')) .
-                        $form->field($link, 'views_id')->dropDownList(ArrayHelper::map(Views::find()->orderBy(['seq' => SORT_ASC])->all(), 'id', 'comment')) .
-                        $form->field($link, 'url')->staticControl() .
-                        '</p>',
-                ],
-                [
-                    'label' => 'SEO',
-                    'content' => '<p>' .
-                        $form->field($link, 'keywords')->textarea() .
-                        $form->field($link, 'description')->textarea() .
-                        $form->field($link, 'priority') .
-                        '</p>',
+        <div class="nav-tabs-custom">
+            <?= Tabs::widget([
+                'items' => [
+                    [
+                        'label' => 'Основные параметры',
+                        'content' => '<p>' .
+                            $form->field($link, 'state')->checkbox() .
+                            $form->field($link, 'start')->checkbox() .
+                            $form->field($link, 'anchor') .
+                            $form->field($link, 'name')->hint('(не обязательно)') .
+                            $form->field($link, 'title') .
+                            $form->field($link, 'gallery_images_id')->widget(GalleryManager::className(), [
+                                'group' => false,
+                                'gallery_groups_id' => 1,
+                                'pluginOptions' => [
+                                    'type' => 'links',
+                                    'apiUrl' => 'gallery-manager',
+                                    'webRoute' => Yii::getAlias('@frontend/web'),
+                                ],
+                                //'options' => ['id' => 'gallery-upload'],
+                            ]) .
+                            '</p>',
+                        'active' => true
+                    ],
+                    [
+                        'label' => 'Дополнительно (системные параметры)',
+                        'content' => '<p>' .
+                            $form->field($link, 'layouts_id')->dropDownList(ArrayHelper::map(Layouts::find()->orderBy(['seq' => SORT_ASC])->all(), 'id', 'comment')) .
+                            $form->field($link, 'views_id')->dropDownList(ArrayHelper::map(Views::find()->orderBy(['seq' => SORT_ASC])->all(), 'id', 'comment')) .
+                            $form->field($link, 'url')->staticControl() .
+                            '</p>',
+                    ],
+                    [
+                        'label' => 'SEO',
+                        'content' => '<p>' .
+                            $form->field($link, 'keywords')->textarea() .
+                            $form->field($link, 'description')->textarea() .
+                            $form->field($link, 'priority') .
+                            '</p>',
+                    ]
                 ]
-            ]
-        ])?>
-
-    </div>
-    <div class="box-footer">
+            ])?>
+        </div>
+    
         <?= Html::a('Отмена', $link_close, ['class' => 'btn btn-default btn-sm btn-flat'])?>
 
         <?= Html::submitButton(($link->id ? 'Изменить' : 'Добавить'), [
@@ -91,7 +90,7 @@ $link_close = ['/map/links', 'categories_id' => Yii::$app->request->get('categor
         ])?>
 
         <?php if ($link->id) {
-            echo Html::a('Ретактор контента', Url::to(['/map/content', 'categories_id' => Yii::$app->request->get('categories_id'), 'links_id' => $link->id]), [
+            echo Html::a('Ретактор контента', Url::to(['/map/content', 'links_id' => $link->id]), [
                 'class' => 'btn btn-info btn-flat btn-sm'
             ]).'&nbsp;';
             Modal::begin([

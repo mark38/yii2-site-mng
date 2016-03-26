@@ -19,12 +19,7 @@ class DefaultController extends Controller
         ];
     }
 
-    public function actionIndex()
-    {
-        return $this->render('index');
-    }
-
-    public function actionList($action=null, $gallery_groups_id=null)
+    public function actionIndex($action=null, $gallery_groups_id=null)
     {
         $gallery_types = GalleryTypes::find()->where(['visible' => 1])->orderBy(['comment' => SORT_ASC])->all();
         $gallery_groups = GalleryGroups::find()->innerJoinWith('galleryType')->where(['visible' => 1])->orderBy(['id' => SORT_DESC])->all();

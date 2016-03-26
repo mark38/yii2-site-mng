@@ -3,6 +3,7 @@
 namespace app\modules\map\controllers;
 
 use Yii;
+use yii\helpers\Url;
 use yii\web\Controller;
 use common\models\main\Categories;
 use common\models\main\Links;
@@ -62,14 +63,33 @@ class DefaultController extends Controller
         return $this->redirect(['/map/links', 'categories_id' => $categories_id]);
     }
 
-    public function actionContent($links_id, $categories_id=null)
+    public function actionContent($links_id, $id=null)
     {
         $link = Links::findOne($links_id);
+
+        if ( Yii::$app->request->get('action') ) {
+            switch (Yii::$app->request->get('action')) {
+                case "add":
+                    $content = new Contents();
+                    $content->links_id = $link->id;
+                    $content->seq = $content->findLastSequence($link->id, $id) + 1;
+                    $content->save();
+                    break;
+                case "del":
+                    Contents::deleteAll(['id' => $id]);
+                    (new Contents())->reSort($link->id);
+                    break;
+            }
+
+            return $this->redirect(Url::current(['action' => null, 'id' => null]));
+        }
+
         $contents = Contents::find()->where(['links_id' => $links_id])->orderBy(['seq' => SORT_ASC])->all();
 
         if (Yii::$app->request->post()) {
             foreach ($contents as $index => $content) {
                 if (Yii::$app->request->post('content-'.$index)) {
+                    $contents[$index]->load(Yii::$app->request->post());
                     $contents[$index]->text = Yii::$app->request->post('content-'.$index);
                     $contents[$index]->save();
                 }
@@ -80,5 +100,28 @@ class DefaultController extends Controller
             'link' => $link,
             'contents' => $contents
         ]);
+    }
+
+    public function actionSaveContent($links_id, $categories_id=null)
+    {
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            $contents = Contents::find()->where(['links_id' => $links_id])->orderBy(['seq' => SORT_ASC])->all();
+            if (Yii::$app->request->post()) {
+                foreach ($contents as $index => $content) {
+                    if (Yii::$app->request->post('content-'.$index)) {
+                        $contents[$index]->load(Yii::$app->request->post());
+                        $contents[$index]->text = Yii::$app->request->post('content-'.$index);
+                        $contents[$index]->save();
+                    }
+                }
+            }
+
+            return [
+                'flash' => 'success',
+                'message' => 'Изменения приняты'
+            ];
+        }
     }
 }

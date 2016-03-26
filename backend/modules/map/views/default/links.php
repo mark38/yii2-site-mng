@@ -28,7 +28,7 @@ MapAsset::register($this);
                     ],
                     'encodeLabel' => false,
                     'options' => [
-                        'class' => 'btn-default btn-xs root-action',
+                        'class' => 'btn btn-default btn-xs root-action',
                         
                     ]
                 ])?>

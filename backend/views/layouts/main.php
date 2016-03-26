@@ -4,6 +4,12 @@ use yii\helpers\Html;
 /* @var $this \yii\web\View */
 /* @var $content string */
 
+$left_view = false;
+if (isset($this->context->module->id)) {
+    if (file_exists(Yii::getAlias('@app/modules/').$this->context->module->id.'/views/layouts/left.php')) $left_view = '../../modules/'.$this->context->module->id.'/views/layouts/left.php';
+}
+if (!$left_view) $left_view = 'left.php';
+
 
 if (Yii::$app->controller->action->id === 'login') { 
 /**
@@ -39,7 +45,13 @@ if (Yii::$app->controller->action->id === 'login') {
     </head>
     <body class="hold-transition fixed skin-blue sidebar-mini">
     <?php $this->beginBody() ?>
+
     <div class="wrapper">
+        <div class="alert" id="alert-flash">
+            <button type="button" class="close" aria-hidden="true">×</button>
+            <h4></h4>
+            <p></p>
+        </div>
 
         <?= $this->render(
             'header.php',
@@ -47,7 +59,7 @@ if (Yii::$app->controller->action->id === 'login') {
         ) ?>
 
         <?= $this->render(
-            'left.php',
+            $left_view,
             ['directoryAsset' => $directoryAsset]
         )
         ?>
