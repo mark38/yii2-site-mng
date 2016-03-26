@@ -80,7 +80,7 @@ $link_close = ['/map/links', 'categories_id' => Yii::$app->request->get('categor
                 ]
             ])?>
         </div>
-    
+
         <?= Html::a('Отмена', $link_close, ['class' => 'btn btn-default btn-sm btn-flat'])?>
 
         <?= Html::submitButton(($link->id ? 'Изменить' : 'Добавить'), [
