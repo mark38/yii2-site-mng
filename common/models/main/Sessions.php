@@ -3,12 +3,15 @@
 namespace common\models\main;
 
 use Yii;
+use common\models\shop\ShopGoodFavorites;
 
 /**
  * This is the model class for table "sessions".
  *
  * @property integer $id
- * @property string $session_id
+ * @property string $name
+ *
+ * @property ShopGoodFavorites[] $shopGoodFavorites
  */
 class Sessions extends \yii\db\ActiveRecord
 {
@@ -26,7 +29,7 @@ class Sessions extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['session_id'], 'string', 'max' => 32]
+            [['name'], 'string', 'max' => 255]
         ];
     }
 
@@ -37,7 +40,15 @@ class Sessions extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'session_id' => 'Session ID',
+            'name' => 'Name',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getShopGoodFavorites()
+    {
+        return $this->hasMany(ShopGoodFavorites::className(), ['sessions_id' => 'id']);
     }
 }
