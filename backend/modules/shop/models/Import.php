@@ -2,6 +2,9 @@
 
 namespace app\modules\shop\models;
 
+use app\models\Translit;
+use common\models\shop\ShopGroupProperties;
+use common\models\shop\ShopProperties;
 use Yii;
 use yii\base\Model;
 use yii\imagine\Image;
@@ -21,6 +24,8 @@ use common\models\gallery\GalleryTypes;
 class Import extends Model
 {
     private $import_file;
+    private $shop_groups = array();
+    private $shop_properties = array();
 
     public function parser($import_file)
     {
@@ -29,6 +34,9 @@ class Import extends Model
 
         $groups_sxe = $sxe->xpath(Yii::$app->params['shop']['start_group_path']);
         if (count($groups_sxe)) $this->parserGroups($groups_sxe);
+
+        $properties_sxe = $sxe->xpath('/КоммерческаяИнформация/Классификатор/Свойства/Свойство');
+        if (count($properties_sxe)) $this->parserProperties($properties_sxe);
 
         $goods_sxe = $sxe->xpath('/КоммерческаяИнформация/Каталог/Товары/Товар');
         if (count($goods_sxe)) $this->parserGoods($goods_sxe);
@@ -87,9 +95,47 @@ class Import extends Model
             };
             $group->name = strval($item->{'Наименование'});
             $group->save();
+            $this->shop_groups[] = $group;
 
             if ($item->{'Группы'}->{'Группа'}) {
                 $this->parserGroups($item->{'Группы'}->{'Группа'}, $link->id);
+            }
+        }
+
+        return true;
+    }
+
+    public function parserProperties($properties_sxe)
+    {
+        foreach ($properties_sxe as $item) {
+            $shop_property = ShopProperties::findOne(['code' => $item->{'Ид'}]);
+
+            if (!$shop_property) {
+                $shop_property = new ShopProperties();
+                $shop_property->seq = $shop_property->findLastSequence() + 1;
+                $currentId = null;
+            } else {
+                $currentId = $shop_property->id;
+            }
+
+            $shop_property->code = strval($item->{'Ид'});
+            $shop_property->name = strval($item->{'Наименование'});
+            $shop_property->anchor = strval($item->{'Наименование'});
+            $shop_property->url = (new Translit())->slugify($item->{'Наименование'}, $shop_property->tableName(), 'url', '_', $currentId);
+            $shop_property->save();
+            $this->shop_properties[] = $shop_property;
+        }
+
+        /** @var $shop_group ShopGroups */
+        foreach ($this->shop_groups as $shop_group) {
+            /** @var $shop_property ShopProperties */
+            foreach ($this->shop_properties as $shop_property) {
+                if (!ShopGroupProperties::findOne(['shop_groups_id' => $shop_group->id, 'shop_properties_id' => $shop_property->id])) {
+                    $shop_group_property = new ShopGroupProperties();
+                    $shop_group_property->shop_groups_id = $shop_group->id;
+                    $shop_group_property->shop_properties_id = $shop_property->id;
+                    $shop_group_property->save();
+                }
             }
         }
 
