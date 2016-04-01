@@ -3,10 +3,13 @@
 namespace app\modules\shop\models;
 
 use app\models\Translit;
+use common\models\shop\ShopGoodProperties;
 use common\models\shop\ShopGroupProperties;
 use common\models\shop\ShopProperties;
+use common\models\shop\ShopPropertyValues;
 use Yii;
 use yii\base\Model;
+use yii\helpers\ArrayHelper;
 use yii\imagine\Image;
 use mark38\galleryManager\Gallery;
 use common\models\main\Contents;
@@ -157,6 +160,7 @@ class Import extends Model
             if (!isset($goods[$good_code])) {
                 $goods[$good_code] = array();
                 $goods[$good_code] = $this->addGood($item, $good_code);
+                if ($item->{'ЗначенияСвойств'}) $this->addPropertyValues($item->{'ЗначенияСвойств'}->{'ЗначенияСвойства'}, $goods[$good_code]['id']);
             }
 
             if ($item_code) {
@@ -243,6 +247,62 @@ class Import extends Model
             'id' => $good->id,
             'links_id' => $link->id,
         ];
+    }
+
+    private function addPropertyValues($properties_sxe, $goods_id)
+    {
+        $properties = ArrayHelper::index($this->shop_properties, 'code');
+        $good_properties = ShopGoodProperties::find()->where(['shop_goods_id' => $goods_id])->all();
+
+        $property_values = array();
+        foreach ($properties_sxe as $item) {
+            $code = strval($item->{'Ид'});
+            $name = strval($item->{'Значение'});
+            $properties_id = $properties[$code]->id;
+
+            $property_value = ShopPropertyValues::findOne(['shop_properties_id' => $properties_id, 'name' => $name]);
+            if (!$property_value) {
+                $property_value = new ShopPropertyValues();
+                $property_value->shop_properties_id = $properties_id;
+                $property_value->name = $name;
+                $property_value->anchor = $name;
+                $property_value->url = (new Translit())->slugify($name, $property_value->tableName(), 'url', '_', null, 'shop_properties_id', $properties_id);
+                $property_value->save();
+            }
+            $property_values[] = $property_value;
+
+            $add_property_value = true;
+            if ($good_properties) {
+                /** @var $good_property ShopGoodProperties */
+                foreach ($good_properties as $good_property) {
+                    if ($good_property->shop_properties_id == $properties_id) {
+                        $add_property_value = false;
+                        if ($good_property->shop_property_values_id != $property_value->id) {
+                            $good_property->shop_property_values_id = $property_value->id;
+                            $good_property->save();
+                        }
+                    }
+                }
+            }
+
+            if ($add_property_value) {
+                $good_property = new ShopGoodProperties();
+                $good_property->shop_goods_id = $goods_id;
+                $good_property->shop_properties_id = $properties_id;
+                $good_property->shop_property_values_id = $property_value->id;
+                $good_property->save();
+            }
+        }
+
+        if ($good_properties) {
+            /** @var $good_property ShopGoodProperties */
+            $property_values = ArrayHelper::index($property_values, 'shop_properties_id');
+            foreach ($good_properties as $good_property) {
+                if (!isset($property_values[$good_property->shop_properties_id])) {
+                    $good_property->delete();
+                }
+            }
+        }
     }
 
     private function addItem($goods_id, $code, $item_sxe)

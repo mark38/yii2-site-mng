@@ -2,6 +2,7 @@
 
 namespace common\models\shop;
 
+use common\models\main\Links;
 use Yii;
 
 /**
@@ -11,6 +12,9 @@ use Yii;
  * @property integer $shop_groups_id
  * @property integer $shop_properties_id
  * @property integer $state
+ *
+ * @property ShopGroups $shopGroups
+ * @property ShopProperties $shopProperties
  */
 class ShopGroupProperties extends \yii\db\ActiveRecord
 {
@@ -45,5 +49,26 @@ class ShopGroupProperties extends \yii\db\ActiveRecord
             'shop_properties_id' => 'Shop Properties ID',
             'state' => 'State',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getShopGroup()
+    {
+        return $this->hasOne(ShopGroups::className(), ['id' => 'shop_groups_id']);
+    }
+
+    public function getLink()
+    {
+        return $this->hasOne(Links::className(), ['id' => 'links_id'])->via('shopGroup');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getShopProperty()
+    {
+        return $this->hasOne(ShopProperties::className(), ['id' => 'shop_properties_id']);
     }
 }

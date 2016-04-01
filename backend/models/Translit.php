@@ -12,12 +12,12 @@ class Translit extends Model
         return $this->replaceSpaces(TransliteratorHelper::process($string, '', 'en'));
     }
 
-    public function slugify($item, $table, $toColumn, $replacement='-', $currentId=null) {
+    public function slugify($item, $table, $toColumn, $replacement='-', $currentId=null, $groupColumnName=false, $groupColumnValue=false) {
         $slug = $this->replaceSpaces(TransliteratorHelper::process($item, '', 'en'), $replacement);
-        if ($this->checkUniqueSlug($slug, $table, $toColumn, $currentId)) {
+        if ($this->checkUniqueSlug($slug, $table, $toColumn, $currentId, $groupColumnName, $groupColumnValue)) {
             return $slug;
         } else {
-            for ( $suffix = 2; !$this->checkUniqueSlug($new_slug = $slug . '_' . $suffix, $table, $toColumn, $currentId); $suffix++ ) {}
+            for ( $suffix = 2; !$this->checkUniqueSlug($new_slug = $slug.$replacement.$suffix, $table, $toColumn, $currentId, $groupColumnName, $groupColumnValue); $suffix++ ) {}
             return $new_slug;
         }
     }
@@ -29,8 +29,12 @@ class Translit extends Model
         return $lowercase ? strtolower( $string ) : $string;
     }
 
-    private function checkUniqueSlug($slug, $table, $toColumn, $currentId)
+    private function checkUniqueSlug($slug, $table, $toColumn, $currentId=null, $groupColumnName=false, $groupColumnValue=false)
     {
-        return !$row = Yii::$app->db->createCommand('SELECT * FROM '.$table.' WHERE '.$toColumn.' like "'.$slug.'"'.($currentId ? ' AND id <> '.$currentId : ''))->queryOne();
+        return !$row = Yii::$app->db->createCommand(
+            'SELECT * FROM '.$table.' WHERE '.$toColumn.' like "'.$slug.'"' .
+            ($currentId ? ' AND id <> '.$currentId : '') .
+            ($groupColumnName && $groupColumnValue ? ' AND '.$groupColumnName.' = '.$groupColumnValue : '')
+        )->queryOne();
     }
 }
