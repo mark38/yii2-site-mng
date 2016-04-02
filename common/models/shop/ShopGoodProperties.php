@@ -2,6 +2,7 @@
 
 namespace common\models\shop;
 
+use common\models\main\Links;
 use Yii;
 
 /**
@@ -19,6 +20,7 @@ use Yii;
 class ShopGoodProperties extends \yii\db\ActiveRecord
 {
     public $amount;
+    public $links_id;
 
     /**
      * @inheritdoc
@@ -57,9 +59,14 @@ class ShopGoodProperties extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getShopGoods()
+    public function getShopGood()
     {
         return $this->hasOne(ShopGoods::className(), ['id' => 'shop_goods_id']);
+    }
+
+    public function getShopPriceGood()
+    {
+        return $this->hasOne(ShopPriceGood::className(), ['shop_goods_id' => 'id'])->via('shopGood')->groupBy(['shop_goods_id'])->orderBy(['price' => SORT_ASC]);
     }
 
     /**

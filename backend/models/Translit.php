@@ -9,11 +9,14 @@ use dosamigos\transliterator\TransliteratorHelper;
 class Translit extends Model
 {
     public function translitToString($string) {
-        return $this->replaceSpaces(TransliteratorHelper::process($string, '', 'en'));
+        $string = $this->replaceSpaces(TransliteratorHelper::process($string, '', 'en'));
+        $string = preg_replace('/[^a-zA-Z0-9=\s—–-]+/u', '', $string);
+        return $string;
     }
 
     public function slugify($item, $table, $toColumn, $replacement='-', $currentId=null, $groupColumnName=false, $groupColumnValue=false) {
-        $slug = $this->replaceSpaces(TransliteratorHelper::process($item, '', 'en'), $replacement);
+        $item = $this->translitToString($item);
+        $slug = $this->replaceSpaces($item, $replacement);
         if ($this->checkUniqueSlug($slug, $table, $toColumn, $currentId, $groupColumnName, $groupColumnValue)) {
             return $slug;
         } else {

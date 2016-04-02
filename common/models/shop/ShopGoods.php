@@ -105,4 +105,9 @@ class ShopGoods extends \yii\db\ActiveRecord
     {
         return $this->hasMany(ShopPriceGood::className(), ['shop_goods_id' => 'id']);
     }
+
+    public function getShopGoodProperties()
+    {
+        return $this->hasMany(ShopGoodProperties::className(), ['shop_goods_id' => 'id']);
+    }
 }

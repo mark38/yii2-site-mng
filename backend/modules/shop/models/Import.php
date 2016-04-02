@@ -257,7 +257,7 @@ class Import extends Model
         $property_values = array();
         foreach ($properties_sxe as $item) {
             $code = strval($item->{'Ид'});
-            $name = strval($item->{'Значение'});
+            $name = trim(strval($item->{'Значение'}));
             $properties_id = $properties[$code]->id;
 
             $property_value = ShopPropertyValues::findOne(['shop_properties_id' => $properties_id, 'name' => $name]);
