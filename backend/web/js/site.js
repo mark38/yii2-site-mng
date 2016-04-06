@@ -12,6 +12,10 @@ var flash = {
                 $('#alert-flash > p').html(message);
             });
         }, 200);
+
+        setTimeout(function() {
+            $('#alert-flash').fadeOut(200);
+        }, 4500);
     }
 }
 
