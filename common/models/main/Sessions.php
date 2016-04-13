@@ -51,4 +51,17 @@ class Sessions extends \yii\db\ActiveRecord
     {
         return $this->hasMany(ShopGoodFavorites::className(), ['sessions_id' => 'id']);
     }
+
+    public function getMySession()
+    {
+        Yii::$app->session->open();
+        $session = self::findOne(['name' => Yii::$app->session->id]);
+        if (!$session) {
+            $session = new self;
+            $session->name = Yii::$app->session->id;
+            $session->save();
+        }
+
+        return $session;
+    }
 }
