@@ -13,6 +13,8 @@ use common\models\main\Links;
  * @property string $links_id
  * @property string $url
  * @property string $date
+ * @property string $date_start
+ * @property string $date_finish
  *
  * @property NewsTypes $newsTypes
  * @property Links $links
@@ -21,6 +23,7 @@ class News extends \yii\db\ActiveRecord
 {
     public $prev_text;
     public $full_text;
+    public $date_range;
 
     /**
      * @inheritdoc
@@ -38,7 +41,7 @@ class News extends \yii\db\ActiveRecord
         return [
             [['news_types_id', 'links_id'], 'integer'],
             [['url', 'prev_text', 'full_text'], 'string'],
-            [['date'], 'safe']
+            [['date', 'date_start', 'date_finish', 'date_range'], 'safe']
         ];
     }
 
@@ -51,10 +54,11 @@ class News extends \yii\db\ActiveRecord
             'id' => 'ID',
             'news_types_id' => 'Категория новости',
             'links_id' => 'Links ID',
-            'url' => 'Внешняя ссылка',
+            'url' => 'Адрес внешней ссылки',
             'date' => 'Дата новости',
             'prev_text' => 'Предварительный текст нововсти',
-            'full_text' => 'Полный текст новости'
+            'full_text' => 'Полный текст новости',
+            'date_range' => 'Период публикации'
         ];
     }
 
@@ -77,6 +81,11 @@ class News extends \yii\db\ActiveRecord
     public function beforeSave($insert)
     {
         $this->date = $this->date ? date('Y-m-d', strtotime($this->date)) : null;
+        if ($this->date_range) {
+            preg_match('/(\d+\.\d+\.\d+) - (\d+\.\d+\.\d+)/', $this->date_range, $match);
+            $this->date_start = isset($match[1]) ? date('Y-m-d', strtotime($match[1])) : null;
+            $this->date_finish = isset($match[2]) ? date('Y-m-d', strtotime($match[2])) : null;
+        }
 
         return true;
     }
