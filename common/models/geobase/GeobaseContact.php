@@ -9,8 +9,10 @@ use Yii;
  *
  * @property integer $id
  * @property integer $geobase_city_id
+ * @property integer $city_name
  * @property string $phone
  * @property integer $def
+ * @property integer $seq
  *
  * @property GeobaseCity $geobaseCity
  */
@@ -30,8 +32,8 @@ class GeobaseContact extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['geobase_city_id', 'def'], 'integer'],
-            [['phone'], 'string', 'max' => 255]
+            [['geobase_city_id', 'def', 'seq'], 'integer'],
+            [['city_name', 'phone'], 'string', 'max' => 255]
         ];
     }
 

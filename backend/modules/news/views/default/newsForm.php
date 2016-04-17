@@ -78,11 +78,11 @@ $link_close = [''];
                                 'group' => false,
                                 'gallery_groups_id' => $news->newsType->gallery_groups_id,
                                 'pluginOptions' => [
-                                    'type' => 'news',
+                                    'type' => 'promo',
                                     'apiUrl' => 'gallery-manager',
                                     'webRoute' => Yii::getAlias('@frontend/web'),
                                 ]
-                            ])->label('Предварительное фото') .
+                            ])->label('Предварительное фото'.$news->newsType->gallery_groups_id) .
                             '</p>',
                         'active' => true
                     ],

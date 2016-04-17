@@ -2,6 +2,7 @@
 
 namespace common\models\news;
 
+use common\models\gallery\GalleryImages;
 use Yii;
 use common\models\main\Links;
 
@@ -76,6 +77,11 @@ class News extends \yii\db\ActiveRecord
     public function getLink()
     {
         return $this->hasOne(Links::className(), ['id' => 'links_id']);
+    }
+
+    public function getGalleryImage()
+    {
+        return $this->hasOne(GalleryImages::className(), ['id' => 'gallery_images_id'])->via('link');
     }
 
     public function beforeSave($insert)
