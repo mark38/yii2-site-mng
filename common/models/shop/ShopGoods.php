@@ -98,11 +98,21 @@ class ShopGoods extends \yii\db\ActiveRecord
         return $this->hasMany(ShopItemCharacteristics::className(), ['shop_items_id' => 'id'])->groupBy(['name'])->orderBy(['name' => SORT_ASC])->via('shopItems');
     }
 
+    public function getProperties()
+    {
+        return $this->hasMany(ShopGoodProperties::className(), ['shop_goods_id' => 'id'])->innerJoinWith(['shopProperty'])->orderBy(['shop_properties.seq' => SORT_ASC]);
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getShopPriceGoods()
     {
         return $this->hasMany(ShopPriceGood::className(), ['shop_goods_id' => 'id']);
+    }
+
+    public function getShopGoodProperties()
+    {
+        return $this->hasMany(ShopGoodProperties::className(), ['shop_goods_id' => 'id']);
     }
 }

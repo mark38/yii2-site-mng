@@ -6,6 +6,7 @@ use yii\bootstrap\Modal;
 use common\models\news\NewsTypes;
 use kartik\date\DatePicker;
 use backend\widgets\gallery\GalleryManager;
+use kartik\daterange\DateRangePicker;
 use backend\widgets\ckeditor\CKEditor;
 use iutbay\yii2kcfinder\KCFinder;
 
@@ -43,6 +44,7 @@ $link_close = [''];
     </div>
     <div class="box-body">
         <div class="nav-tabs-custom">
+            <?php $addon = '<span class="input-group-addon"><i class="fa fa-calendar"></i></span>'; ?>
             <?= Tabs::widget([
                 'items' => [
                     [
@@ -62,9 +64,19 @@ $link_close = [''];
                                     'format' => 'dd.mm.yyyy'
                                 ]
                             ]) .
+                            $form->field($news, 'date_range')->widget(DateRangePicker::classname(), [
+                                'convertFormat' => true,
+                                'pluginOptions' => [
+                                    'locale' => [
+                                        'format' => 'd.m.Y',
+                                        'separator' => ' - '
+                                    ],
+                                    'opens' => 'left'
+                                ]
+                            ]) .
                             $form->field($link, 'gallery_images_id')->widget(GalleryManager::className(), [
                                 'group' => false,
-                                'gallery_groups_id' => 2,
+                                'gallery_groups_id' => $news->newsType->gallery_groups_id,
                                 'pluginOptions' => [
                                     'type' => 'news',
                                     'apiUrl' => 'gallery-manager',
@@ -104,6 +116,43 @@ $link_close = [''];
             'labelOptions' => ['class' => 'col-sm-12']
         ])->widget(CKEditor::className(), [
             'options' => ['id' => 'full-text'],
+            'preset' => 'full',
+            'clientOptions' => [
+                'height' => 300,
+                'toolbar' => [
+                    [
+                        'name' => 'row1',
+                        'items' => [
+                            'Maximize', 'Source', '-',
+                            'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-',
+                            'Bold', 'Italic', 'Underline', 'Strike', '-',
+                            'Subscript', 'Superscript', 'RemoveFormat', '-',
+                            'TextColor', 'BGColor', '-',
+                            'NumberedList', 'BulletedList', '-',
+                            'Outdent', 'Indent', '-', 'Blockquote', '-',
+                            'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'list', 'indent', 'blocks', 'align', 'bidi', '-',
+                        ],
+                    ],
+                    [
+                        'name' => 'row2',
+                        'items' => [
+                            'Link', 'Unlink', 'Anchor', '-',
+                            'ShowBlocks', '-',
+                            'Image', 'Table', 'HorizontalRule', 'SpecialChar', 'Iframe', '-',
+                            'NewPage', 'Print', 'Templates', '-',
+                            'Undo', 'Redo', '-',
+                            'Find', 'SelectAll', 'Format', 'Font', 'FontSize',
+                        ],
+                    ],
+                ],
+            ],
+        ])?>
+
+        <?/*=$form->field($news, 'full_text', [
+            'template' => '{label}<div class="col-sm-12">{input}</div><div class="col-sm-10">{error}</div>',
+            'labelOptions' => ['class' => 'col-sm-12']
+        ])->widget(CKEditor::className(), [
+            'options' => ['id' => 'full-text'],
             'preset' => 'custom',
             'clientOptions' => [
                 'height' => 300,
@@ -121,7 +170,7 @@ $link_close = [''];
                     ['name' => 'links']
                 ],
             ],
-        ])?>
+        ])*/?>
 
         <?= Html::a('Отмена', $link_close, ['class' => 'btn btn-default btn-sm btn-flat'])?>
         <?= Html::submitButton(($link->id ? 'Изменить' : 'Добавить'), [

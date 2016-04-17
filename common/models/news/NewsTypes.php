@@ -15,6 +15,7 @@ use common\models\gallery\GalleryTypes;
  * @property string $links_id
  * @property string $name
  * @property integer $gallery_types_id
+ * @property integer $gallery_groups_id
  *
  * @property News[] $news
  * @property Categories $categories
@@ -37,7 +38,7 @@ class NewsTypes extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['categories_id', 'links_id', 'gallery_types_id'], 'integer'],
+            [['categories_id', 'links_id', 'gallery_types_id', 'gallery_groups_id'], 'integer'],
             [['name'], 'string', 'max' => 255]
         ];
     }

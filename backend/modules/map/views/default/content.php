@@ -93,7 +93,36 @@ MapAsset::register($this);
                     'id' => 'content-'.$index
                 ],
                 'preset' => 'full',
-                'clientOptions' => ['config.extraPlugins' => 'codeSnippet']
+                'clientOptions' => [
+                    'height' => 300,
+                    'toolbar' => [
+                        [
+                            'name' => 'row1',
+                            'items' => [
+                                'Maximize', 'Source', '-',
+                                'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-',
+                                'Bold', 'Italic', 'Underline', 'Strike', '-',
+                                'Subscript', 'Superscript', 'RemoveFormat', '-',
+                                'TextColor', 'BGColor', '-',
+                                'NumberedList', 'BulletedList', '-',
+                                'Outdent', 'Indent', '-', 'Blockquote', '-',
+                                'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'list', 'indent', 'blocks', 'align', 'bidi', '-',
+                            ],
+                        ],
+                        [
+                            'name' => 'row2',
+                            'items' => [
+                                'Link', 'Unlink', 'Anchor', '-',
+                                'ShowBlocks', '-',
+                                'Image', 'Table', 'HorizontalRule', 'SpecialChar', 'Iframe', '-',
+                                'NewPage', 'Print', 'Templates', '-',
+                                'Undo', 'Redo', '-',
+                                'Find', 'SelectAll', 'Format', 'Font', 'FontSize',
+                            ],
+                        ],
+                    ],
+                ],
+                //'clientOptions' => ['config.extraPlugins' => 'codeSnippet']
             ])->label(false),
             ['class' => 'col-sm-9']
         );

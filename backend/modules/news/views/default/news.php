@@ -57,11 +57,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     /** @var $new \common\models\news\News */
                     foreach ($news_list as $new) {
                         $new_date = $new->date !== null ? date('d.m.Y', strtotime($new->date)) : null;
+                        $new->date_range = $news->date_start && $news->date_finish ? 'период публикации: '.date('d.m.Y', strtotime($news->date_start)).' - '.date('d.m.Y', strtotime($news->date_finish)) : 'опубликовано';
                         $image = $new->link->gallery_images_id ? $new->link->galleryImage->small : false;
                         $ch_link = ['', 'news' => 'ch', 'news_types_id' => $new->news_types_id, 'news_id' => $new->id];
 
                         echo '<div class="row">' .
-                            '<div class="col-sm-11">';
+                            '<div class="col-sm-10">';
 
 
                             echo Html::beginTag('div', ['class' => 'media']);
@@ -71,16 +72,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 echo Html::endTag('div');
 
                                 echo Html::beginTag('div', ['class' => 'media-body']);
-                                echo Html::tag('h4', '<span class="text-mutted">'.$new_date.'</span> '.$new->link->anchor.' '.Html::a('<i class="fa fa-external-link"></i>', $new->link->url, ['target' => '_blank']));
+                                echo Html::tag('h4', '<span class="text-mutted">'.$new_date.'</span> '.$new->link->anchor);
                                 echo Html::tag('div', $new->link->contents[1]->text);
-                                echo Html::tag('div', '<small>('.$new->newsType->name.')</small>', ['class' => 'text-muted']);
+                                echo Html::tag('div', '<span>('.$new->newsType->name.' / '.$new->date_range.')</span>', ['class' => 'text-muted']);
                                 echo Html::endTag('div');
 
                             echo Html::endTag('div');
 
-                        echo '</div><div class="col-sm-1 text-right">';
+                        echo '</div><div class="col-sm-2 text-right">';
 
-                            echo Html::a('<i class="fa fa-pencil-square-o"></i>', $ch_link);
+                            echo '<ul class="list-inline">' .
+                                    '<li>'.Html::a('<i class="fa fa-pencil-square-o"></i>', $ch_link).'</li>' .
+                                    '<li>'.Html::a('<i class="fa fa-external-link"></i>', $new->link->url, ['target' => '_blank']).'</li>' .
+                                 '</ul>';
 
                         echo '</div></div>';
 

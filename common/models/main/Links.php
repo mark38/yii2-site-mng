@@ -267,6 +267,7 @@ class Links extends \yii\db\ActiveRecord
             'Я' => 'Ya', 'я' => 'ya',
             '№' => '#', 'Ӏ' => '‡',
             '’' => '`', 'ˮ' => '¨',
+            ' ' => '-'
         );
 
         $anchor = strtr($anchor, $transliteration);
