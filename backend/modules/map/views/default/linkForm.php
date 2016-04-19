@@ -1,17 +1,23 @@
 <?php
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Tabs;
+use yii\bootstrap\Modal;
+use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Url;
 use common\models\main\Layouts;
 use common\models\main\Views;
-use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\bootstrap\Modal;
 use mark38\galleryManager\GalleryManager;
 
 /** @var $link \common\models\main\Links */
 
 $link_close = ['/map/links', 'categories_id' => Yii::$app->request->get('categories_id')];
+$layouts = array();
+foreach (Layouts::find()->orderBy(['seq' => SORT_ASC])->all() as $layout) {
+    $layouts[$layout['id']] = $layout->comment.' &mdash; '.$layout->name;
+}
+$views = array();
+foreach (Views::find()->orderBy(['seq' => SORT_ASC])->all() as $view) $views[$view->id] = $view->comment . ' &mdash; '.$view->name;
 ?>
 
 <?php $form = ActiveForm::begin([
@@ -64,8 +70,8 @@ $link_close = ['/map/links', 'categories_id' => Yii::$app->request->get('categor
                     [
                         'label' => 'Дополнительно (системные параметры)',
                         'content' => '<p>' .
-                            $form->field($link, 'layouts_id')->dropDownList(ArrayHelper::map(Layouts::find()->orderBy(['seq' => SORT_ASC])->all(), 'id', 'comment')) .
-                            $form->field($link, 'views_id')->dropDownList(ArrayHelper::map(Views::find()->orderBy(['seq' => SORT_ASC])->all(), 'id', 'comment')) .
+                            $form->field($link, 'layouts_id')->dropDownList($layouts, ['encode' => false]) .
+                            $form->field($link, 'views_id')->dropDownList($views, ['encode' => false]) .
                             $form->field($link, 'url')->staticControl() .
                             '</p>',
                     ],

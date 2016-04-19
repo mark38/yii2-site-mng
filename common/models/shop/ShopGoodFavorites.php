@@ -11,6 +11,7 @@ use common\models\main\Sessions;
  * @property integer $id
  * @property integer $sessions_id
  * @property integer $shop_goods_id
+ * @property integer $created_at
  *
  * @property Sessions $sessions
  * @property ShopGoods $shopGoods
@@ -31,7 +32,7 @@ class ShopGoodFavorites extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['sessions_id', 'shop_goods_id'], 'integer']
+            [['sessions_id', 'shop_goods_id', 'created_at'], 'integer']
         ];
     }
 
@@ -50,7 +51,7 @@ class ShopGoodFavorites extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSessions()
+    public function getSession()
     {
         return $this->hasOne(Sessions::className(), ['id' => 'sessions_id']);
     }
@@ -58,8 +59,17 @@ class ShopGoodFavorites extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getShopGoods()
+    public function getShopGood()
     {
         return $this->hasOne(ShopGoods::className(), ['id' => 'shop_goods_id']);
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            $this->created_at = time();
+        }
+
+        return true;
     }
 }

@@ -12,6 +12,7 @@ use common\models\main\Sessions;
  * @property integer $id
  * @property integer $sessions_id
  * @property integer $shop_goods_id
+ * @property integer $created_at
  *
  * @property Sessions $sessions
  * @property ShopGoods $shopGoods
@@ -32,7 +33,7 @@ class ShopGoodViewed extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['sessions_id', 'shop_goods_id'], 'integer'],
+            [['sessions_id', 'shop_goods_id', 'created_at'], 'integer'],
             [['sessions_id'], 'exist', 'skipOnError' => true, 'targetClass' => Sessions::className(), 'targetAttribute' => ['sessions_id' => 'id']],
             [['shop_goods_id'], 'exist', 'skipOnError' => true, 'targetClass' => ShopGoods::className(), 'targetAttribute' => ['shop_goods_id' => 'id']],
         ];
@@ -69,5 +70,14 @@ class ShopGoodViewed extends \yii\db\ActiveRecord
     public function getLink()
     {
         return $this->hasOne(Links::className(), ['id' => 'links_id'])->via('shopGood');
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            $this->created_at = time();
+        }
+
+        return true;
     }
 }
