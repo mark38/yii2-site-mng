@@ -28,7 +28,7 @@ class DefaultController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['index', 'links', 'link-del', 'content', 'save-content'],
+                        'actions' => ['index', 'links', 'link-del', 'content', 'save-content', 'gallery-manager'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
