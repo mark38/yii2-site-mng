@@ -286,7 +286,7 @@ class Links extends \yii\db\ActiveRecord
 
     public static function findByUrlForLink($name, $links_id, $parent=null)
     {
-        return static::find()->where(['name' => $name])->andWhere(['not in', 'id', $links_id])->andWhere(['parent' => $parent])->all();
+        return static::find()->where(['name' => $name])->andWhere(['<>', 'id', $links_id])->andWhere(['parent' => $parent])->all();
     }
 
     public static function findLastSequence($categoreis_id, $parent=null)
