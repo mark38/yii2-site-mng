@@ -30,6 +30,8 @@ use common\models\gallery\GalleryImages;
  * @property string $priority
  * @property integer $state
  * @property string $content_nums
+ * @property string $css_class
+ * @property string $icon
  *
  * @property Contents[] $contents
  * @property Layouts $layouts
@@ -58,7 +60,7 @@ class Links extends \yii\db\ActiveRecord
             [['anchor'], 'required'],
             [['categories_id', 'layouts_id', 'views_id', 'parent', 'child_exist', 'level', 'seq', 'gallery_images_id', 'start', 'created_at', 'updated_at', 'state', 'content_nums'], 'integer'],
             [['priority'], 'number'],
-            [['url', 'name', 'anchor'], 'string', 'max' => 255],
+            [['url', 'name', 'anchor', 'css_class', 'icon'], 'string', 'max' => 255],
             [['title', 'keywords', 'description'], 'string', 'max' => 1024],
             [['url'], 'unique']
         ];
@@ -99,6 +101,8 @@ class Links extends \yii\db\ActiveRecord
             'priority' => 'Приоритет (применимо к sitemap.xml)',
             'state' => 'Активная (опубликованная) страница',
             'content_nums' => 'Content Nums',
+            'css_class' => 'Класы стилей',
+            'icon' => 'Иконка',
         ];
     }
 

@@ -73,6 +73,8 @@ foreach (Views::find()->orderBy(['seq' => SORT_ASC])->all() as $view) $views[$vi
                             $form->field($link, 'layouts_id')->dropDownList($layouts, ['encode' => false]) .
                             $form->field($link, 'views_id')->dropDownList($views, ['encode' => false]) .
                             $form->field($link, 'url')->staticControl() .
+                            $form->field($link, 'css_class') .
+                            $form->field($link, 'icon') .
                             '</p>',
                     ],
                     [
