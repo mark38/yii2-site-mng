@@ -1,0 +1,15 @@
+.menu-col {
+    padding: 0px!important;
+}
+
+.menu-button {
+    width: 100%;
+}
+
+.control-ul {
+    -webkit-border-radius: 0px;
+    -moz-border-radius: 0px;
+    border-radius: 0px;
+    right: -1px!important;
+    left: auto;
+}

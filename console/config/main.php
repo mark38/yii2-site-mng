@@ -11,6 +11,11 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'console\controllers',
+    'modules' => [
+        'broadcast' => [
+            'class' => 'app\modules\broadcast\Module',
+        ],
+    ],
     'components' => [
         'log' => [
             'targets' => [
