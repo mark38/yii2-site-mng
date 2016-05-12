@@ -30,11 +30,12 @@ class DefaultController extends Controller
         $title = $broadcast_send->broadcast->title;
         $broadcast_addresses = BroadcastAddress::find()->where(['broadcast_send_id' => $id, 'status' => 0])->all();
 
-
-
         $messages = [];
+        /** @var $address BroadcastAddress */
         foreach ($broadcast_addresses as $address) {
             $email = $address->user_id ? $address->user->email : $address->email;
+            $fio = $address->fio;
+            $company = '';
 
             $mailer = Yii::$app->mailer->compose($view, [
                 'content' => $this->handleContent($broadcast_send->broadcast, '', '')
@@ -60,7 +61,7 @@ class DefaultController extends Controller
 
     public function handleContent($broadcast, $fio, $company) {
         $patterns = array();
-        $patterns[0] = '/{{fi}}/';
+        $patterns[0] = '/{{if}}/';
         $patterns[1] = '/{{company}}/';
         $patterns[2] = '/{{current_date}}/';
         $patterns[3] = '/{{h1}}/';
@@ -69,7 +70,7 @@ class DefaultController extends Controller
         $replacements[0] = isset($arr[1]) ? ' '.$arr[1].' '.$arr[0] : $arr[0];
         $replacements[1] = $company;
         $replacements[2] = date('d.m.Y',time());
-        $replacements[3] = Html::tag('div', $broadcast->h1, ['style' => 'background:#43a6df;color:#000000;font-weight:900;font-size:22px;padding:4px 6px;text-align:center;']);
+        $replacements[3] = Html::tag('div', $broadcast->h1, ['style' => 'color:#333333;font-weight:900;font-size:18px;padding:4px 6px;text-align:center;']);
         $new_content = preg_replace($patterns, $replacements, $broadcast->content);
         return $new_content;
     }

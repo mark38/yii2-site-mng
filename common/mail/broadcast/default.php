@@ -4,7 +4,3 @@
 
 echo $content;
 ?>
-
-
-<div
-

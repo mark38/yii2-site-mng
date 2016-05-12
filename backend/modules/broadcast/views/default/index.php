@@ -62,7 +62,7 @@ $cols[] = [
 ?>
 
 <div class="box box-default">
-    <div class="box-header with-border"><?=Html::a('<i class="glyphicon glyphicon-envelope"></i> Новое письмо', ['/broadcast/manager'], ['class' => 'btn btn-success'])?></div>
+    <div class="box-header with-border"><?=Html::a('<i class="glyphicon glyphicon-envelope"></i> Новое письмо', ['/broadcast/manager'], ['class' => 'btn btn-default btn-flat'])?></div>
     <div class="box-body">
         <?=GridView::widget([
             'dataProvider' => $dataProvider,

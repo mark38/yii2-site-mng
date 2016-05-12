@@ -1,9 +1,10 @@
 <?php
 return [
+    'domainName' => 'site.ru',
+    'hostname' => 'http://site.ru',
     'adminEmail' => 'email@site.ru',
     'supportEmail' => 'email@site.ru',
     'user.passwordResetTokenExpire' => 3600,
-    'domainName' => 'site.ru',
     'shop' => [
         'phpAuthUser' => 'admin',
         'phpAuthPw' => 'sdDcgv87N',

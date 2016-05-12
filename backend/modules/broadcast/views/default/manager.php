@@ -86,22 +86,21 @@ Yii::$app->session->set('KCFINDER', $kcfOptions);
         <?=$form->field($broadcast, 'registered_users')->checkbox()?>
         <?=$form->field($broadcast, 'destinations')->textarea()?>
 
-        <?=Html::a('Отмена', ['/broadcast/index'], ['class' => 'btn btn-sm btn-default'])?>
+        <?=Html::a('Отмена', ['/broadcast/index'], ['class' => 'btn btn-sm btn-default btn-flat'])?>
         <?=Html::submitButton('Сохранить', [
-            'class' => 'btn btn-sm btn-primary'
+            'class' => 'btn btn-sm btn-primary btn-flat'
         ]);?>
         <?php if (isset($broadcast->id)) {
-            echo Html::a('Подготовить к отправке', ['/broadcast/render-send', 'broadcast_id' => $broadcast->id], ['class' => 'btn btn-sm btn-success']);
+            echo Html::a('Подготовить к отправке', ['/broadcast/render-send', 'broadcast_id' => $broadcast->id], ['class' => 'btn btn-sm btn-success btn-flat']);
         }?>
     </div>
     <div class="col-sm-4">
-        <h3>Паттерны в контенте и их расшифровка</h3>
+        <h3>Паттерны в контенте и их расшифровка при наличии соответствоющих записей в базе данных</h3>
         <ul>
             <li>{{h1}} &mdash; Заголовок в теле письма;</li>
-            <li>{{fi}} &mdash; Фамилия Имя в именительном падеже;</li>
+            <li>{{if}} &mdash; Имя Фамилия в именительном падеже;</li>
             <li>{{company}} &mdash; полное наименование компании;</li>
             <li>{{current_date}} &mdash; сегодняшняя дата в формат mm.dd.YYYY;</li>
-            <li>... по запросу.</li>
         </ul>
         <hr>
         <h3>Список адресов указывается согласно следующего шаблона с разделителем ","</h3>

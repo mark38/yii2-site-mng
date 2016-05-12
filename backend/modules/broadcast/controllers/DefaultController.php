@@ -107,7 +107,7 @@ class DefaultController extends Controller
                 $broadcast_address = new BroadcastAddress();
                 $broadcast_address->broadcast_send_id = $broadcast_send->id;
                 $broadcast_address->email = trim($arr[0]);
-                $broadcast_address->username = isset($arr[1]) ? trim($arr[1]) : '';
+                $broadcast_address->fio = isset($arr[1]) ? trim($arr[1]) : '';
                 $broadcast_address->save();
             }
         }

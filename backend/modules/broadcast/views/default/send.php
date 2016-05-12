@@ -30,8 +30,8 @@ $this->params['breadcrumbs'][] = 'Управление';
                                 'data-status-url' => Url::to(['status'])
                             ]);
                         } else {
-                            echo Html::a('Отправить', '#', [
-                                'class' => 'btn btn-sm btn-success',
+                            echo Html::a('<i class="fa fa-paper-plane" aria-hidden="true"></i> Отправить', '#', [
+                                'class' => 'btn btn-sm btn-success btn-flat',
                                 'data-url-redirect' => Url::current(['action' => 'send']),
                                 'data-url-address' => Url::to(['address']),
                                 'id' => 'brodcast-send',
@@ -45,12 +45,15 @@ $this->params['breadcrumbs'][] = 'Управление';
             /** @var $address \common\models\broadcast\BroadcastAddress */
             if (ArrayHelper::getColumn($broadcast_address, 'user_id')) {
                 echo Html::tag('li', '<h3>Зарегистрированные пользователи</h3>');
+
+                $user_exist = false;
                 foreach ($broadcast_address as $address) {
                     if ($address->user_id) {
+                        $user_exist = true;
                         echo Html::tag('li',
                             '<div class="checkbox">' .
                             Html::checkbox('check_user_'.$address->id, true, [
-                                'label' => Html::tag('strong', $address->user->email).' &mdash; '.$address->user->fio.($address->user->companies_id ? ' <nobr>('.$address->user->company->name.')</nobr>' : ''),
+                                'label' => Html::tag('strong', $address->user->email).' &mdash; '.$address->user->username,
                                 'data-checkbox-address-id' => $address->id,
                                 'class' => 'check-user',
                                 'disabled' => (Yii::$app->request->get('action') == 'send' ? true : false)
@@ -60,12 +63,19 @@ $this->params['breadcrumbs'][] = 'Управление';
                         );
                     }
                 }
+
+                if (!$user_exist) {
+                    echo Html::tag('li', '<em class="text-muted">Не заданы</em>');
+                }
             }
 
             if (ArrayHelper::getColumn($broadcast_address, 'email')) {
                 echo Html::tag('li', '<h3>Незарегистрированные пользователи</h3>');
+
+                $user_exist = false;
                 foreach ($broadcast_address as $address) {
                     if ($address->email) {
+                        $user_exist = true;
                         echo Html::tag('li',
                             '<div class="checkbox">' .
                             Html::checkbox('check_user_'.$address->id, true, [
@@ -78,6 +88,10 @@ $this->params['breadcrumbs'][] = 'Управление';
                             '</div>'
                         );
                     }
+                }
+
+                if (!$user_exist) {
+                    echo Html::tag('li', '<em class="text-muted">Не заданы</em>');
                 }
             }
 
