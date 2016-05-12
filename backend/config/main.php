@@ -27,6 +27,9 @@ return [
         'realty' => [
             'class' => 'app\modules\realty\Module',
         ],
+        'broadcast' => [
+            'class' => 'app\modules\broadcast\Module',
+        ],
     ],
     'components' => [
         'request' => [
