@@ -30,8 +30,8 @@ return [
         'broadcast' => [
             'class' => 'app\modules\broadcast\Module',
         ],
-        'certificate' => [
-            'class' => 'app\modules\certificate\Module',
+        'certificates' => [
+            'class' => 'app\modules\certificates\Module',
         ],
     ],
     'components' => [

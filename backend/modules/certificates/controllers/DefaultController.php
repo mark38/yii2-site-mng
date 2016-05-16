@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\certificate\controllers;
+namespace app\modules\certificates\controllers;
 
 use yii\web\Controller;
 

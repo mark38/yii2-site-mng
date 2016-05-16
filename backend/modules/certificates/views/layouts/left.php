@@ -1,22 +1,22 @@
 <?php
-use app\modules\certificate\CertificateAssets;
+use app\modules\certificates\CertificatesAssets;
 
 /** @var $this \yii\web\View */
 
-CertificateAssets::register($this);
+CertificatesAssets::register($this);
 
 
 $items[] = ['label' => 'Обмен справками РЖД', 'options' => ['class' => 'header']];
 $items[] = [
     'label' => 'Список задач',
     'icon' => 'fa fa-circle-thin',
-    'url' => ['/certificate/index'],
+    'url' => ['/certificates/index'],
     'active' => $this->context->module->id == 'certifies' ? true : false,
 ];
 $items[] = [
     'label' => 'Перечень справок',
     'icon' => 'fa fa-circle-thin',
-    'url' => ['/certificate/list'],
+    'url' => ['/certificates/list'],
     'active' => $this->context->module->id == 'certifies' ? true : false,
 ];
 

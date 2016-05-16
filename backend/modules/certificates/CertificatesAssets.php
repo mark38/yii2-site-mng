@@ -1,13 +1,13 @@
 <?php
 
-namespace app\modules\certificate;
+namespace app\modules\certificates;
 
 use Yii;
 use yii\web\AssetBundle;
 
-class CertificateAssets extends AssetBundle
+class CertificatesAssets extends AssetBundle
 {
-    public $sourcePath = '@app/modules/broadcast/assets';
+    public $sourcePath = '@app/modules/certificates/assets';
     public $css = [
         //'certificate.css',
     ];

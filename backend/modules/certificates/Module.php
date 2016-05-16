@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\certificate;
+namespace app\modules\certificates;
 
 /**
  * certificate module definition class
@@ -10,7 +10,7 @@ class Module extends \yii\base\Module
     /**
      * @inheritdoc
      */
-    public $controllerNamespace = 'app\modules\certificate\controllers';
+    public $controllerNamespace = 'app\modules\certificates\controllers';
 
     /**
      * @inheritdoc
