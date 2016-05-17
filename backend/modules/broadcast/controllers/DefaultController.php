@@ -30,7 +30,7 @@ class DefaultController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['index', 'manager', 'render-send', 'send', 'address', 'status'],
+                        'actions' => ['index', 'manager', 'render-send', 'send', 'address', 'status', 'layouts'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -156,5 +156,10 @@ class DefaultController extends Controller
                 'address' => BroadcastAddress::find()->where(['broadcast_send_id' => Yii::$app->request->post('broadcast_send_id')])->all()
             ];
         }
+    }
+
+    public function actionLayouts()
+    {
+        
     }
 }
