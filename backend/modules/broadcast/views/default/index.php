@@ -2,7 +2,6 @@
 use yii\bootstrap\Html;
 use yii\bootstrap\Dropdown;
 use yii\grid\GridView;
-use yii\bootstrap\Nav;
 
 /**
  * @var $dataProvider \yii\data\ActiveDataProvider

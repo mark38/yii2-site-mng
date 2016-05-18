@@ -2,6 +2,7 @@
 
 namespace app\modules\broadcast\controllers;
 
+use common\models\broadcast\BroadcastLayouts;
 use common\models\broadcast\BroadcastSend;
 use Yii;
 use common\models\broadcast\Broadcast;
@@ -30,7 +31,7 @@ class DefaultController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['index', 'manager', 'render-send', 'send', 'address', 'status', 'layouts'],
+                        'actions' => ['index', 'manager', 'render-send', 'send', 'address', 'status', 'layouts', 'layout-mng'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -160,6 +161,27 @@ class DefaultController extends Controller
 
     public function actionLayouts()
     {
-        
+        $dataProvider = new ActiveDataProvider([
+            'query' => BroadcastLayouts::find()->orderBy(['name' => SORT_ASC])
+        ]);
+
+        return $this->render('layouts', [
+            'dataProvider' => $dataProvider
+        ]);
+    }
+
+    public function actionLayoutMng($id=null)
+    {
+        $layout = new BroadcastLayouts();
+        if ($id) $layout = BroadcastLayouts::findOne($id);
+
+        if ($layout->load(Yii::$app->request->post()) && $layout->save()) {
+            Yii::$app->getSession()->setFlash('success', 'Изменения приняты');
+            return $this->redirect(['/boradcast/ssss-mng', 'id' => $id]);
+        }
+
+        return $this->render('layoutMng', [
+            'layout' => $layout
+        ]);
     }
 }
