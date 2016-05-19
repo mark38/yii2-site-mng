@@ -5,10 +5,10 @@ use yii\bootstrap\Modal;
 use yii\bootstrap\Dropdown;
 use yii\helpers\Url;
 
-$this->title = 'Список задач';
+$this->title = 'Список запросов для задачи от '.date('d.m.Y H:i', $task->created_at);
 
 /**
- * @var $tasks \common\models\certificates\Tasks;
+ * @var $requests \common\models\certificates\Requests;
  * @var $request \common\models\certificates\Requests;
  * @var $companies \common\models\main\Companies;
  * @var $new boolean;
@@ -19,33 +19,18 @@ $this->title = 'Список задач';
     <div class="col-sm-6">
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title"><a href="<?= Url::to(['/certificates/requests', 'tasks_id' => $current_task ? $current_task->id : null, 'new' => true]) ?>" class="btn btn-default btn-sm btn-flat"><i class="fa fa-plus"></i> Добавить запрос</a></h3>
+                <h3 class="box-title"><a href="<?= Url::to(['/certificates/requests', 'tasks_id' => $task->id, 'new' => true]) ?>" class="btn btn-default btn-sm btn-flat <?= $task->state ? '' : 'disabled' ?>"><i class="fa fa-plus"></i> Добавить запрос</a></h3>
             </div>
             <div class="box-body">
                 <?php
                 $columns = [
-                    [
-                        'attribute' => 'created_at',
-                        'format' =>  ['date', 'php:d.m.Y H:i']
-                    ],
-                    [
-                        'attribute' => 'Количество запросов',
-                        'value' => function($data) {
-                            return $data->requestAmount;
-                        }
-                    ],
-                    [
-                        'attribute' => 'state',
-                        'value' => function($data) {
-                            return $data->state ? 'Активна' : 'Неактивна';
-                        }
-                    ],
+                    'company.name',
                     [
                         'label' => '',
                         'format' => 'raw',
                         'contentOptions' =>['class' => 'menu-col skip-export'],
-                        'value' => function ($data) {
-                            $items[] = ['label' => 'Подробнее', 'url' => ['/certificates/requests', 'tasks_id' => $data->id]];
+                        'value' => function ($data) use ($task) {
+                            $items[] = ['label' => 'Редактировать', 'url' => ['/certificates/requests', 'tasks_id' => $task->id, 'id' => $data->id]];
                             $items[] = ['label' =>'Удалить', 'url' => ['#'], 'linkOptions' =>
                                 [
                                     'data-toggle' => 'modal',
@@ -65,7 +50,7 @@ $this->title = 'Список задач';
                                 '</ul></div>';
                             Modal::end();
 
-                            return '<div class="dropdown"><span class="btn btn-flat menu-button dropdown-toggle" data-toggle="dropdown" ><i class="fa fa-ellipsis-v"></i></span>' .
+                            return '<div class="dropdown"><span class="btn btn-flat menu-button dropdown-toggle '.($task->state ? '' : 'disabled').'" data-toggle="dropdown" ><i class="fa fa-ellipsis-v"></i></span>' .
                             Dropdown::widget([
                                 'items' => $items,
                                 'options' => [
@@ -78,7 +63,7 @@ $this->title = 'Список задач';
                 ];
 
                 echo GridView::widget([
-                    'dataProvider' => $tasks,
+                    'dataProvider' => $requests,
                     'columns' => $columns,
                     'layout' => '<div class="pull-left">{summary}</div><div class="pull-right">{export}</div>{items}{pager}',
 
@@ -112,8 +97,64 @@ $this->title = 'Список задач';
                 ?>
             </div>
         </div>
+
+        <?php if ($task->state) { ?>
+            <div class="box box-default">
+                <div class="box-body">
+                    <?= Html::a('Закрыть задачу и сформировать файлы excel', ['/certificates/close-task', 'tasks_id' => $task->id], ['class' => 'btn btn-success btn-sm btn-flat']) ?>
+                </div>
+            </div>
+        <? } ?>
+
+        <?php if (!$task->state && $file_paths) { ?>
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Запрашиваемые справки в формате excel</h3>
+                    <div class="box-tools pull-right">
+                        <?= $excel_zip ? Html::a('<i class="fa fa-file-archive-o" aria-hidden="true"></i> Скачать все', ['/'.$excel_zip], ['class' => 'btn btn-default btn-xs btn-flat']) : '' ?>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <ul class="list-unstyled">
+                        <?php
+                        foreach ($file_paths as $path) {
+                            echo '<li>'.Html::a($path->name, ['/'.$path->path]).'</li>';
+                        }
+                        ?>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Разбиение на архивы по компаниям</h3>
+                </div>
+                <div class="box-body">
+                    <ul class="list-unstyled">
+<?=
+echo '<label class="control-label">Upload Document</label>';
+echo File::widget([
+    'name' => 'attachment_3',
+]);
+?>
+                    </ul>
+                </div>
+            </div>
+        <? } ?>
+
+
+
     </div>
     <div class="col-sm-6">
-
+        <?php
+        if ($request) {
+            echo $this->render('mng-request', [
+                'request' => $request,
+                'companies' => $companies,
+                'requested_certificates' => $requested_certificates,
+                'new' => $new ? true : false
+            ]);
+        }
+        ?>
     </div>
 </div>

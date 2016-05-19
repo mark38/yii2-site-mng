@@ -43,7 +43,9 @@
         "kartik-v/yii2-checkbox-x": "^1.0",
         "kartik-v/yii2-date-range": "^1.6",
         "kartik-v/yii2-grid": "^3.1",
-        "kartik-v/yii2-mpdf": "^1.0"
+        "kartik-v/yii2-mpdf": "^1.0",
+        "phpoffice/phpexcel": "^1.8",
+        "kartik-v/yii2-widget-fileinput": "^1.0"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

@@ -4,9 +4,9 @@ use yii\helpers\Html;
 
 /**
  * @var $new boolean;
- * @var $certificate \common\models\certificates\Certificates;
+ * @var $request \common\models\certificates\Requests;
  */
-$title = $new ? 'Добавление новой справки' : 'Редактирование справки '.$certificate->code;
+$title = $new ? 'Создание нового запроса' : 'Редактирование запроса';
 ?>
 <div class="box box-default">
     <div class="box-header with-border">
@@ -23,9 +23,12 @@ $title = $new ? 'Добавление новой справки' : 'Редакт
             'layout' => 'horizontal',
         ]);
 
-        echo $form->field($certificate, 'code')->textInput();
-        echo $form->field($certificate, 'name')->textInput();
-        echo $form->field($certificate, 'state')->dropDownList([1 => 'Активна', 0 => 'Неактивна']);
+        echo $form->field($request, 'companies_id')->dropDownList($companies);
+
+        foreach ($requested_certificates as $key => $certificate) {
+            echo $form->field($certificate, "[$key]wagons")->textInput()->label($certificate->certificate->code);
+        }
+
 
         echo Html::submitButton(('Сохранить'), [
             'class' => 'btn btn-primary btn-flat btn-sm',
