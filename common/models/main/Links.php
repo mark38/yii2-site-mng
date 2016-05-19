@@ -37,7 +37,7 @@ use common\models\gallery\GalleryImages;
  * @property Layouts $layouts
  * @property Views $views
  * @property Categories $categories
- * @property Links $parent0
+ * @property Links $parentLink
  * @property Links[] $links
  * @property Redirects[] $redirects
  */

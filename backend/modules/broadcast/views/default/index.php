@@ -49,14 +49,15 @@ $cols[] = [
         $items[] = ['label' => 'Редактировать', 'url' =>['/broadcast/manager', 'id' => $data->id]];
         $items[] = ['label' => 'Подготовить к отправке', 'url' =>['/broadcast/render-send', 'broadcast_id' => $data->id]];
 
-        return '<div class="dropdown"><span class="btn btn-flat menu-button dropdown-toggle" data-toggle="dropdown" ><i class="glyphicon glyphicon-option-vertical"></i></span>'.
-        Dropdown::widget([
-            'items' => $items,
-            'options' => [
-                'class' => 'control-ul',
-            ]
-        ]).
-        '</div>';
+        return Html::tag('div',
+            '<span class="btn btn-flat menu-button dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-option-vertical"></i></span>' .
+            Dropdown::widget([
+                'items' => $items,
+                'options' => [
+                    'class' => 'control-ul',
+                ]
+            ]),
+            ['class' => 'dropdown']);
     },
 ];
 ?>
