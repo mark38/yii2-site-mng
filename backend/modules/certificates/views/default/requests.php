@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\bootstrap\Modal;
 use yii\bootstrap\Dropdown;
 use yii\helpers\Url;
+use kartik\file\FileInput;
 
 $this->title = 'Список запросов для задачи от '.date('d.m.Y H:i', $task->created_at);
 
@@ -131,12 +132,27 @@ $this->title = 'Список запросов для задачи от '.date('d
                 </div>
                 <div class="box-body">
                     <ul class="list-unstyled">
-<?=
-echo '<label class="control-label">Upload Document</label>';
-echo File::widget([
-    'name' => 'attachment_3',
-]);
-?>
+                        <?
+                        echo '<label class="control-label">Загрузить файлы</label>';
+                        echo FileInput::widget([
+                            'name' => 'file',
+                            'language' => 'ru',
+                            'options' => ['multiple' => true, 'uploadAsync' => false, 'maxFileCount' => 1],
+                            'pluginOptions' => [
+                                'previewFileType' => 'text',
+                                'uploadUrl' => Url::to(['/certificates/txt-upload', 'tasks_id' => $task->id]),
+                                'showPreview' => false,
+                                'showCaption' => true,
+                                'showRemove' => false,
+                                'showUpload' => true
+                            ],
+                            'pluginEvents' => [
+                                'filebatchuploadcomplete' => 'function() {
+                                    window.location.href = "requests?tasks_id=" + '.$task->id.';
+                                }'
+                            ]
+                        ]);
+                        ?>
                     </ul>
                 </div>
             </div>

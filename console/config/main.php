@@ -15,6 +15,9 @@ return [
         'broadcast' => [
             'class' => 'app\modules\broadcast\Module',
         ],
+        'certificates' => [
+            'class' => 'app\modules\certificates\Module',
+        ]
     ],
     'components' => [
         'log' => [

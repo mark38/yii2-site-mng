@@ -164,4 +164,19 @@ class DefaultController extends Controller
         }
         return $this->redirect(['/certificates/requests', 'tasks_id' => $tasks_id]);
     }
+
+    public function actionTxtUpload($tasks_id) {
+        if (Yii::$app->request->post()) {
+            if ($_FILES['file']['type'] == 'text/plain') {
+                if ((new CertificatesHelper())->moveFile($_FILES, 'temp_txt')) {
+                    exec(Yii::getAlias('@app').'/../yii certificates/load-from-certificate/load-from-file '.$_FILES['file']['name']);
+                    (new CertificatesHelper())->createCompaniesZip($tasks_id);
+                    return json_encode(['success' => 'Ок!']);
+                } return json_encode(['error' => 'Ошибка при записи файла на сервер']);
+            } else {
+                return json_encode(['error' => $_FILES['file']['name'].' неверного формата.']);
+            }
+        }
+        return $this->render('load-wagons');
+    }
 }

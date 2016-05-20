@@ -68,18 +68,18 @@ class CertificatesHelper extends Model
             $excel_path = $dir.'/'.$file_name;
             $writer = \PHPExcel_IOFactory::createWriter($file, 'Excel2007');
             $writer->save($excel_path);
-            $this->writeFilePath($excel_path, $file_name, 'excel');
+            $this->writeFilePath($excel_path, $file_name, 'excel', $this->tasks_id);
             $file_number++;
         }
     }
 
-    private function writeFilePath($excel_path, $file_name, $type)
+    private function writeFilePath($excel_path, $file_name, $type, $tasks_id)
     {
         if (!FilePaths::find()->where(['name' => $file_name, 'path' => $excel_path, 'type' => $type])->one()) {
             $file_path = new FilePaths();
             $file_path->name = $file_name;
             $file_path->path = $excel_path;
-            $file_path->tasks_id = $this->tasks_id;
+            $file_path->tasks_id = $tasks_id;
             $file_path->type = $type;
             $file_path->save();
         }
@@ -100,7 +100,37 @@ class CertificatesHelper extends Model
             $zip->addFile($path->path, $path->name);
         }
         $zip->close();
-        $this->writeFilePath($destination, $name, 'excel-zip');
+        $this->writeFilePath($destination, $name, 'excel-zip', $tasks_id);
+    }
+
+    public function createCompaniesZip($tasks_id)
+    {
+        $task = Tasks::findOne($tasks_id);
+        foreach ($task->requests as $request) {
+            $name = $request->company->name.'_'.$tasks_id.'.zip';
+            $zip = new ZipArchive();
+            $destination = 'uploads/companies_zip/'.$name;
+            if($zip->open($destination, ZipArchive::CREATE) !== true) {
+                return false;
+            }
+            foreach ($request->requestedCertificates as $requested_certificate) {
+
+                $wagons = preg_split('/[\s,]+/', $requested_certificate->wagons);
+                foreach($wagons as $wagon)
+                {
+                    $zip->addFile('uploads/certificates_txt/'.$requested_certificate->certificate->code.'_'.$wagon.'.txt', $requested_certificate->certificate->code.'_'.$wagon.'.txt');
+                }
+
+
+            }
+            $zip->close();
+            $this->writeFilePath($destination, $name, 'companies-zip', $tasks_id);
+        }
+
+    }
+
+    public static function moveFile($file, $folder) {
+        return move_uploaded_file( $file['file']['tmp_name'], 'uploads/'.$folder.'/'.$file['file']['name']);
     }
 
 }
