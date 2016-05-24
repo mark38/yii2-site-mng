@@ -1,11 +1,12 @@
 <?php
 
 namespace app\modules\certificates\models;
+use common\models\certificates\CertificatesLost;
 use common\models\certificates\FilePaths;
 use common\models\certificates\RequestedCertificates;
 use common\models\certificates\Requests;
 use common\models\certificates\Tasks;
-use Faker\Provider\File;
+use dosamigos\transliterator\TransliteratorHelper;
 use yii\base\Model;
 use ZipArchive;
 
@@ -31,7 +32,7 @@ class CertificatesHelper extends Model
                 }
             }
         }
-        $dir = 'uploads/certificates/task_'.$tasks_id.'_'.date('d.m.Y');
+        $dir = 'uploads/certificates/certificates_excel/task_'.$tasks_id.'_'.date('d.m.Y');
 
         if(!is_dir($dir)){
             mkdir($dir, 0777, true);
@@ -91,7 +92,7 @@ class CertificatesHelper extends Model
         $name = date('d-m-Y_H-i', $task->created_at).'.zip';
         $file_paths = FilePaths::find()->where(['tasks_id' => $tasks_id, 'type' => 'excel'])->all();
         $zip = new ZipArchive();
-        $destination = 'uploads/zip/'.$name;
+        $destination = 'uploads/certificates/zip/'.$name;
         if($zip->open($destination, ZipArchive::CREATE) !== true) {
             return false;
         }
@@ -107,30 +108,53 @@ class CertificatesHelper extends Model
     {
         $task = Tasks::findOne($tasks_id);
         foreach ($task->requests as $request) {
-            $name = $request->company->name.'_'.$tasks_id.'.zip';
+            $name = $this->translit($request->company->name).'_'.$tasks_id.'.zip';
             $zip = new ZipArchive();
-            $destination = 'uploads/companies_zip/'.$name;
+            $destination = 'uploads/certificates/companies_zip/'.$name;
             if($zip->open($destination, ZipArchive::CREATE) !== true) {
                 return false;
             }
             foreach ($request->requestedCertificates as $requested_certificate) {
-
                 $wagons = preg_split('/[\s,]+/', $requested_certificate->wagons);
                 foreach($wagons as $wagon)
                 {
-                    $zip->addFile('uploads/certificates_txt/'.$requested_certificate->certificate->code.'_'.$wagon.'.txt', $requested_certificate->certificate->code.'_'.$wagon.'.txt');
+                    if ($lost = CertificatesLost::find()->where(['tasks_id' => $tasks_id, 'wagon' => $wagon, 'certificates_id' => $requested_certificate->certificate->id])->one()) {
+                        $lost->delete();
+                    }
+                    if (!$zip->addFile('uploads/certificates/certificates_txt/'.$requested_certificate->certificate->code.'_'.$wagon.'.txt', $requested_certificate->certificate->code.'_'.$wagon.'.txt')) {
+                        $lost = new CertificatesLost();
+                        $lost->tasks_id = $tasks_id;
+                        $lost->wagon = $wagon;
+                        $lost->certificates_id = $requested_certificate->certificate->id;
+                        $lost->save();
+                    }
+
                 }
-
-
             }
             $zip->close();
-            $this->writeFilePath($destination, $name, 'companies-zip', $tasks_id);
+            if (file_exists($destination)) {
+                $this->writeFilePath($destination, $name, 'companies-zip', $tasks_id);
+            }
         }
+        $this->clearCertificatesTxtFolder();
+    }
 
+    private function clearCertificatesTxtFolder()
+    {
+        $files = glob('uploads/certificates/certificates_txt/{,.}*', GLOB_BRACE);
+        foreach($files as $file){
+            if(is_file($file))
+                unlink($file);
+        }
+    }
+
+    public function translit($string)
+    {
+        return TransliteratorHelper::process($string, '_', 'en');
     }
 
     public static function moveFile($file, $folder) {
-        return move_uploaded_file( $file['file']['tmp_name'], 'uploads/'.$folder.'/'.$file['file']['name']);
+        return move_uploaded_file( $file['file']['tmp_name'], 'uploads/certificates/'.$folder.'/'.$file['file']['name']);
     }
 
 }

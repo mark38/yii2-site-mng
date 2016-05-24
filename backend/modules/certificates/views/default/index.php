@@ -50,17 +50,17 @@ $this->title = 'Список задач';
                                 [
                                     'data-toggle' => 'modal',
                                     'data-target' => '#myModal',
-                                    'onclick' => '$("#del-certificate").attr("href", "del-certificate?id='.$data->id.'");',
+                                    'onclick' => '$("#del-task").attr("href", "del-task?id='.$data->id.'");',
                                 ]
                             ];
 
                             Modal::begin([
-                                'header' => '<h2>Действительно удалить справку из списка?</h2>',
+                                'header' => '<h2>Действительно удалить задачу из списка?</h2>',
                                 'id' => 'myModal'
                             ]);
-                            echo '<div class="panel">Также будут удалены все задачи, связанные с данной справкой.</div>';
+                            echo '<div class="panel">Также будут удалены все запросы, связанные с данной задачей.</div>';
                             echo '<div class="text-center"><ul class="list-inline">' .
-                                '<li>'.Html::a('<span class="fa fa-times"></span> Удалить', '', ['id' => 'del-certificate', 'class' => 'btn btn-sm btn-flat btn-danger']).'</li>' .
+                                '<li>'.Html::a('<span class="fa fa-times"></span> Удалить', '', ['id' => 'del-task', 'class' => 'btn btn-sm btn-flat btn-danger']).'</li>' .
                                 '<li>'.Html::a('Отменить', '', ['class' => 'btn btn-sm btn-flat btn-default ', 'data-dismiss' => "modal", 'aria-hidden' => true]).'</li>' .
                                 '</ul></div>';
                             Modal::end();

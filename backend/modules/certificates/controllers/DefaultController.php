@@ -3,6 +3,7 @@
 namespace app\modules\certificates\controllers;
 
 use app\modules\certificates\models\CertificatesHelper;
+use common\models\certificates\CertificatesLost;
 use common\models\certificates\FilePaths;
 use common\models\certificates\RequestedCertificates;
 use common\models\certificates\Requests;
@@ -108,11 +109,33 @@ class DefaultController extends Controller
                 'request' => $request,
                 'requested_certificates' => $requested_certificates,
                 'new' => $new,
-                'file_paths' => FilePaths::find()->where(['tasks_id' => $tasks_id, 'type' => 'excel'])->all() ? FilePaths::find()->where(['tasks_id' => $tasks_id, 'type' => 'excel'])->all() : '',
-                'excel_zip' => FilePaths::find()->where(['tasks_id' => $tasks_id, 'type' => 'excel-zip'])->one() ? FilePaths::find()->where(['tasks_id' => $tasks_id, 'type' => 'excel-zip'])->one()->path : ''
+                'excels' => FilePaths::find()->where(['tasks_id' => $tasks_id, 'type' => 'excel'])->all() ? FilePaths::find()->where(['tasks_id' => $tasks_id, 'type' => 'excel'])->all() : '',
+                'excel_zip' => FilePaths::find()->where(['tasks_id' => $tasks_id, 'type' => 'excel-zip'])->one() ? FilePaths::find()->where(['tasks_id' => $tasks_id, 'type' => 'excel-zip'])->one()->path : '',
+                'companies_zip' => FilePaths::find()->where(['tasks_id' => $tasks_id, 'type' => 'companies-zip'])->all() ? FilePaths::find()->where(['tasks_id' => $tasks_id, 'type' => 'companies-zip'])->all() : '',
+                'lost' => CertificatesLost::find()->where(['tasks_id' => $tasks_id])->all() ? CertificatesLost::find()->where(['tasks_id' => $tasks_id])->all() : ''
             ]);
         }
         return $this->redirect(['/certificates/requests', 'tasks_id' => $task->id]);
+    }
+
+    public function actionDelRequest($id) {
+        $request = Requests::findOne($id);
+        if ($request->delete()) {
+            Yii::$app->getSession()->setFlash('success', 'Запрос удален');
+        } else {
+            Yii::$app->getSession()->setFlash('error', 'Возникли проблемы. Попробуйте позже');
+        }
+        return $this->redirect(['/certificates/requests', 'tasks_id' => $request->tasks_id]);
+    }
+
+    public function actionDelTask($id) {
+        $task = Tasks::findOne($id);
+        if ($task->delete()) {
+            Yii::$app->getSession()->setFlash('success', 'Задача удалена');
+        } else {
+            Yii::$app->getSession()->setFlash('error', 'Возникли проблемы. Попробуйте позже');
+        }
+        return $this->redirect(['/certificates/index']);
     }
 
     public function actionList($id = null, $new = null)
@@ -170,7 +193,6 @@ class DefaultController extends Controller
             if ($_FILES['file']['type'] == 'text/plain') {
                 if ((new CertificatesHelper())->moveFile($_FILES, 'temp_txt')) {
                     exec(Yii::getAlias('@app').'/../yii certificates/load-from-certificate/load-from-file '.$_FILES['file']['name']);
-                    (new CertificatesHelper())->createCompaniesZip($tasks_id);
                     return json_encode(['success' => 'Ок!']);
                 } return json_encode(['error' => 'Ошибка при записи файла на сервер']);
             } else {
@@ -178,5 +200,11 @@ class DefaultController extends Controller
             }
         }
         return $this->render('load-wagons');
+    }
+
+    public function actionCreateCompaniesZip($tasks_id)
+    {
+        (new CertificatesHelper())->createCompaniesZip($tasks_id);
+        return $this->redirect(['/certificates/requests', 'tasks_id' => $tasks_id]);
     }
 }

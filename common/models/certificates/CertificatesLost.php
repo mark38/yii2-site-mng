@@ -5,24 +5,24 @@ namespace common\models\certificates;
 use Yii;
 
 /**
- * This is the model class for table "requested_certificates".
+ * This is the model class for table "certificates_lost".
  *
  * @property integer $id
- * @property integer $requests_id
+ * @property string $wagon
  * @property integer $certificates_id
- * @property string $wagons
+ * @property integer $tasks_id
  *
+ * @property Tasks $tasks
  * @property Certificates $certificates
- * @property Requests $requests
  */
-class RequestedCertificates extends \yii\db\ActiveRecord
+class CertificatesLost extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'certificates_requested_certificates';
+        return 'certificates_lost';
     }
 
     /**
@@ -31,10 +31,10 @@ class RequestedCertificates extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['requests_id', 'certificates_id'], 'integer'],
-            [['wagons'], 'string', 'max' => 4095],
+            [['certificates_id', 'tasks_id'], 'integer'],
+            [['wagon'], 'string', 'max' => 255],
+            [['tasks_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tasks::className(), 'targetAttribute' => ['tasks_id' => 'id']],
             [['certificates_id'], 'exist', 'skipOnError' => true, 'targetClass' => Certificates::className(), 'targetAttribute' => ['certificates_id' => 'id']],
-            [['requests_id'], 'exist', 'skipOnError' => true, 'targetClass' => Requests::className(), 'targetAttribute' => ['requests_id' => 'id']],
         ];
     }
 
@@ -45,10 +45,18 @@ class RequestedCertificates extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'requests_id' => 'Requests ID',
+            'wagon' => 'Wagon',
             'certificates_id' => 'Certificates ID',
-            'wagons' => 'Wagons',
+            'tasks_id' => 'Tasks ID',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTask()
+    {
+        return $this->hasOne(Tasks::className(), ['id' => 'tasks_id']);
     }
 
     /**
@@ -57,13 +65,5 @@ class RequestedCertificates extends \yii\db\ActiveRecord
     public function getCertificate()
     {
         return $this->hasOne(Certificates::className(), ['id' => 'certificates_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getRequest()
-    {
-        return $this->hasOne(Requests::className(), ['id' => 'requests_id']);
     }
 }

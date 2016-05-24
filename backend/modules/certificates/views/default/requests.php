@@ -36,17 +36,16 @@ $this->title = 'Список запросов для задачи от '.date('d
                                 [
                                     'data-toggle' => 'modal',
                                     'data-target' => '#myModal',
-                                    'onclick' => '$("#del-certificate").attr("href", "del-certificate?id='.$data->id.'");',
+                                    'onclick' => '$("#del-request").attr("href", "del-request?id='.$data->id.'");',
                                 ]
                             ];
 
                             Modal::begin([
-                                'header' => '<h2>Действительно удалить справку из списка?</h2>',
+                                'header' => '<h2>Действительно удалить запрос из задачи?</h2>',
                                 'id' => 'myModal'
                             ]);
-                            echo '<div class="panel">Также будут удалены все задачи, связанные с данной справкой.</div>';
                             echo '<div class="text-center"><ul class="list-inline">' .
-                                '<li>'.Html::a('<span class="fa fa-times"></span> Удалить', '', ['id' => 'del-certificate', 'class' => 'btn btn-sm btn-flat btn-danger']).'</li>' .
+                                '<li>'.Html::a('<span class="fa fa-times"></span> Удалить', '', ['id' => 'del-request', 'class' => 'btn btn-sm btn-flat btn-danger']).'</li>' .
                                 '<li>'.Html::a('Отменить', '', ['class' => 'btn btn-sm btn-flat btn-default ', 'data-dismiss' => "modal", 'aria-hidden' => true]).'</li>' .
                                 '</ul></div>';
                             Modal::end();
@@ -99,7 +98,7 @@ $this->title = 'Список запросов для задачи от '.date('d
             </div>
         </div>
 
-        <?php if ($task->state) { ?>
+        <?php if ($task->state && $task->requests) { ?>
             <div class="box box-default">
                 <div class="box-body">
                     <?= Html::a('Закрыть задачу и сформировать файлы excel', ['/certificates/close-task', 'tasks_id' => $task->id], ['class' => 'btn btn-success btn-sm btn-flat']) ?>
@@ -107,7 +106,7 @@ $this->title = 'Список запросов для задачи от '.date('d
             </div>
         <? } ?>
 
-        <?php if (!$task->state && $file_paths) { ?>
+        <?php if (!$task->state && $excels) { ?>
             <div class="box box-default">
                 <div class="box-header with-border">
                     <h3 class="box-title">Запрашиваемые справки в формате excel</h3>
@@ -118,7 +117,7 @@ $this->title = 'Список запросов для задачи от '.date('d
                 <div class="box-body">
                     <ul class="list-unstyled">
                         <?php
-                        foreach ($file_paths as $path) {
+                        foreach ($excels as $path) {
                             echo '<li>'.Html::a($path->name, ['/'.$path->path]).'</li>';
                         }
                         ?>
@@ -146,15 +145,40 @@ $this->title = 'Список запросов для задачи от '.date('d
                                 'showRemove' => false,
                                 'showUpload' => true
                             ],
-                            'pluginEvents' => [
-                                'filebatchuploadcomplete' => 'function() {
-                                    window.location.href = "requests?tasks_id=" + '.$task->id.';
-                                }'
-                            ]
+                        'pluginEvents' => [
+                            'filebatchuploadcomplete' => 'function() {
+                                window.location.href = "create-companies-zip?tasks_id=" + '.$task->id.';
+                            }'
+                        ]
                         ]);
                         ?>
                     </ul>
                 </div>
+                <?php if ($companies_zip) { ?>
+                <div class="box-body">
+                    <label>Скачать архив</label>
+                    <ul class="list-unstyled">
+                        <?php
+                        foreach ($companies_zip as $path) {
+                            echo '<li>'.Html::a($path->name, ['/'.$path->path]).'</li>';
+                        }
+                        ?>
+                    </ul>
+                </div>
+                <?php }?>
+                <?php
+                if ($lost) { ?>
+                    <div class="box-body">
+                        <label>Ненайденные справки</label>
+                        <ul class="list-unstyled">
+                            <?php
+                            foreach ($lost as $wagon) {
+                                echo '<li class="text-red">'.$wagon->certificate->code.' - вагон № '.$wagon->wagon.'</li>';
+                            }
+                            ?>
+                        </ul>
+                    </div>
+                <?php } ?>
             </div>
         <? } ?>
 
