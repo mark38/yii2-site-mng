@@ -175,6 +175,43 @@ class DefaultController extends Controller
         return $this->redirect(['/certificates/list']);
     }
 
+    public function actionCompanies($id = null, $new = null)
+    {
+        $company = $new ? new Companies() : Companies::findOne($id);
+        $companies = new ActiveDataProvider([
+            'query' => Companies::find(),
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+        ]);
+
+        if ($company && $company->load(Yii::$app->request->post()) && $company->save()) {
+            if ($new) {
+                Yii::$app->getSession()->setFlash('success', 'Компания добавлена');
+            } else {
+                Yii::$app->getSession()->setFlash('success', 'Изменения сохранены');
+            }
+
+        } else {
+            return $this->render('companies', [
+                'companies' => $companies,
+                'company' => $company,
+                'new' => $new
+            ]);
+        }
+        return $this->redirect(['/certificates/companies']);
+    }
+
+    public function actionDelCompany($id) {
+        $company = Companies::findOne($id);
+        if ($company->delete()) {
+            Yii::$app->getSession()->setFlash('success', 'Компания удалена');
+        } else {
+            Yii::$app->getSession()->setFlash('error', 'Возникли проблемы. Попробуйте позже');
+        }
+        return $this->redirect(['/certificates/companies']);
+    }
+
     public function actionCloseTask($tasks_id)
     {
         if ($tasks_id != Tasks::find()->where(['state' => 1])->one()->id) {

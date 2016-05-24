@@ -11,13 +11,19 @@ $items[] = [
     'label' => 'Список задач',
     'icon' => 'fa fa-circle-thin',
     'url' => ['/certificates/index'],
-    'active' => $this->context->module->id == 'certifies' ? true : false,
+    'active' => Yii::$app->controller->action->id == 'index' ? true : false,
 ];
 $items[] = [
     'label' => 'Перечень справок',
     'icon' => 'fa fa-circle-thin',
     'url' => ['/certificates/list'],
-    'active' => $this->context->module->id == 'certifies' ? true : false,
+    'active' => Yii::$app->controller->action->id == 'list' ? true : false,
+];
+$items[] = [
+    'label' => 'Список компаний',
+    'icon' => 'fa fa-circle-thin',
+    'url' => ['/certificates/companies'],
+    'active' => Yii::$app->controller->action->id == 'companies' ? true : false,
 ];
 
 ?>
