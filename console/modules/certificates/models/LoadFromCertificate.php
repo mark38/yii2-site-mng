@@ -49,6 +49,12 @@ class LoadFromCertificate extends Model
             }
         }
 
+        if (preg_match('/Г(В|B)Ц (М|M)П(С|C)\s+(\D+)\s+(\d+).+/', $certificate, $match)) {
+            if (isset($match[5])) {
+                $certificate_number = $match[5];
+            }
+        }
+
         if (preg_match('/(\d{8})/', $certificate, $match)) {
             if (isset($match[1])) {
                 $wagon_number = $match[1];
