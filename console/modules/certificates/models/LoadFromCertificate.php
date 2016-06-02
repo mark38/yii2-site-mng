@@ -24,36 +24,35 @@ class LoadFromCertificate extends Model
         $utf8_file = iconv("windows-1251", "UTF-8", $txt_file);
         $rows = explode(PHP_EOL, $utf8_file);
         $str = '';
+        $divider = '';
+        $certificate_number = '';
         foreach ($rows as $row) {
-            if (preg_match('/И(В|B)Ц Ж(A|А)/', $row)) {
+            if ($row) {
+                preg_match('/(\D+)\s+(\d+)/', $row, $match);
+                $divider = $match[1];
+                $certificate_number = $match[2];
+                break;
+            } else {
+                continue;
+            }
+        }
+        foreach ($rows as $row) {
+            if (preg_match('/'.$divider.'/', $row)) {
                 if ($str) {
-                    $this->saveCertificate($str);
+                    $this->saveCertificate($str, $certificate_number);
                 }
                 $str = '';
             }
             $str .= $row."\n";
         }
-        $this->saveCertificate($str);
+        $this->saveCertificate($str, $certificate_number);
         unlink($file);
     }
 
-    private function saveCertificate($certificate)
+    private function saveCertificate($certificate, $certificate_number)
     {
         $dir = Yii::getAlias('@backend/web/uploads/certificates/certificates_txt/');
-        $certificate_number = '';
         $wagon_number = '';
-
-        if (preg_match('/И(В|B)Ц Ж(A|А)\s+(\D+)\s+(\d+).+/', $certificate, $match)) {
-            if (isset($match[4])) {
-                $certificate_number = $match[4];
-            }
-        }
-
-        if (preg_match('/Г(В|B)Ц (М|M)П(С|C)\s+(\D+)\s+(\d+).+/', $certificate, $match)) {
-            if (isset($match[5])) {
-                $certificate_number = $match[5];
-            }
-        }
 
         if (preg_match('/(\d{8})/', $certificate, $match)) {
             if (isset($match[1])) {
