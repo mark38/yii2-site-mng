@@ -17,6 +17,9 @@ return [
         ],
         'certificates' => [
             'class' => 'app\modules\certificates\Module',
+        ],
+        'ftptransfer' => [
+            'class' => 'app\modules\ftptransfer\Module',
         ]
     ],
     'components' => [
