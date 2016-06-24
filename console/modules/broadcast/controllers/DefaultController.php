@@ -3,11 +3,13 @@
 namespace app\modules\broadcast\controllers;
 
 use common\models\broadcast\Broadcast;
+use common\models\broadcast\BroadcastFiles;
 use common\models\User;
 use Yii;
 use common\models\broadcast\BroadcastAddress;
 use common\models\broadcast\BroadcastSend;
 use yii\console\Controller;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 
 /**
@@ -26,6 +28,7 @@ class DefaultController extends Controller
         }
 
         $broadcast_send = BroadcastSend::findOne($id);
+        $broadcast_files = BroadcastFiles::find()->where(['broadcast_id' => $broadcast_send->broadcast_id])->all();
         $view = $broadcast_send->broadcast->broadcastLayout->layout_path;
         $title = $broadcast_send->broadcast->title;
         $broadcast_addresses = BroadcastAddress::find()->where(['broadcast_send_id' => $id, 'status' => 0])->all();
@@ -39,8 +42,14 @@ class DefaultController extends Controller
 
             $mailer = Yii::$app->mailer->compose($view, [
                 'content' => $this->handleContent($broadcast_send->broadcast, '', '')
-            ])
-                ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name])
+            ]);
+            if ($broadcast_files) {
+                $files = array();
+                foreach ($broadcast_files as $file) {
+                    $mailer = $mailer->attach(Yii::getAlias('@backend').preg_replace('/\/mng/', '', $file->file));
+                }
+            }
+            $mailer->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name])
                 ->setTo($email)
                 ->setSubject($title);
             try {

@@ -19,6 +19,13 @@ $items[] = [
     'url' => ['/broadcast/layouts'],
     'active' => $this->context->module->id == 'layouts' ? true : false,
 ];
+$items[] = ['label' => 'Поддержка', 'options' => ['class' => 'header']];
+$items[] = [
+    'label' => 'Важно',
+    'icon' => 'fa fa-circle-thin',
+    'url' => ['/broadcast/support/readme'],
+    'active' => $this->context->module->id == 'readme' ? true : false,
+];
 
 ?>
 

@@ -2,6 +2,7 @@
 
 namespace app\modules\broadcast\controllers;
 
+use app\modules\broadcast\models\BroadcastForm;
 use common\models\broadcast\BroadcastLayouts;
 use common\models\broadcast\BroadcastSend;
 use Yii;
@@ -66,14 +67,13 @@ class DefaultController extends Controller
 
     public function actionManager($id=null)
     {
-        $broadcast = new Broadcast();
-        if ($id) $broadcast = Broadcast::findOne($id);
+        $broadcast = new BroadcastForm();
+        if ($id) $broadcast = BroadcastForm::findOne($id);
 
         if ($broadcast->load(Yii::$app->request->post()) && $broadcast->save()) {
             Yii::$app->session->setFlash('success', 'Изменения приняты. Вы можете подготовить письмо к отправке.');
             return $this->redirect(Url::current(['id' => $broadcast->id]));
         }
-
 
         return $this->render('manager', [
             'broadcast' => $broadcast,
