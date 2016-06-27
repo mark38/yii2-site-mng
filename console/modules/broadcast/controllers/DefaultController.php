@@ -57,7 +57,7 @@ class DefaultController extends Controller
                 $address->status = 1;
                 $address->update();
             } catch (\Exception $e) {
-                echo "ERROR\n";
+                echo "ERROR: ".$e."\n";
             }
         } try {Yii::$app->mailer->sendMultiple($messages);} catch (Exception $e) {echo "Error\n";}
 
