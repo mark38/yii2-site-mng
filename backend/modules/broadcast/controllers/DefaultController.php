@@ -176,7 +176,7 @@ class DefaultController extends Controller
 
         if ($layout->load(Yii::$app->request->post()) && $layout->save()) {
             Yii::$app->getSession()->setFlash('success', 'Изменения приняты');
-            return $this->redirect(['/boradcast/ssss-mng', 'id' => $id]);
+            return $this->redirect(['/boradcast/layout-mng', 'id' => $id]);
         }
 
         return $this->render('layoutMng', [

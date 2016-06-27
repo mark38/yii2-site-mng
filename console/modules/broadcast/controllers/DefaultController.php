@@ -45,13 +45,20 @@ class DefaultController extends Controller
             $fio = $address->fio;
             $company = '';
 
+            //$content = preg_replace('/{{content}}/', $broadcast_send->broadcast->broadcastLayout->content, $this->handleContent($broadcast_send->broadcast));
+            $content = $this->handleContent($broadcast_send->broadcast, '', '');
+            if ($broadcast_send->broadcast->broadcastLayout->content) {
+                $content = preg_replace('/{{content}}/', $content, $broadcast_send->broadcast->broadcastLayout->content);
+            }
+
             $mailer = Yii::$app->mailer->compose($view, [
-                'content' => $this->handleContent($broadcast_send->broadcast, '', '')
+                //'content' => $this->handleContent($broadcast_send->broadcast, '', '')
+                'content' => $content
             ]);
             if ($broadcast_files) {
-                $files = array();
                 foreach ($broadcast_files as $file) {
-                    $mailer = $mailer->attach(Yii::getAlias('@backend/web').preg_replace('/^'.addcslashes(Yii::$app->params['broadcast']['clearMngUrl'], '/').'/', '', $file->file));
+                    $attach_file = Yii::getAlias('@backend/web').preg_replace('/^'.addcslashes(Yii::$app->params['broadcast']['clearMngUrl'], '/').'/', '', $file->file);
+                    if (is_file($attach_file)) $mailer = $mailer->attach($attach_file);
                 }
             }
             $mailer->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name])

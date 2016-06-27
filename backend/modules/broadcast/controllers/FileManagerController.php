@@ -80,7 +80,7 @@ class FileManagerController extends Controller
 
         $file = BroadcastFiles::findOne($request->post('id'));
         unlink(Yii::getAlias('@backend/web').preg_replace('/^'.addcslashes(Yii::$app->params['broadcast']['clearMngUrl'], '/').'/', '', $file->file));
-        
+
         BroadcastFiles::findOne($request->post('id'))->delete();
 
         return ['success' => true];
