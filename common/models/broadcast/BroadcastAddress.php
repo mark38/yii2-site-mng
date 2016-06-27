@@ -35,7 +35,8 @@ class BroadcastAddress extends \yii\db\ActiveRecord
     {
         return [
             [['broadcast_send_id', 'user_id', 'status'], 'integer'],
-            [['fio', 'email'], 'string', 'max' => 255],
+            [['fio'], 'string', 'max' => 255],
+            ['email', 'email'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
             [['broadcast_send_id'], 'exist', 'skipOnError' => true, 'targetClass' => BroadcastSend::className(), 'targetAttribute' => ['broadcast_send_id' => 'id']],
         ];

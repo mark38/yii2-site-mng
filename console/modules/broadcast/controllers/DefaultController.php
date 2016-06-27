@@ -11,6 +11,7 @@ use common\models\broadcast\BroadcastSend;
 use yii\console\Controller;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\validators\EmailValidator;
 
 /**
  * Sending mail
@@ -37,6 +38,10 @@ class DefaultController extends Controller
         /** @var $address BroadcastAddress */
         foreach ($broadcast_addresses as $address) {
             $email = $address->user_id ? $address->user->email : $address->email;
+
+            $emailValidator = new EmailValidator();
+            if (!$emailValidator->validate($email)) continue;
+
             $fio = $address->fio;
             $company = '';
 
@@ -46,7 +51,7 @@ class DefaultController extends Controller
             if ($broadcast_files) {
                 $files = array();
                 foreach ($broadcast_files as $file) {
-                    $mailer = $mailer->attach(Yii::getAlias('@backend').preg_replace('/\/mng/', '', $file->file));
+                    $mailer = $mailer->attach(Yii::getAlias('@backend/web').preg_replace('/^'.addcslashes(Yii::$app->params['broadcast']['clearMngUrl'], '/').'/', '', $file->file));
                 }
             }
             $mailer->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name])

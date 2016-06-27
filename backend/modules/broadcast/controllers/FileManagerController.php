@@ -78,6 +78,9 @@ class FileManagerController extends Controller
         $request = Yii::$app->request;
         if ($request->isAjax) Yii::$app->response->format = Response::FORMAT_JSON;
 
+        $file = BroadcastFiles::findOne($request->post('id'));
+        unlink(Yii::getAlias('@backend/web').preg_replace('/^'.addcslashes(Yii::$app->params['broadcast']['clearMngUrl'], '/').'/', '', $file->file));
+        
         BroadcastFiles::findOne($request->post('id'))->delete();
 
         return ['success' => true];
