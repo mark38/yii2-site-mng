@@ -33,3 +33,9 @@ phpunit.phar
 # frontend
 /frontend
 upload/
+.gitignore
+.htaccess
+assets/
+css/
+img/
+robots.txt
