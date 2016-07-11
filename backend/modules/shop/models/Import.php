@@ -190,7 +190,10 @@ class Import extends Model
     {
         $group = ShopGroups::findOne(['code' => strval($item->{'Группы'}->{'Ид'})]);
         $good = ShopGoods::findOne(['code' => $code]);
-        $link = $good ? Links::findOne($good->links_id) : new Links();
+        if ($good) {
+            $link = Links::findOne($good->links_id);
+        }
+        if (!isset($link)) $link = new Links();
 
         $link->categories_id = Yii::$app->params['shop']['categories_id'];
         $link->parent = $group->links_id;
