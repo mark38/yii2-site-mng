@@ -50,7 +50,7 @@ class DefaultController extends Controller
                 echo "success\nHello1C\nHello";
             }
         } elseif (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('mode') == 'init') {
-            unlink(Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/1cbitrix.zip');
+            @ unlink(Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/1cbitrix.zip');
             (new Helpers())->removeDirectory(Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/1cbitrix');
             $zip_file = fopen(Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/1cbitrix.zip', 'w');
             fclose($zip_file);
