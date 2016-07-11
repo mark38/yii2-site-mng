@@ -50,7 +50,11 @@ class DefaultController extends Controller
                 echo "success\nHello1C\nHello";
             }
         } elseif (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('mode') == 'init') {
-            echo "zip=yes\nfile_limit=314572800";
+            unlink(Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/1cbitrix.zip');
+            (new Helpers())->removeDirectory(Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/1cbitrix');
+            $zip_file = fopen(Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/1cbitrix.zip', 'w');
+            fclose($zip_file);
+            echo "zip=yes\nfile_limit=".Yii::$app->params['shop']['fileLimit'];
         } elseif (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('filename')) {
             if ( $postdata = file_get_contents( "php://input" ) ) {
                 $zip_file = Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/1cbitrix.zip';
@@ -59,7 +63,7 @@ class DefaultController extends Controller
                 (new Helpers())->removeDirectory($unzip_dir);
                 mkdir($unzip_dir);
 
-                $upload_zip = fopen($zip_file, 'w');
+                $upload_zip = fopen($zip_file, 'a+');
                 fwrite($upload_zip, $postdata);
 
                 $zip = new \ZipArchive();
