@@ -255,52 +255,55 @@ class Import extends Model
     private function addPropertyValues($properties_sxe, $goods_id)
     {
         $properties = ArrayHelper::index($this->shop_properties, 'code');
-        $good_properties = ShopGoodProperties::find()->where(['shop_goods_id' => $goods_id])->all();
+        $goodProperties = ShopGoodProperties::find()->where(['shop_goods_id' => $goods_id])->all();
+        if ($goodProperties) {
+            ShopGoodProperties::updateAll(['state' => 0], ['id' => ArrayHelper::getColumn($goodProperties, 'id')]);
+        }
 
         $property_values = array();
         foreach ($properties_sxe as $item) {
             $code = strval($item->{'Ид'});
-            $name = trim(strval($item->{'Значение'}));
+            $names = preg_split('/\,/', trim(strval($item->{'Значение'})));
             $properties_id = $properties[$code]->id;
 
-            $property_value = ShopPropertyValues::findOne(['shop_properties_id' => $properties_id, 'name' => $name]);
-            if (!$property_value) {
-                $property_value = new ShopPropertyValues();
-                $property_value->shop_properties_id = $properties_id;
-                $property_value->name = $name;
-                $property_value->anchor = $name;
-                $property_value->url = (new Translit())->slugify($name, $property_value->tableName(), 'url', '_', null, 'shop_properties_id', $properties_id);
-                $property_value->save();
-            }
-            $property_values[] = $property_value;
+            foreach ($names as $name) {
+                $property_value = ShopPropertyValues::findOne(['shop_properties_id' => $properties_id, 'name' => $name]);
+                if (!$property_value) {
+                    $property_value = new ShopPropertyValues();
+                    $property_value->shop_properties_id = $properties_id;
+                    $property_value->name = $name;
+                    $property_value->anchor = $name;
+                    $property_value->url = (new Translit())->slugify($name, $property_value->tableName(), 'url', '_', null, 'shop_properties_id', $properties_id);
+                    $property_value->save();
+                }
+                $property_values[] = $property_value;
 
-            $add_property_value = true;
-            if ($good_properties) {
-                /** @var $good_property ShopGoodProperties */
-                foreach ($good_properties as $good_property) {
-                    if ($good_property->shop_properties_id == $properties_id) {
-                        $add_property_value = false;
-                        if ($good_property->shop_property_values_id != $property_value->id) {
-                            $good_property->shop_property_values_id = $property_value->id;
-                            $good_property->save();
+                $add_property_value = true;
+                if ($goodProperties) {
+                    foreach ($goodProperties as $goodProperty) {
+                        if ($goodProperty->shop_properties_id == $properties_id) {
+                            $addPropertyValue = false;
+                            if ($goodProperty->shop_property_values_id != $property_value->id) {
+                                $good_property->shop_property_values_id = $property_value->id;
+                                $good_property->save();
+                            }
                         }
                     }
                 }
-            }
 
-            if ($add_property_value) {
-                $good_property = new ShopGoodProperties();
-                $good_property->shop_goods_id = $goods_id;
-                $good_property->shop_properties_id = $properties_id;
-                $good_property->shop_property_values_id = $property_value->id;
-                $good_property->save();
+                if ($add_property_value) {
+                    $good_property = new ShopGoodProperties();
+                    $good_property->shop_goods_id = $goods_id;
+                    $good_property->shop_properties_id = $properties_id;
+                    $good_property->shop_property_values_id = $property_value->id;
+                    $good_property->save();
+                }
             }
         }
 
-        if ($good_properties) {
-            /** @var $good_property ShopGoodProperties */
+        if ($goodProperties) {
             $property_values = ArrayHelper::index($property_values, 'shop_properties_id');
-            foreach ($good_properties as $good_property) {
+            foreach ($goodProperties as $good_property) {
                 if (!isset($property_values[$good_property->shop_properties_id])) {
                     $good_property->delete();
                 }

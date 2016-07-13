@@ -12,6 +12,7 @@ use Yii;
  * @property integer $shop_goods_id
  * @property integer $shop_properties_id
  * @property integer $shop_property_values_id
+ * @property integer $state
  *
  * @property ShopGoods $shopGoods
  * @property ShopProperties $shopProperties
@@ -36,7 +37,7 @@ class ShopGoodProperties extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['shop_goods_id', 'shop_properties_id', 'shop_property_values_id'], 'integer'],
+            [['shop_goods_id', 'shop_properties_id', 'shop_property_values_id', 'state'], 'integer'],
             [['shop_goods_id'], 'exist', 'skipOnError' => true, 'targetClass' => ShopGoods::className(), 'targetAttribute' => ['shop_goods_id' => 'id']],
             [['shop_properties_id'], 'exist', 'skipOnError' => true, 'targetClass' => ShopProperties::className(), 'targetAttribute' => ['shop_properties_id' => 'id']],
             [['shop_property_values_id'], 'exist', 'skipOnError' => true, 'targetClass' => ShopPropertyValues::className(), 'targetAttribute' => ['shop_property_values_id' => 'id']],
@@ -53,6 +54,7 @@ class ShopGoodProperties extends \yii\db\ActiveRecord
             'shop_goods_id' => 'Shop Goods ID',
             'shop_properties_id' => 'Shop Properties ID',
             'shop_property_values_id' => 'Shop Property Values ID',
+            'state' => 'State',
         ];
     }
 
