@@ -260,13 +260,13 @@ class Import extends Model
             ShopGoodProperties::updateAll(['state' => 0], ['id' => ArrayHelper::getColumn($goodProperties, 'id')]);
         }
 
-        $property_values = array();
         foreach ($properties_sxe as $item) {
             $code = strval($item->{'Ид'});
             $names = preg_split('/\,/', trim(strval($item->{'Значение'})));
             $properties_id = $properties[$code]->id;
 
             foreach ($names as $name) {
+                $name = trim($name);
                 $property_value = ShopPropertyValues::findOne(['shop_properties_id' => $properties_id, 'name' => $name]);
                 if (!$property_value) {
                     $property_value = new ShopPropertyValues();
@@ -276,39 +276,31 @@ class Import extends Model
                     $property_value->url = (new Translit())->slugify($name, $property_value->tableName(), 'url', '_', null, 'shop_properties_id', $properties_id);
                     $property_value->save();
                 }
-                $property_values[] = $property_value;
 
-                $add_property_value = true;
+                $addPropertyValue = true;
                 if ($goodProperties) {
-                    foreach ($goodProperties as $goodProperty) {
-                        if ($goodProperty->shop_properties_id == $properties_id) {
+                    foreach ($goodProperties as $id => $goodProperty) {
+                        if ($goodProperty->shop_properties_id == $properties_id && $goodProperty->shop_property_values_id == $property_value->id) {
                             $addPropertyValue = false;
-                            if ($goodProperty->shop_property_values_id != $property_value->id) {
-                                $good_property->shop_property_values_id = $property_value->id;
-                                $good_property->save();
-                            }
+                            /*$goodProperty->state = 1;
+                            $goodProperty->update();*/
+                            ShopGoodProperties::updateAll(['state' => 1], ['id' => $goodProperty->id]);
                         }
                     }
                 }
 
-                if ($add_property_value) {
-                    $good_property = new ShopGoodProperties();
-                    $good_property->shop_goods_id = $goods_id;
-                    $good_property->shop_properties_id = $properties_id;
-                    $good_property->shop_property_values_id = $property_value->id;
-                    $good_property->save();
+                if ($addPropertyValue) {
+                    $goodProperty = new ShopGoodProperties();
+                    $goodProperty->shop_goods_id = $goods_id;
+                    $goodProperty->shop_properties_id = $properties_id;
+                    $goodProperty->shop_property_values_id = $property_value->id;
+                    $goodProperty->state = 1;
+                    $goodProperty->save();
                 }
             }
         }
 
-        if ($goodProperties) {
-            $property_values = ArrayHelper::index($property_values, 'shop_properties_id');
-            foreach ($goodProperties as $good_property) {
-                if (!isset($property_values[$good_property->shop_properties_id])) {
-                    $good_property->delete();
-                }
-            }
-        }
+        ShopGoodProperties::deleteAll(['shop_goods_id' => $goods_id, 'state' => 0]);
     }
 
     private function addItem($goods_id, $code, $item_sxe)
