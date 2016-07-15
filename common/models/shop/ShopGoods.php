@@ -12,8 +12,10 @@ use Yii;
  * @property integer $id
  * @property integer $shop_groups_id
  * @property string $links_id
- * @property string $code
+ * @property string $verification_code
  * @property string $name
+ * @property string $code
+ * @property string $state
  *
  * @property ShopGoodImages[] $shopGoodImages
  * @property ShopGroup $shopGroups
@@ -37,8 +39,8 @@ class ShopGoods extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['shop_groups_id', 'links_id'], 'integer'],
-            [['code', 'name'], 'string', 'max' => 255]
+            [['shop_groups_id', 'links_id', 'state'], 'integer'],
+            [['verification_code', 'name', 'code'], 'string', 'max' => 255]
         ];
     }
 
@@ -51,8 +53,10 @@ class ShopGoods extends \yii\db\ActiveRecord
             'id' => 'ID',
             'shop_groups_id' => 'Shop Groups ID',
             'links_id' => 'Links ID',
-            'code' => 'Code',
+            'verification_code' => 'Verification Code',
             'name' => 'Name',
+            'code' => 'Code',
+            'state' => 'State',
         ];
     }
 

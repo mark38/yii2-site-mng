@@ -33,7 +33,7 @@ class ShopGroups extends \yii\db\ActiveRecord
     {
         return [
             [['links_id'], 'integer'],
-            [['code', 'name'], 'string', 'max' => 255]
+            [['verification_code', 'name'], 'string', 'max' => 255]
         ];
     }
 
@@ -45,7 +45,7 @@ class ShopGroups extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'links_id' => 'Links ID',
-            'code' => 'Code',
+            'verification_code' => 'Verification Code',
             'name' => 'Name',
         ];
     }

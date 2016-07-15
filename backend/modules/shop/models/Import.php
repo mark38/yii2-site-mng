@@ -43,12 +43,14 @@ class Import extends Model
 
         $goods_sxe = $sxe->xpath('/КоммерческаяИнформация/Каталог/Товары/Товар');
         if (count($goods_sxe)) $this->parserGoods($goods_sxe);
+
+        Links::updateAll(['state' => 0], ['id' => ArrayHelper::getColumn(ShopGoods::find()->where(['state' => 0])->all(), 'links_id')]);
     }
 
     public function parserGroups($groups_sxe, $parent=null)
     {
         foreach ($groups_sxe as $item) {
-            $group = ShopGroups::findOne(['code' => $item->{'Ид'}]);
+            $group = ShopGroups::findOne(['verification_code' => $item->{'Ид'}]);
             $link = $group ? Links::findOne($group->links_id) : new Links();
 
             $link->categories_id = Yii::$app->params['shop']['categories_id'];
@@ -94,11 +96,13 @@ class Import extends Model
             if (!$group) {
                 $group = new ShopGroups();
                 $group->links_id = $link->id;
-                $group->code = strval($item->{'Ид'});
+                $group->verification_code = strval($item->{'Ид'});
             };
             $group->name = strval($item->{'Наименование'});
             $group->save();
             $this->shop_groups[] = $group;
+
+            ShopGoods::updateAll(['state' => 0], ['shop_groups_id' => $group->id]);
 
             if ($item->{'Группы'}->{'Группа'}) {
                 $this->parserGroups($item->{'Группы'}->{'Группа'}, $link->id);
@@ -111,7 +115,7 @@ class Import extends Model
     public function parserProperties($properties_sxe)
     {
         foreach ($properties_sxe as $item) {
-            $shop_property = ShopProperties::findOne(['code' => $item->{'Ид'}]);
+            $shop_property = ShopProperties::findOne(['verification_code' => $item->{'Ид'}]);
 
             if (!$shop_property) {
                 $shop_property = new ShopProperties();
@@ -121,7 +125,7 @@ class Import extends Model
                 $currentId = $shop_property->id;
             }
 
-            $shop_property->code = strval($item->{'Ид'});
+            $shop_property->verification_code = strval($item->{'Ид'});
             $shop_property->name = strval($item->{'Наименование'});
             $shop_property->anchor = strval($item->{'Наименование'});
             $shop_property->url = (new Translit())->slugify($item->{'Наименование'}, $shop_property->tableName(), 'url', '_', $currentId);
@@ -149,30 +153,30 @@ class Import extends Model
     {
         $goods = array();
         foreach ($goods_sxe as $item) {
-            $item_code = false;
+            $itemVerificationCode = false;
             if (preg_match('/(.+)#(.+)/', $item->{'Ид'}, $matches)) {
-                $good_code = strval($matches[1]);
-                $item_code = strval($matches[2]);
+                $goodVerificationCode = strval($matches[1]);
+                $itemVerificationCode = strval($matches[2]);
             } else {
-                $good_code = strval($item->{'Ид'});
+                $goodVerificationCode = strval($item->{'Ид'});
             }
 
-            if (!isset($goods[$good_code])) {
-                $goods[$good_code] = array();
-                $goods[$good_code] = $this->addGood($item, $good_code);
-                if ($item->{'ЗначенияСвойств'}) $this->addPropertyValues($item->{'ЗначенияСвойств'}->{'ЗначенияСвойства'}, $goods[$good_code]['id']);
+            if (!isset($goods[$goodVerificationCode])) {
+                $goods[$goodVerificationCode] = array();
+                $goods[$goodVerificationCode] = $this->addGood($item, $goodVerificationCode);
+                if ($item->{'ЗначенияСвойств'}) $this->addPropertyValues($item->{'ЗначенияСвойств'}->{'ЗначенияСвойства'}, $goods[$goodVerificationCode]['id']);
             }
 
-            if ($item_code) {
-                $goods[$good_code]['items'][$item_code] = $this->addItem($goods[$good_code]['id'], $item_code, $item);
+            if ($itemVerificationCode) {
+                $goods[$goodVerificationCode]['items'][$itemVerificationCode] = $this->addItem($goods[$goodVerificationCode]['id'], $itemVerificationCode, $item);
             }
         }
 
-        foreach ($goods as $good_code => $good) {
+        foreach ($goods as $goodVerificationCode => $good) {
             $items = ShopItems::findAll(['shop_goods_id' => $good['id']]);
             if (isset($good['items'])) {
                 foreach ($items as $item) {
-                    if (!isset($good['items'][$item->code])) {
+                    if (!isset($good['items'][$item->verification_code])) {
                         $item->state = 0;
                         $item->save();
                     }
@@ -186,10 +190,10 @@ class Import extends Model
         }
     }
 
-    private function addGood($item, $code)
+    private function addGood($item, $verificationCode)
     {
-        $group = ShopGroups::findOne(['code' => strval($item->{'Группы'}->{'Ид'})]);
-        $good = ShopGoods::findOne(['code' => $code]);
+        $group = ShopGroups::findOne(['verification_code' => strval($item->{'Группы'}->{'Ид'})]);
+        $good = ShopGoods::findOne(['verification_code' => $verificationCode]);
         if ($good) {
             $link = Links::findOne($good->links_id);
         }
@@ -237,9 +241,11 @@ class Import extends Model
             $good = new ShopGoods();
             $good->links_id = $link->id;
             $good->shop_groups_id = $group->id;
-            $good->code = $code;
+            $good->verification_code = $verificationCode;
         }
         $good->name = strval($item->{'Наименование'});
+        $good->code = preg_replace('/^ЦБ0+/', '', $item->{'КодНоменклатуры'});
+        $good->state = 1;
         $good->save();
 
         if ($item->{'Картинки'} && $item->{'Картинки'}->{'Картинка'}) {
@@ -252,38 +258,36 @@ class Import extends Model
         ];
     }
 
-    private function addPropertyValues($properties_sxe, $goods_id)
+    private function addPropertyValues($propertiesSxe, $goodsId)
     {
-        $properties = ArrayHelper::index($this->shop_properties, 'code');
-        $goodProperties = ShopGoodProperties::find()->where(['shop_goods_id' => $goods_id])->all();
+        $properties = ArrayHelper::index($this->shop_properties, 'verification_code');
+        $goodProperties = ShopGoodProperties::find()->where(['shop_goods_id' => $goodsId])->all();
         if ($goodProperties) {
             ShopGoodProperties::updateAll(['state' => 0], ['id' => ArrayHelper::getColumn($goodProperties, 'id')]);
         }
 
-        foreach ($properties_sxe as $item) {
-            $code = strval($item->{'Ид'});
+        foreach ($propertiesSxe as $item) {
+            $verification_code = strval($item->{'Ид'});
             $names = preg_split('/\,/', trim(strval($item->{'Значение'})));
-            $properties_id = $properties[$code]->id;
+            $propertiesId = $properties[$verification_code]->id;
 
             foreach ($names as $name) {
                 $name = trim($name);
-                $property_value = ShopPropertyValues::findOne(['shop_properties_id' => $properties_id, 'name' => $name]);
-                if (!$property_value) {
-                    $property_value = new ShopPropertyValues();
-                    $property_value->shop_properties_id = $properties_id;
-                    $property_value->name = $name;
-                    $property_value->anchor = $name;
-                    $property_value->url = (new Translit())->slugify($name, $property_value->tableName(), 'url', '_', null, 'shop_properties_id', $properties_id);
-                    $property_value->save();
+                $propertyValue = ShopPropertyValues::findOne(['shop_properties_id' => $propertiesId, 'name' => $name]);
+                if (!$propertyValue) {
+                    $propertyValue = new ShopPropertyValues();
+                    $propertyValue->shop_properties_id = $propertiesId;
+                    $propertyValue->name = $name;
+                    $propertyValue->anchor = $name;
+                    $propertyValue->url = (new Translit())->slugify($name, $propertyValue->tableName(), 'url', '_', null, 'shop_properties_id', $propertiesId);
+                    $propertyValue->save();
                 }
 
                 $addPropertyValue = true;
                 if ($goodProperties) {
                     foreach ($goodProperties as $id => $goodProperty) {
-                        if ($goodProperty->shop_properties_id == $properties_id && $goodProperty->shop_property_values_id == $property_value->id) {
+                        if ($goodProperty->shop_properties_id == $propertiesId && $goodProperty->shop_property_values_id == $propertyValue->id) {
                             $addPropertyValue = false;
-                            /*$goodProperty->state = 1;
-                            $goodProperty->update();*/
                             ShopGoodProperties::updateAll(['state' => 1], ['id' => $goodProperty->id]);
                         }
                     }
@@ -291,25 +295,25 @@ class Import extends Model
 
                 if ($addPropertyValue) {
                     $goodProperty = new ShopGoodProperties();
-                    $goodProperty->shop_goods_id = $goods_id;
-                    $goodProperty->shop_properties_id = $properties_id;
-                    $goodProperty->shop_property_values_id = $property_value->id;
+                    $goodProperty->shop_goods_id = $goodsId;
+                    $goodProperty->shop_properties_id = $propertiesId;
+                    $goodProperty->shop_property_values_id = $propertyValue->id;
                     $goodProperty->state = 1;
                     $goodProperty->save();
                 }
             }
         }
 
-        ShopGoodProperties::deleteAll(['shop_goods_id' => $goods_id, 'state' => 0]);
+        ShopGoodProperties::deleteAll(['shop_goods_id' => $goodsId, 'state' => 0]);
     }
 
-    private function addItem($goods_id, $code, $item_sxe)
+    private function addItem($goods_id, $verification_code, $item_sxe)
     {
-        $item = ShopItems::findOne(['code' => $code]);
+        $item = ShopItems::findOne(['verification_code' => $verification_code]);
         if (!$item) {
             $item = new ShopItems();
             $item->shop_goods_id = $goods_id;
-            $item->code = $code;
+            $item->verification_code = $verification_code;
         }
         $item->state = 1;
         $item->save();
