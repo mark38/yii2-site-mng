@@ -12,6 +12,9 @@ return [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'console\controllers',
     'modules' => [
+        'shop' => [
+            'class' => 'app\modules\shop\Module',
+        ],
         'broadcast' => [
             'class' => 'app\modules\broadcast\Module',
         ],

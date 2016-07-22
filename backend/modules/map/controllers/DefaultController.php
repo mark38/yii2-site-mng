@@ -57,14 +57,17 @@ class DefaultController extends Controller
         return $this->render('index');
     }
 
-    public function actionLinks($categories_id=null)
+    public function actionLinks($categories_id=null, $id=null, $parent=null, $action=null)
     {
         $category = Categories::findOne($categories_id);
-        $link = new Links();
-        $link->categories_id = $categories_id;
 
-        if (Yii::$app->request->get('mng_link') == 'ch') {
-            $link = Links::findOne(Yii::$app->request->get('links_id'));
+        if ($id) {
+            $link = Links::findOne($id);
+        } else {
+            $link = new Links();
+            $link->categories_id = $categories_id;
+            $link->parent = $parent;
+            $link->state = 1;
         }
 
         if ($link->load(Yii::$app->request->post()) && $link->save()) {
@@ -75,12 +78,10 @@ class DefaultController extends Controller
                 $content->save();
             }
             Yii::$app->getSession()->setFlash('success', 'Изменения приняты');
+            return $this->redirect(['', 'categories_id' => $categories_id, 'id' => $link->id, 'action' => $action]);
         }
 
-        return $this->render('links', [
-            'category' => $category,
-            'link' => $link,
-        ]);
+        return $this->render('links', compact('category', 'link'));
     }
 
     public function actionLinkDel($links_id, $categories_id=null)

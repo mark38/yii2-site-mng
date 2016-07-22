@@ -2,6 +2,7 @@
 
 namespace common\models\main;
 
+use common\models\helpers\Translit;
 use Yii;
 use common\models\gallery\GalleryGroups;
 use common\models\gallery\GalleryImages;
@@ -64,14 +65,6 @@ class Links extends \yii\db\ActiveRecord
             [['title', 'keywords', 'description'], 'string', 'max' => 1024],
             [['url'], 'unique']
         ];
-    }
-
-    public function init() {
-        $this->state = 1;
-        $this->priority = '0.5';
-        $this->parent = Yii::$app->request->get('parent_links_id');
-
-        //$this->gl_imgs_id = 31;
     }
 
     /**
@@ -177,13 +170,17 @@ class Links extends \yii\db\ActiveRecord
 
     public function beforeSave($insert)
     {
-        if (!$this->name) {
-            $this->name = $this->anchor2translit(preg_replace('/\s\/.+$/', '', $this->anchor));
-        }
-
         if ($this->start == 1) {
             $this->url = '/';
-        } else {
+        }
+
+        if (!$this->name) {
+            $translit = new Translit();
+            $parent = isset($this->parent) ? $this->parent : null;
+            $this->name = $insert ? $translit->slugify($this->anchor, $this->tableName(), 'name', '-', $this->id, 'parent', $parent) : $translit->slugify($this->anchor, $this->tableName(), 'name', '-', null, 'parent', $parent);
+        }
+
+        if (!$this->url) {
             $this->url = $this->parent ? preg_replace('/\/$/', '', self::findOne($this->parent)->url).'/'.$this->name : '/'.$this->name;
         }
 
@@ -217,8 +214,54 @@ class Links extends \yii\db\ActiveRecord
             }
             return true;
         }
+
+        return true;
     }
 
+    /*public function beforeSave($insert)
+    {
+        if (!$this->name) {
+            $this->name = $this->anchor2translit(preg_replace('/\s\/.+$/', '', $this->anchor));
+        }
+
+        if ($this->start == 1) {
+            $this->url = '/';
+        } else {
+            $this->url = $this->parent ? preg_replace('/\/$/', '', self::findOne($this->parent)->url).'/'.$this->name : '/'.$this->name;
+        }
+
+        if ($insert) {
+            $this->child_exist = 0;
+            $this->level = 1;
+            $this->seq = $this->findLastSequence($this->categories_id, $this->parent) + 1;
+
+            if ($this->parent) {
+                $parent_link = self::findOne($this->parent);
+                $this->level = $parent_link->level + 1;
+                if ($parent_link->child_exist == 0) {
+                    $parent_link->child_exist = 1;
+                    $parent_link->save();
+                }
+            }
+
+            if (self::findOne(['url' => $this->url])) {
+                Yii::$app->getSession()->setFlash('danger', 'Адрес страницы (URL) уже существует на сайте. Вам следует указать другое наименование латиницай.');
+                return false;
+            }
+
+            return true;
+        } else {
+            echo 'UPDATE'.$this->url.'<br>';
+            $link = self::findOne([$this->id]);
+            if ($link && $this->url != $link->url) {
+                $redirect = new Redirects();
+                $redirect->links_id = $link->id;
+                $redirect->url = $link->url;
+                $redirect->save();
+            }
+            return true;
+        }
+    }*/
 
     public function afterDelete()
     {
@@ -230,6 +273,31 @@ class Links extends \yii\db\ActiveRecord
                 $parent_link->save();
             }
         }
+    }
+
+    public function getPrefixUrl($pattern, $linkLevel, $parent=null)
+    {
+        $patternSplit = preg_split('/\//', preg_replace('/\/$/', '', $pattern));
+        $prefixUrl = '';
+        if ($patternSplit) {
+            foreach ($patternSplit as $item) {
+                if (preg_match('/{(level)-(\d+)}/', $item, $match)) {
+                    if (isset($match[2]) && $linkLevel > $match[2]) {
+                        $level = $linkLevel - 1;
+                        $parentLink = self::findOne($parent);
+                        while ($level > $match[2]) {
+                            $level = $level - 1;
+                            $parentLink = Links::findOne($parentLink->parent);
+                        }
+                        $prefixUrl .= $parentLink->name.'/';
+                    }
+                } else {
+                    $prefixUrl .= $item.'/';
+                }
+            }
+        }
+
+        return preg_replace('/\/$/', '', $prefixUrl);
     }
 
     public function anchor2translit($anchor)

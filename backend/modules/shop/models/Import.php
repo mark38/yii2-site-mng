@@ -1,17 +1,13 @@
 <?php
 
-namespace app\modules\shop\models;
+namespace backend\modules\shop\models;
 
-use app\models\Translit;
-use common\models\shop\ShopGoodProperties;
-use common\models\shop\ShopGroupProperties;
-use common\models\shop\ShopProperties;
-use common\models\shop\ShopPropertyValues;
 use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use yii\imagine\Image;
 use mark38\galleryManager\Gallery;
+use common\models\helpers\Translit;
 use common\models\main\Contents;
 use common\models\main\Links;
 use common\models\shop\ShopCharacteristics;
@@ -20,6 +16,10 @@ use common\models\shop\ShopGroups;
 use common\models\shop\ShopItemCharacteristics;
 use common\models\shop\ShopItems;
 use common\models\shop\ShopGoodGallery;
+use common\models\shop\ShopGoodProperties;
+use common\models\shop\ShopGroupProperties;
+use common\models\shop\ShopProperties;
+use common\models\shop\ShopPropertyValues;
 use common\models\gallery\GalleryGroups;
 use common\models\gallery\GalleryImages;
 use common\models\gallery\GalleryTypes;
@@ -32,11 +32,17 @@ class Import extends Model
 
     public function parser($import_file)
     {
+        ShopGoods::updateAll(['state' => 1], ['state' => 0]);
+
         $this->import_file = $import_file;
         $sxe = simplexml_load_file($this->import_file);
 
-        $groups_sxe = $sxe->xpath(Yii::$app->params['shop']['start_group_path']);
-        if (count($groups_sxe)) $this->parserGroups($groups_sxe);
+        $groups_sxe = $sxe->xpath(Yii::$app->params['shop']['startGroupPath']);
+        if (count($groups_sxe)) {
+            $parentLink = Links::findOne(['url' => Yii::$app->params['shop']['catalogUrl']]);
+            $parent = $parentLink ? $parentLink->id : null;
+            $this->parserGroups($groups_sxe, $parent);
+        }
 
         $properties_sxe = $sxe->xpath('/КоммерческаяИнформация/Классификатор/Свойства/Свойство');
         if (count($properties_sxe)) $this->parserProperties($properties_sxe);
@@ -52,28 +58,16 @@ class Import extends Model
         foreach ($groups_sxe as $item) {
             $group = ShopGroups::findOne(['verification_code' => $item->{'Ид'}]);
             $link = $group ? Links::findOne($group->links_id) : new Links();
+            $translit = new Translit();
 
-            $link->categories_id = Yii::$app->params['shop']['categories_id'];
+            $link->categories_id = Yii::$app->params['shop']['categoriesId'];
             $link->parent = $parent;
             $link->anchor = strval(isset($item->{'НаименованиеНаСайте'}) && $item->{'НаименованиеНаСайте'} ? $item->{'НаименованиеНаСайте'} : $item->{'Наименование'});
-            $link->name = isset($item->{'URI'}) && $item->{'URI'} ? strval($item->{'URI'}) : $link->anchor2translit($link->anchor);
-            $link_name = $link->name;
-            $num = 1;
-            if (isset($link->id)) {
-                while (Links::findByUrlForLink($link->name, $link->id, $parent)) {
-                    $num += 1;
-                    $link->name = $link_name.'-'.$num;
-                }
-            } else {
-                while (Links::findByUrl($link->name, $parent)) {
-                    $num += 1;
-                    $link->name = $link_name.'-'.$num;
-                }
-            }
+            $link->name = isset($link->id) ? $translit->slugify($link->anchor, $link->tableName(), 'name', '-', $link->id, 'parent', $parent) : $translit->slugify($link->anchor, $link->tableName(), 'name', '-', null, 'parent', $parent);
             $link->level = $parent !== null ? Links::findOne($parent)->level + 1 : 1;
+            $link->url = (new Links())->getPrefixUrl(Yii::$app->params['shop']['groupUrlPrefix'], $link->level, $parent).'/'.$link->name;
             $link->child_exist = 1;
-            $link->url = $parent !== null ? Links::findOne($parent)->url.'/'.$link->name : '/'.$link->name;
-            $link->seq = isset($link->id) ? $link->seq : Links::findLastSequence(Yii::$app->params['shop']['categories_id'], $parent) + 1;
+            $link->seq = isset($link->id) ? $link->seq : Links::findLastSequence(Yii::$app->params['shop']['categoriesId'], $parent) + 1;
             $link->title = isset($link->id) ? $link->title : $link->anchor;
             $link->created_at = isset($link->id) ? $link->created_at : time();
             $link->updated_at = time();
@@ -167,24 +161,26 @@ class Import extends Model
                 if ($item->{'ЗначенияСвойств'}) $this->addPropertyValues($item->{'ЗначенияСвойств'}->{'ЗначенияСвойства'}, $goods[$goodVerificationCode]['id']);
             }
 
-            if ($itemVerificationCode) {
+            /*if ($itemVerificationCode) {
                 $goods[$goodVerificationCode]['items'][$itemVerificationCode] = $this->addItem($goods[$goodVerificationCode]['id'], $itemVerificationCode, $item);
-            }
+            }*/
         }
 
-        foreach ($goods as $goodVerificationCode => $good) {
-            $items = ShopItems::findAll(['shop_goods_id' => $good['id']]);
-            if (isset($good['items'])) {
-                foreach ($items as $item) {
-                    if (!isset($good['items'][$item->verification_code])) {
+        if ($goods) {
+            foreach ($goods as $goodVerificationCode => $good) {
+                $items = ShopItems::findAll(['shop_goods_id' => $good['id']]);
+                if (isset($good['items'])) {
+                    foreach ($items as $item) {
+                        if (!isset($good['items'][$item->verification_code])) {
+                            $item->state = 0;
+                            $item->save();
+                        }
+                    }
+                } else {
+                    foreach ($items as $item) {
                         $item->state = 0;
                         $item->save();
                     }
-                }
-            } else {
-                foreach ($items as $item) {
-                    $item->state = 0;
-                    $item->save();
                 }
             }
         }
@@ -194,32 +190,18 @@ class Import extends Model
     {
         $group = ShopGroups::findOne(['verification_code' => strval($item->{'Группы'}->{'Ид'})]);
         $good = ShopGoods::findOne(['verification_code' => $verificationCode]);
-        if ($good) {
-            $link = Links::findOne($good->links_id);
-        }
+        if ($good) $link = Links::findOne($good->links_id);
         if (!isset($link)) $link = new Links();
+        $translit = new Translit();
 
-        $link->categories_id = Yii::$app->params['shop']['categories_id'];
+        $link->categories_id = Yii::$app->params['shop']['categoriesId'];
         $link->parent = $group->links_id;
         $link->anchor = strval(isset($item->{'НаименованиеНаСайте'}) && $item->{'НаименованиеНаСайте'} ? $item->{'НаименованиеНаСайте'} : $item->{'Наименование'});
-        $link->name = isset($item->{'URI'}) && $item->{'URI'} ? strval($item->{'URI'}) : $link->anchor2translit($link->anchor);
-        $link_name = $link->name;
-        $num = 1;
-        if (isset($link->id)) {
-            while (Links::findByUrlForLink($link->name, $link->id, $link->parent)) {
-                $num += 1;
-                $link->name = $link_name.'-'.$num;
-            }
-        } else {
-            while (Links::findByUrl($link->name, $link->parent)) {
-                $num += 1;
-                $link->name = $link_name.'-'.$num;
-            }
-        }
+        $link->name = isset($link->id) ? $translit->slugify($link->anchor, $link->tableName(), 'name', '-', $link->id, 'parent', $group->links_id) : $translit->slugify($link->anchor, $link->tableName(), 'name', '-', null, 'parent', $group->links_id);
         $link->level = $group->link->level + 1;
+        $link->url = (new Links())->getPrefixUrl(Yii::$app->params['shop']['goodUrlPrefix'], $link->level, $group->links_id).'/'.$link->name;
         $link->child_exist = 0;
-        $link->url = $group->link->url.'/'.$link->name;
-        $link->seq = isset($link->id) ? $link->seq : Links::findLastSequence(Yii::$app->params['shop']['categories_id'], $link->parent) + 1;
+        $link->seq = isset($link->id) ? $link->seq : Links::findLastSequence(Yii::$app->params['shop']['categoriesId'], $link->parent) + 1;
         $link->title = isset($link->id) ? $link->title : $link->anchor;
         $link->created_at = isset($link->id) ? $link->created_at : time();
         $link->updated_at = time();

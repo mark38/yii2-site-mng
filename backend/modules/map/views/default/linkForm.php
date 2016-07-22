@@ -3,7 +3,6 @@ use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Tabs;
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use common\models\main\Layouts;
 use common\models\main\Views;
@@ -24,7 +23,6 @@ foreach (Views::find()->orderBy(['seq' => SORT_ASC])->all() as $view) $views[$vi
     'method' => 'post',
     'layout' => 'horizontal',
     'fieldConfig' => [
-        //'template' => "{label}\n{beginWrapper}\n{input}\n{hint}\n{error}\n{endWrapper}",
         'horizontalCssClasses' => [
             'label' => 'col-sm-4',
             'offset' => 'col-sm-offset-4',
@@ -37,7 +35,7 @@ foreach (Views::find()->orderBy(['seq' => SORT_ASC])->all() as $view) $views[$vi
 
 <div class="box box-default">
     <div class="box-header with-border">
-        <h3 class="box-title"><?=Yii::$app->request->get('mng_link') == 'add' ? 'Добавление новой ссылки' : 'Редактирование ссылки'?></h3>
+        <h3 class="box-title"><?=Yii::$app->request->get('action') == 'add' ? 'Добавление новой ссылки' : 'Редактирование ссылки'?></h3>
         <div class="box-tools pull-right">
             <?=Html::a('<i class="fa fa-times"></i>', $link_close, ['class' => 'btn btn-box-tool'])?>
         </div>

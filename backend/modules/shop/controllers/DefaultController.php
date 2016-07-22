@@ -6,7 +6,7 @@ use Yii;
 use yii\web\Controller;
 use yii\web\Cookie;
 use app\models\Helpers;
-use app\modules\shop\models\Import;
+use backend\modules\shop\models\Import;
 use app\modules\shop\models\Offers;
 
 class DefaultController extends Controller
@@ -103,6 +103,7 @@ class DefaultController extends Controller
     public function actionHandImport()
     {
         $this->layout = false;
+        ini_set("memory_limit", "2000M");
 
         $import_file = Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/1cbitrix/import.xml';
 
@@ -110,6 +111,11 @@ class DefaultController extends Controller
         $model->parser($import_file);
 
         return false;
+    }
+
+    public function actionHandImportConsole()
+    {
+        exec('php '.Yii::getAlias('@app').'/../yii shop/default/import '.Yii::getAlias('@app').Yii::$app->params['shop']['upload_dir'].'/1cbitrix/import.xml');
     }
 
     public function actionHandOffers($offers='offers.xml')

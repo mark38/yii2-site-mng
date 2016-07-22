@@ -31,11 +31,8 @@ phpunit.phar
 /phpunit.xml
 
 # frontend
-/frontend
-upload/
-.gitignore
-.htaccess
-assets/
-css/
-img/
-robots.txt
+!/frontend
+/frontend/*
+!/frontend/controllers
+!/frontend/modules
+
