@@ -35,4 +35,3 @@ phpunit.phar
 /frontend/*
 !/frontend/controllers
 !/frontend/modules
-
