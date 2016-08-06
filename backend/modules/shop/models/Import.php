@@ -50,7 +50,7 @@ class Import extends Model
         $goods_sxe = $sxe->xpath('/КоммерческаяИнформация/Каталог/Товары/Товар');
         if (count($goods_sxe)) $this->parserGoods($goods_sxe);
 
-        Links::updateAll(['state' => 0], ['id' => ArrayHelper::getColumn(ShopGoods::find()->where(['state' => 0])->all(), 'links_id')]);
+        //Links::updateAll(['state' => 0], ['id' => ArrayHelper::getColumn(ShopGoods::find()->where(['state' => 0])->all(), 'links_id')]);
     }
 
     public function parserGroups($groups_sxe, $parent=null)
