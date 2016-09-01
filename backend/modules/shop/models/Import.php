@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use yii\imagine\Image;
+use app\models\Helpers;
 use mark38\galleryManager\Gallery;
 use common\models\helpers\Translit;
 use common\models\main\Contents;
@@ -23,6 +24,7 @@ use common\models\shop\ShopPropertyValues;
 use common\models\gallery\GalleryGroups;
 use common\models\gallery\GalleryImages;
 use common\models\gallery\GalleryTypes;
+use common\models\shop\ShopUnits;
 
 class Import extends Model
 {
@@ -57,13 +59,13 @@ class Import extends Model
     {
         foreach ($groups_sxe as $item) {
             $group = ShopGroups::findOne(['verification_code' => $item->{'Ид'}]);
-            $link = $group ? Links::findOne($group->links_id) : new Links();
+            $link = $group && $group->links_id ? Links::findOne($group->links_id) : new Links();
             $translit = new Translit();
 
             $link->categories_id = Yii::$app->params['shop']['categoriesId'];
             $link->parent = $parent;
             $link->anchor = strval(isset($item->{'НаименованиеНаСайте'}) && $item->{'НаименованиеНаСайте'} ? $item->{'НаименованиеНаСайте'} : $item->{'Наименование'});
-            $link->name = isset($link->id) ? $translit->slugify($link->anchor, $link->tableName(), 'name', '-', $link->id, 'parent', $parent) : $translit->slugify($link->anchor, $link->tableName(), 'name', '-', null, 'parent', $parent);
+            $link->name = isset($link->id) ? $translit->slugify($link->anchor, $link->tableName(), 'name', '-', $link->id) : $translit->slugify($link->anchor, $link->tableName(), 'name', '-', null);
             $link->level = $parent !== null ? Links::findOne($parent)->level + 1 : 1;
             $link->url = (new Links())->getPrefixUrl(Yii::$app->params['shop']['groupUrlPrefix'], $link->level, $parent).'/'.$link->name;
             $link->child_exist = 1;
@@ -89,9 +91,9 @@ class Import extends Model
 
             if (!$group) {
                 $group = new ShopGroups();
-                $group->links_id = $link->id;
                 $group->verification_code = strval($item->{'Ид'});
             };
+            $group->links_id = $link->id;
             $group->name = strval($item->{'Наименование'});
             $group->save();
             $this->shop_groups[] = $group;
@@ -161,9 +163,9 @@ class Import extends Model
                 if ($item->{'ЗначенияСвойств'}) $this->addPropertyValues($item->{'ЗначенияСвойств'}->{'ЗначенияСвойства'}, $goods[$goodVerificationCode]['id']);
             }
 
-            /*if ($itemVerificationCode) {
+            if ($itemVerificationCode) {
                 $goods[$goodVerificationCode]['items'][$itemVerificationCode] = $this->addItem($goods[$goodVerificationCode]['id'], $itemVerificationCode, $item);
-            }*/
+            }
         }
 
         if ($goods) {
@@ -197,7 +199,7 @@ class Import extends Model
         $link->categories_id = Yii::$app->params['shop']['categoriesId'];
         $link->parent = $group->links_id;
         $link->anchor = strval(isset($item->{'НаименованиеНаСайте'}) && $item->{'НаименованиеНаСайте'} ? $item->{'НаименованиеНаСайте'} : $item->{'Наименование'});
-        $link->name = isset($link->id) ? $translit->slugify($link->anchor, $link->tableName(), 'name', '-', $link->id, 'parent', $group->links_id) : $translit->slugify($link->anchor, $link->tableName(), 'name', '-', null, 'parent', $group->links_id);
+        $link->name = isset($link->id) ? $translit->slugify($link->anchor, $link->tableName(), 'name', '-', $link->id) : $translit->slugify($link->anchor, $link->tableName(), 'name', '-', null);
         $link->level = $group->link->level + 1;
         $link->url = (new Links())->getPrefixUrl(Yii::$app->params['shop']['goodUrlPrefix'], $link->level, $group->links_id).'/'.$link->name;
         $link->child_exist = 0;
@@ -221,12 +223,19 @@ class Import extends Model
 
         if (!$good) {
             $good = new ShopGoods();
-            $good->links_id = $link->id;
             $good->shop_groups_id = $group->id;
             $good->verification_code = $verificationCode;
         }
+        $good->links_id = $link->id;
+        $shopUnit = ShopUnits::findOne(['name' => $item->{'БазоваяЕдиница'}]);
+        if (!$shopUnit) {
+            $shopUnit = new ShopUnits();
+            $shopUnit->name = strval($item->{'БазоваяЕдиница'});
+            $shopUnit->save();
+        }
+        $good->shop_units_id = $shopUnit->id;
         $good->name = strval($item->{'Наименование'});
-        $good->code = preg_replace('/^ЦБ0+/', '', $item->{'КодНоменклатуры'});
+        $good->code = preg_replace('/^\D+0*/', '', $item->{'КодНоменклатуры'});
         $good->state = 1;
         $good->save();
 
@@ -339,6 +348,7 @@ class Import extends Model
             if (!$basename_src) continue;
 
             $src_image = pathinfo($this->import_file)['dirname'].'/'.strval($image_sxe->{'ПутьКИзображению'});
+
             if (!is_file($src_image)) continue;
 
             $gallery_types_id = false;
@@ -383,7 +393,7 @@ class Import extends Model
                 } else {
                     $gallery_group = GalleryGroups::findOne($good_gallery->gallery_groups_id);
                 }
-            } elseif (in_array($gallery_types_id, Yii::$app->params['shop']['gallery_link'])) {
+            } elseif (in_array($gallery_types_id, Yii::$app->params['shop']['galleryLink'])) {
                 if (!$link->gallery_images_id) {
                     $gallery_group = new GalleryGroups();
                     $gallery_group->gallery_types_id = $gallery_types_id;
@@ -421,7 +431,7 @@ class Import extends Model
                             $gallery_group->update();
                         }
 
-                        if ($link->gallery_images_id != $gallery_image->id) {
+                        if ($gallery_image->id && $link->gallery_images_id != $gallery_image->id) {
                             $link->gallery_images_id = $gallery_image->id;
                             $link->update();
                         }
@@ -458,6 +468,10 @@ class Import extends Model
         $gallery = new Gallery();
         $size = $gallery->getSize($src_image, $type);
         $path = Yii::getAlias('@frontend/web').$type['destination'];
+        if (!is_dir($path)) {
+            $helper = new Helpers();
+            $helper->makeDirectory($path);
+        }
         $file_info = new \SplFileInfo($src_image);
 
         $image_small = $gallery->renderFilename($path, $file_info->getExtension());

@@ -23,7 +23,10 @@ return [
         ],
         'ftptransfer' => [
             'class' => 'app\modules\ftptransfer\Module',
-        ]
+        ],
+        'ipGeoBase' => [
+            'class' => 'app\modules\ipGeoBase\Module',
+        ],
     ],
     'components' => [
         'log' => [

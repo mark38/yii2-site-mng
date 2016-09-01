@@ -14,9 +14,9 @@ use common\models\gallery\GalleryTypes;
  * @property integer $gallery_types_id
  * @property integer $gallery_groups_id
  *
- * @property ShopGood $shopGoods
- * @property GalleryType $galleryTypes
- * @property GalleryGroup $galleryGroups
+ * @property ShopGoods $shopGood
+ * @property GalleryTypes $galleryType
+ * @property GalleryGroups $galleryGroup
  */
 class ShopGoodGallery extends \yii\db\ActiveRecord
 {

@@ -12,16 +12,20 @@ use Yii;
  * @property integer $id
  * @property integer $shop_groups_id
  * @property string $links_id
+ * @property integer $shop_units_id
  * @property string $verification_code
  * @property string $name
  * @property string $code
  * @property string $state
  *
+ * @property ShopGoodGallery $shopGoodGallery
  * @property ShopGoodImages[] $shopGoodImages
- * @property ShopGroup $shopGroups
- * @property Link $links
+ * @property ShopGroups $shopGroup
+ * @property Links $link
  * @property ShopItems[] $shopItems
+ * @property ShopUnits $shopUnit
  * @property ShopPriceGood[] $shopPriceGoods
+ * @property ShopProperties[] $shopProperties
  */
 class ShopGoods extends \yii\db\ActiveRecord
 {
@@ -39,7 +43,7 @@ class ShopGoods extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['shop_groups_id', 'links_id', 'state'], 'integer'],
+            [['shop_groups_id', 'links_id', 'shop_units_id', 'state'], 'integer'],
             [['verification_code', 'name', 'code'], 'string', 'max' => 255]
         ];
     }
@@ -53,11 +57,17 @@ class ShopGoods extends \yii\db\ActiveRecord
             'id' => 'ID',
             'shop_groups_id' => 'Shop Groups ID',
             'links_id' => 'Links ID',
+            'shop_units_id' => 'Shop Units Id',
             'verification_code' => 'Verification Code',
             'name' => 'Name',
             'code' => 'Code',
             'state' => 'State',
         ];
+    }
+
+    public function getShopGoodGallery()
+    {
+        return $this->hasOne(ShopGoodGallery::className(), ['shop_goods_id' => 'id']);
     }
 
     /**
@@ -82,6 +92,11 @@ class ShopGoods extends \yii\db\ActiveRecord
     public function getLink()
     {
         return $this->hasOne(Links::className(), ['id' => 'links_id']);
+    }
+
+    public function getShopUnit()
+    {
+        return $this->hasOne(ShopUnits::className(), ['id' => 'shop_units_id']);
     }
 
     public function getGalleryImage()
@@ -117,6 +132,6 @@ class ShopGoods extends \yii\db\ActiveRecord
 
     public function getShopGoodProperties()
     {
-        return $this->hasMany(ShopGoodProperties::className(), ['shop_goods_id' => 'id']);
+        return $this->hasMany(ShopGoodProperties::className(), ['shop_goods_id' => 'id'])->innerJoin('shop_properties')->orderBy(['shop_properties.seq' => SORT_ASC]);
     }
 }

@@ -14,7 +14,7 @@ use common\models\main\Links;
  * @property string $name
  *
  * @property ShopGoods[] $shopGoods
- * @property Link $links
+ * @property Links $link
  */
 class ShopGroups extends \yii\db\ActiveRecord
 {

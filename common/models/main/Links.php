@@ -2,8 +2,8 @@
 
 namespace common\models\main;
 
-use common\models\helpers\Translit;
 use Yii;
+use common\models\helpers\Translit;
 use common\models\gallery\GalleryGroups;
 use common\models\gallery\GalleryImages;
 
