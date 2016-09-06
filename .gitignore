@@ -31,7 +31,4 @@ phpunit.phar
 /phpunit.xml
 
 # frontend
-!/frontend
-/frontend/*
-!/frontend/controllers
-!/frontend/modules
+/frontend
