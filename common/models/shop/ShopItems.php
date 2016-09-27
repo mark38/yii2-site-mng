@@ -9,7 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property integer $shop_goods_id
- * @property string $code
+ * @property string $verification_code
  * @property integer $state
  *
  * @property ShopItemCharacteristics[] $shopItemCharacteristics
@@ -33,7 +33,7 @@ class ShopItems extends \yii\db\ActiveRecord
     {
         return [
             [['shop_goods_id', 'state'], 'integer'],
-            [['code'], 'string', 'max' => 255]
+            [['verification_code'], 'string', 'max' => 255]
         ];
     }
 
@@ -45,7 +45,7 @@ class ShopItems extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'shop_goods_id' => 'Shop Goods ID',
-            'code' => 'Code',
+            'verification_code' => 'Verification Code',
             'state' => 'State',
         ];
     }

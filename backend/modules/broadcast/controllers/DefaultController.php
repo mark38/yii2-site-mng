@@ -2,18 +2,18 @@
 
 namespace app\modules\broadcast\controllers;
 
-use common\models\broadcast\BroadcastLayouts;
-use common\models\broadcast\BroadcastSend;
 use Yii;
-use common\models\broadcast\Broadcast;
-use common\models\broadcast\BroadcastAddress;
-use common\models\User;
-use yii\bootstrap\Html;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\web\Controller;
+use app\modules\broadcast\models\BroadcastForm;
+use common\models\broadcast\Broadcast;
+use common\models\broadcast\BroadcastAddress;
+use common\models\User;
+use common\models\broadcast\BroadcastLayouts;
+use common\models\broadcast\BroadcastSend;
 
 /**
  * Default controller for the `multicast` module
@@ -66,14 +66,13 @@ class DefaultController extends Controller
 
     public function actionManager($id=null)
     {
-        $broadcast = new Broadcast();
-        if ($id) $broadcast = Broadcast::findOne($id);
+        $broadcast = new BroadcastForm();
+        if ($id) $broadcast = BroadcastForm::findOne($id);
 
         if ($broadcast->load(Yii::$app->request->post()) && $broadcast->save()) {
             Yii::$app->session->setFlash('success', 'Изменения приняты. Вы можете подготовить письмо к отправке.');
             return $this->redirect(Url::current(['id' => $broadcast->id]));
         }
-
 
         return $this->render('manager', [
             'broadcast' => $broadcast,
@@ -177,7 +176,7 @@ class DefaultController extends Controller
 
         if ($layout->load(Yii::$app->request->post()) && $layout->save()) {
             Yii::$app->getSession()->setFlash('success', 'Изменения приняты');
-            return $this->redirect(['/boradcast/ssss-mng', 'id' => $id]);
+            return $this->redirect(['/boradcast/layout-mng', 'id' => $id]);
         }
 
         return $this->render('layoutMng', [

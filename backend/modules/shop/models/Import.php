@@ -1,17 +1,14 @@
 <?php
 
-namespace app\modules\shop\models;
+namespace backend\modules\shop\models;
 
-use app\models\Translit;
-use common\models\shop\ShopGoodProperties;
-use common\models\shop\ShopGroupProperties;
-use common\models\shop\ShopProperties;
-use common\models\shop\ShopPropertyValues;
 use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use yii\imagine\Image;
+use app\models\Helpers;
 use mark38\galleryManager\Gallery;
+use common\models\helpers\Translit;
 use common\models\main\Contents;
 use common\models\main\Links;
 use common\models\shop\ShopCharacteristics;
@@ -20,9 +17,14 @@ use common\models\shop\ShopGroups;
 use common\models\shop\ShopItemCharacteristics;
 use common\models\shop\ShopItems;
 use common\models\shop\ShopGoodGallery;
+use common\models\shop\ShopGoodProperties;
+use common\models\shop\ShopGroupProperties;
+use common\models\shop\ShopProperties;
+use common\models\shop\ShopPropertyValues;
 use common\models\gallery\GalleryGroups;
 use common\models\gallery\GalleryImages;
 use common\models\gallery\GalleryTypes;
+use common\models\shop\ShopUnits;
 
 class Import extends Model
 {
@@ -32,46 +34,42 @@ class Import extends Model
 
     public function parser($import_file)
     {
+        ShopGoods::updateAll(['state' => 1], ['state' => 0]);
+
         $this->import_file = $import_file;
         $sxe = simplexml_load_file($this->import_file);
 
-        $groups_sxe = $sxe->xpath(Yii::$app->params['shop']['start_group_path']);
-        if (count($groups_sxe)) $this->parserGroups($groups_sxe);
+        $groups_sxe = $sxe->xpath(Yii::$app->params['shop']['startGroupPath']);
+        if (count($groups_sxe)) {
+            $parentLink = Links::findOne(['url' => Yii::$app->params['shop']['catalogUrl']]);
+            $parent = $parentLink ? $parentLink->id : null;
+            $this->parserGroups($groups_sxe, $parent);
+        }
 
         $properties_sxe = $sxe->xpath('/КоммерческаяИнформация/Классификатор/Свойства/Свойство');
         if (count($properties_sxe)) $this->parserProperties($properties_sxe);
 
         $goods_sxe = $sxe->xpath('/КоммерческаяИнформация/Каталог/Товары/Товар');
         if (count($goods_sxe)) $this->parserGoods($goods_sxe);
+
+        //Links::updateAll(['state' => 0], ['id' => ArrayHelper::getColumn(ShopGoods::find()->where(['state' => 0])->all(), 'links_id')]);
     }
 
     public function parserGroups($groups_sxe, $parent=null)
     {
         foreach ($groups_sxe as $item) {
-            $group = ShopGroups::findOne(['code' => $item->{'Ид'}]);
-            $link = $group ? Links::findOne($group->links_id) : new Links();
+            $group = ShopGroups::findOne(['verification_code' => $item->{'Ид'}]);
+            $link = $group && $group->links_id ? Links::findOne($group->links_id) : new Links();
+            $translit = new Translit();
 
-            $link->categories_id = Yii::$app->params['shop']['categories_id'];
+            $link->categories_id = Yii::$app->params['shop']['categoriesId'];
             $link->parent = $parent;
             $link->anchor = strval(isset($item->{'НаименованиеНаСайте'}) && $item->{'НаименованиеНаСайте'} ? $item->{'НаименованиеНаСайте'} : $item->{'Наименование'});
-            $link->name = isset($item->{'URI'}) && $item->{'URI'} ? strval($item->{'URI'}) : $link->anchor2translit($link->anchor);
-            $link_name = $link->name;
-            $num = 1;
-            if (isset($link->id)) {
-                while (Links::findByUrlForLink($link->name, $link->id, $parent)) {
-                    $num += 1;
-                    $link->name = $link_name.'-'.$num;
-                }
-            } else {
-                while (Links::findByUrl($link->name, $parent)) {
-                    $num += 1;
-                    $link->name = $link_name.'-'.$num;
-                }
-            }
+            $link->name = isset($link->id) ? $translit->slugify($link->anchor, $link->tableName(), 'name', '-', $link->id) : $translit->slugify($link->anchor, $link->tableName(), 'name', '-', null);
             $link->level = $parent !== null ? Links::findOne($parent)->level + 1 : 1;
+            $link->url = (new Links())->getPrefixUrl(Yii::$app->params['shop']['groupUrlPrefix'], $link->level, $parent).'/'.$link->name;
             $link->child_exist = 1;
-            $link->url = $parent !== null ? Links::findOne($parent)->url.'/'.$link->name : '/'.$link->name;
-            $link->seq = isset($link->id) ? $link->seq : Links::findLastSequence(Yii::$app->params['shop']['categories_id'], $parent) + 1;
+            $link->seq = isset($link->id) ? $link->seq : Links::findLastSequence(Yii::$app->params['shop']['categoriesId'], $parent) + 1;
             $link->title = isset($link->id) ? $link->title : $link->anchor;
             $link->created_at = isset($link->id) ? $link->created_at : time();
             $link->updated_at = time();
@@ -93,12 +91,14 @@ class Import extends Model
 
             if (!$group) {
                 $group = new ShopGroups();
-                $group->links_id = $link->id;
-                $group->code = strval($item->{'Ид'});
+                $group->verification_code = strval($item->{'Ид'});
             };
+            $group->links_id = $link->id;
             $group->name = strval($item->{'Наименование'});
             $group->save();
             $this->shop_groups[] = $group;
+
+            ShopGoods::updateAll(['state' => 0], ['shop_groups_id' => $group->id]);
 
             if ($item->{'Группы'}->{'Группа'}) {
                 $this->parserGroups($item->{'Группы'}->{'Группа'}, $link->id);
@@ -111,7 +111,7 @@ class Import extends Model
     public function parserProperties($properties_sxe)
     {
         foreach ($properties_sxe as $item) {
-            $shop_property = ShopProperties::findOne(['code' => $item->{'Ид'}]);
+            $shop_property = ShopProperties::findOne(['verification_code' => $item->{'Ид'}]);
 
             if (!$shop_property) {
                 $shop_property = new ShopProperties();
@@ -121,7 +121,7 @@ class Import extends Model
                 $currentId = $shop_property->id;
             }
 
-            $shop_property->code = strval($item->{'Ид'});
+            $shop_property->verification_code = strval($item->{'Ид'});
             $shop_property->name = strval($item->{'Наименование'});
             $shop_property->anchor = strval($item->{'Наименование'});
             $shop_property->url = (new Translit())->slugify($item->{'Наименование'}, $shop_property->tableName(), 'url', '_', $currentId);
@@ -149,70 +149,61 @@ class Import extends Model
     {
         $goods = array();
         foreach ($goods_sxe as $item) {
-            $item_code = false;
+            $itemVerificationCode = false;
             if (preg_match('/(.+)#(.+)/', $item->{'Ид'}, $matches)) {
-                $good_code = strval($matches[1]);
-                $item_code = strval($matches[2]);
+                $goodVerificationCode = strval($matches[1]);
+                $itemVerificationCode = strval($matches[2]);
             } else {
-                $good_code = strval($item->{'Ид'});
+                $goodVerificationCode = strval($item->{'Ид'});
             }
 
-            if (!isset($goods[$good_code])) {
-                $goods[$good_code] = array();
-                $goods[$good_code] = $this->addGood($item, $good_code);
-                if ($item->{'ЗначенияСвойств'}) $this->addPropertyValues($item->{'ЗначенияСвойств'}->{'ЗначенияСвойства'}, $goods[$good_code]['id']);
+            if (!isset($goods[$goodVerificationCode])) {
+                $goods[$goodVerificationCode] = array();
+                $goods[$goodVerificationCode] = $this->addGood($item, $goodVerificationCode);
+                if ($item->{'ЗначенияСвойств'}) $this->addPropertyValues($item->{'ЗначенияСвойств'}->{'ЗначенияСвойства'}, $goods[$goodVerificationCode]['id']);
             }
 
-            if ($item_code) {
-                $goods[$good_code]['items'][$item_code] = $this->addItem($goods[$good_code]['id'], $item_code, $item);
+            if ($itemVerificationCode) {
+                $goods[$goodVerificationCode]['items'][$itemVerificationCode] = $this->addItem($goods[$goodVerificationCode]['id'], $itemVerificationCode, $item);
             }
         }
 
-        foreach ($goods as $good_code => $good) {
-            $items = ShopItems::findAll(['shop_goods_id' => $good['id']]);
-            if (isset($good['items'])) {
-                foreach ($items as $item) {
-                    if (!isset($good['items'][$item->code])) {
+        if ($goods) {
+            foreach ($goods as $goodVerificationCode => $good) {
+                $items = ShopItems::findAll(['shop_goods_id' => $good['id']]);
+                if (isset($good['items'])) {
+                    foreach ($items as $item) {
+                        if (!isset($good['items'][$item->verification_code])) {
+                            $item->state = 0;
+                            $item->save();
+                        }
+                    }
+                } else {
+                    foreach ($items as $item) {
                         $item->state = 0;
                         $item->save();
                     }
-                }
-            } else {
-                foreach ($items as $item) {
-                    $item->state = 0;
-                    $item->save();
                 }
             }
         }
     }
 
-    private function addGood($item, $code)
+    private function addGood($item, $verificationCode)
     {
-        $group = ShopGroups::findOne(['code' => strval($item->{'Группы'}->{'Ид'})]);
-        $good = ShopGoods::findOne(['code' => $code]);
-        $link = $good ? Links::findOne($good->links_id) : new Links();
+        $group = ShopGroups::findOne(['verification_code' => strval($item->{'Группы'}->{'Ид'})]);
+        $good = ShopGoods::findOne(['verification_code' => $verificationCode]);
+        if ($good) $link = Links::findOne($good->links_id);
+        if (!isset($link)) $link = new Links();
+        $translit = new Translit();
 
-        $link->categories_id = Yii::$app->params['shop']['categories_id'];
+        $link->categories_id = Yii::$app->params['shop']['categoriesId'];
         $link->parent = $group->links_id;
         $link->anchor = strval(isset($item->{'НаименованиеНаСайте'}) && $item->{'НаименованиеНаСайте'} ? $item->{'НаименованиеНаСайте'} : $item->{'Наименование'});
-        $link->name = isset($item->{'URI'}) && $item->{'URI'} ? strval($item->{'URI'}) : $link->anchor2translit($link->anchor);
-        $link_name = $link->name;
-        $num = 1;
-        if (isset($link->id)) {
-            while (Links::findByUrlForLink($link->name, $link->id, $link->parent)) {
-                $num += 1;
-                $link->name = $link_name.'-'.$num;
-            }
-        } else {
-            while (Links::findByUrl($link->name, $link->parent)) {
-                $num += 1;
-                $link->name = $link_name.'-'.$num;
-            }
-        }
+        $link->name = isset($link->id) ? $translit->slugify($link->anchor, $link->tableName(), 'name', '-', $link->id) : $translit->slugify($link->anchor, $link->tableName(), 'name', '-', null);
         $link->level = $group->link->level + 1;
+        $link->url = (new Links())->getPrefixUrl(Yii::$app->params['shop']['goodUrlPrefix'], $link->level, $group->links_id).'/'.$link->name;
         $link->child_exist = 0;
-        $link->url = $group->link->url.'/'.$link->name;
-        $link->seq = isset($link->id) ? $link->seq : Links::findLastSequence(Yii::$app->params['shop']['categories_id'], $link->parent) + 1;
+        $link->seq = isset($link->id) ? $link->seq : Links::findLastSequence(Yii::$app->params['shop']['categoriesId'], $link->parent) + 1;
         $link->title = isset($link->id) ? $link->title : $link->anchor;
         $link->created_at = isset($link->id) ? $link->created_at : time();
         $link->updated_at = time();
@@ -232,11 +223,20 @@ class Import extends Model
 
         if (!$good) {
             $good = new ShopGoods();
-            $good->links_id = $link->id;
             $good->shop_groups_id = $group->id;
-            $good->code = $code;
+            $good->verification_code = $verificationCode;
         }
+        $good->links_id = $link->id;
+        $shopUnit = ShopUnits::findOne(['name' => $item->{'БазоваяЕдиница'}]);
+        if (!$shopUnit) {
+            $shopUnit = new ShopUnits();
+            $shopUnit->name = strval($item->{'БазоваяЕдиница'});
+            $shopUnit->save();
+        }
+        $good->shop_units_id = $shopUnit->id;
         $good->name = strval($item->{'Наименование'});
+        $good->code = preg_replace('/^\D+0*/', '', $item->{'КодНоменклатуры'});
+        $good->state = 1;
         $good->save();
 
         if ($item->{'Картинки'} && $item->{'Картинки'}->{'Картинка'}) {
@@ -249,69 +249,62 @@ class Import extends Model
         ];
     }
 
-    private function addPropertyValues($properties_sxe, $goods_id)
+    private function addPropertyValues($propertiesSxe, $goodsId)
     {
-        $properties = ArrayHelper::index($this->shop_properties, 'code');
-        $good_properties = ShopGoodProperties::find()->where(['shop_goods_id' => $goods_id])->all();
+        $properties = ArrayHelper::index($this->shop_properties, 'verification_code');
+        $goodProperties = ShopGoodProperties::find()->where(['shop_goods_id' => $goodsId])->all();
+        if ($goodProperties) {
+            ShopGoodProperties::updateAll(['state' => 0], ['id' => ArrayHelper::getColumn($goodProperties, 'id')]);
+        }
 
-        $property_values = array();
-        foreach ($properties_sxe as $item) {
-            $code = strval($item->{'Ид'});
-            $name = trim(strval($item->{'Значение'}));
-            $properties_id = $properties[$code]->id;
+        foreach ($propertiesSxe as $item) {
+            $verification_code = strval($item->{'Ид'});
+            $names = preg_split('/\,/', trim(strval($item->{'Значение'})));
+            $propertiesId = $properties[$verification_code]->id;
 
-            $property_value = ShopPropertyValues::findOne(['shop_properties_id' => $properties_id, 'name' => $name]);
-            if (!$property_value) {
-                $property_value = new ShopPropertyValues();
-                $property_value->shop_properties_id = $properties_id;
-                $property_value->name = $name;
-                $property_value->anchor = $name;
-                $property_value->url = (new Translit())->slugify($name, $property_value->tableName(), 'url', '_', null, 'shop_properties_id', $properties_id);
-                $property_value->save();
-            }
-            $property_values[] = $property_value;
+            foreach ($names as $name) {
+                $name = trim($name);
+                $propertyValue = ShopPropertyValues::findOne(['shop_properties_id' => $propertiesId, 'name' => $name]);
+                if (!$propertyValue) {
+                    $propertyValue = new ShopPropertyValues();
+                    $propertyValue->shop_properties_id = $propertiesId;
+                    $propertyValue->name = $name;
+                    $propertyValue->anchor = $name;
+                    $propertyValue->url = (new Translit())->slugify($name, $propertyValue->tableName(), 'url', '_', null, 'shop_properties_id', $propertiesId);
+                    $propertyValue->save();
+                }
 
-            $add_property_value = true;
-            if ($good_properties) {
-                /** @var $good_property ShopGoodProperties */
-                foreach ($good_properties as $good_property) {
-                    if ($good_property->shop_properties_id == $properties_id) {
-                        $add_property_value = false;
-                        if ($good_property->shop_property_values_id != $property_value->id) {
-                            $good_property->shop_property_values_id = $property_value->id;
-                            $good_property->save();
+                $addPropertyValue = true;
+                if ($goodProperties) {
+                    foreach ($goodProperties as $id => $goodProperty) {
+                        if ($goodProperty->shop_properties_id == $propertiesId && $goodProperty->shop_property_values_id == $propertyValue->id) {
+                            $addPropertyValue = false;
+                            ShopGoodProperties::updateAll(['state' => 1], ['id' => $goodProperty->id]);
                         }
                     }
                 }
-            }
 
-            if ($add_property_value) {
-                $good_property = new ShopGoodProperties();
-                $good_property->shop_goods_id = $goods_id;
-                $good_property->shop_properties_id = $properties_id;
-                $good_property->shop_property_values_id = $property_value->id;
-                $good_property->save();
-            }
-        }
-
-        if ($good_properties) {
-            /** @var $good_property ShopGoodProperties */
-            $property_values = ArrayHelper::index($property_values, 'shop_properties_id');
-            foreach ($good_properties as $good_property) {
-                if (!isset($property_values[$good_property->shop_properties_id])) {
-                    $good_property->delete();
+                if ($addPropertyValue) {
+                    $goodProperty = new ShopGoodProperties();
+                    $goodProperty->shop_goods_id = $goodsId;
+                    $goodProperty->shop_properties_id = $propertiesId;
+                    $goodProperty->shop_property_values_id = $propertyValue->id;
+                    $goodProperty->state = 1;
+                    $goodProperty->save();
                 }
             }
         }
+
+        ShopGoodProperties::deleteAll(['shop_goods_id' => $goodsId, 'state' => 0]);
     }
 
-    private function addItem($goods_id, $code, $item_sxe)
+    private function addItem($goods_id, $verification_code, $item_sxe)
     {
-        $item = ShopItems::findOne(['code' => $code]);
+        $item = ShopItems::findOne(['verification_code' => $verification_code]);
         if (!$item) {
             $item = new ShopItems();
             $item->shop_goods_id = $goods_id;
-            $item->code = $code;
+            $item->verification_code = $verification_code;
         }
         $item->state = 1;
         $item->save();
@@ -355,6 +348,7 @@ class Import extends Model
             if (!$basename_src) continue;
 
             $src_image = pathinfo($this->import_file)['dirname'].'/'.strval($image_sxe->{'ПутьКИзображению'});
+
             if (!is_file($src_image)) continue;
 
             $gallery_types_id = false;
@@ -399,7 +393,7 @@ class Import extends Model
                 } else {
                     $gallery_group = GalleryGroups::findOne($good_gallery->gallery_groups_id);
                 }
-            } elseif (in_array($gallery_types_id, Yii::$app->params['shop']['gallery_link'])) {
+            } elseif (in_array($gallery_types_id, Yii::$app->params['shop']['galleryLink'])) {
                 if (!$link->gallery_images_id) {
                     $gallery_group = new GalleryGroups();
                     $gallery_group->gallery_types_id = $gallery_types_id;
@@ -437,7 +431,7 @@ class Import extends Model
                             $gallery_group->update();
                         }
 
-                        if ($link->gallery_images_id != $gallery_image->id) {
+                        if ($gallery_image->id && $link->gallery_images_id != $gallery_image->id) {
                             $link->gallery_images_id = $gallery_image->id;
                             $link->update();
                         }
@@ -474,6 +468,10 @@ class Import extends Model
         $gallery = new Gallery();
         $size = $gallery->getSize($src_image, $type);
         $path = Yii::getAlias('@frontend/web').$type['destination'];
+        if (!is_dir($path)) {
+            $helper = new Helpers();
+            $helper->makeDirectory($path);
+        }
         $file_info = new \SplFileInfo($src_image);
 
         $image_small = $gallery->renderFilename($path, $file_info->getExtension());

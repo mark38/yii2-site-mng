@@ -72,7 +72,7 @@ class ShopCarts extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getSessions()
+    public function getSession()
     {
         return $this->hasOne(Sessions::className(), ['id' => 'sessions_id']);
     }

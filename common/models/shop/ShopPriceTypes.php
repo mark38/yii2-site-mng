@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "shop_price_types".
  *
  * @property integer $id
- * @property string $code
+ * @property string $verification_code
  * @property string $name
  * @property integer $def
  *
@@ -32,7 +32,7 @@ class ShopPriceTypes extends \yii\db\ActiveRecord
     {
         return [
             [['def'], 'integer'],
-            [['code', 'name'], 'string', 'max' => 255]
+            [['verification_code', 'name'], 'string', 'max' => 255]
         ];
     }
 
@@ -43,7 +43,7 @@ class ShopPriceTypes extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'code' => 'Code',
+            'verification_code' => 'Verification Code',
             'name' => 'Name',
             'def' => 'Def',
         ];

@@ -52,9 +52,9 @@ class Links extends Widget
                         'label' => '<i class="fa fa-cog"></i>',
                         'dropdown' => [
                             'items' => [
+                                ['label' => 'Параметры', 'url' => ['/map/links', 'categories_id' => Yii::$app->request->get('categories_id'), 'action' => 'ch', 'id' => $link->id]],
                                 ['label' => 'Ретактор контента', 'url' => ['/map/content', 'links_id' => $link->id]],
-                                ['label' => 'Ретактировать', 'url' => ['/map/links', 'categories_id' => Yii::$app->request->get('categories_id'), 'mng_link' => 'ch', 'links_id' => $link->id]],
-                                ['label' => 'Добавить дочернюю ссылку', 'url' => ['/map/links', 'categories_id' => Yii::$app->request->get('categories_id'), 'parent_links_id' => $link->id, 'mng_link' => 'add']],
+                                ['label' => 'Добавить дочернюю ссылку', 'url' => ['/map/links', 'categories_id' => Yii::$app->request->get('categories_id'), 'parent' => $link->id, 'action' => 'add']],
                             ],
                         ],
                         'encodeLabel' => false,

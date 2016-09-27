@@ -1,4 +1,5 @@
 <?php
+
 namespace app\modules\shop\models;
 
 use common\models\shop\ShopGoods;
@@ -31,10 +32,10 @@ class Offers extends Model
     private function parserPriceTypes($price_types_sxe)
     {
         foreach ($price_types_sxe as $item) {
-            $price_type = ShopPriceTypes::findOne(['code' => $item->{'Ид'}]);
+            $price_type = ShopPriceTypes::findOne(['verification_code' => $item->{'Ид'}]);
             if (!$price_type) {
                 $price_type = new ShopPriceTypes();
-                $price_type->code = strval($item->{'Ид'});
+                $price_type->verification_code = strval($item->{'Ид'});
             }
             $price_type->name = strval($item->{'Наименование'});
             $price_type->save();
@@ -48,44 +49,44 @@ class Offers extends Model
         /* Поиск и удаление цен для товара и его характеристик */
         foreach ($offers_sxe as $item_sxe) {
             if (preg_match('/(.+)#(.+)/', $item_sxe->{'Ид'}, $matches)) {
-                $good_code = strval($matches[1]);
-                $item_code = strval($matches[2]);
-                $prices_item = ShopPriceItem::find()->innerJoinWith('shopItem')->where(['shop_items.code' => $item_code])->all();
+                $good_verification_code = strval($matches[1]);
+                $item_verification_code = strval($matches[2]);
+                $prices_item = ShopPriceItem::find()->innerJoinWith('shopItem')->where(['shop_items.verification_code' => $item_verification_code])->all();
                 if ($prices_item) ShopPriceItem::deleteAll(['id' => ArrayHelper::getColumn($prices_item, 'id')]);
             } else {
-                $good_code = strval($item_sxe->{'Ид'});
+                $good_verification_code = strval($item_sxe->{'Ид'});
             }
-            $price_good = ShopPriceGood::find()->innerJoinWith('shopGood')->where(['shop_goods.code' => $good_code])->all();
+            $price_good = ShopPriceGood::find()->innerJoinWith('shopGood')->where(['shop_goods.verification_code' => $good_verification_code])->all();
             if ($price_good) ShopPriceGood::deleteAll(['id' => ArrayHelper::getColumn($price_good, 'id')]);
         }
 
-        $price_types = ArrayHelper::map(ShopPriceTypes::find()->all(), 'code', 'id');
+        $price_types = ArrayHelper::map(ShopPriceTypes::find()->all(), 'verification_code', 'id');
         $good_min_price = array();
         foreach ($offers_sxe as $item_sxe) {
-            $item_code = false;
+            $item_verification_code = false;
             if (preg_match('/(.+)#(.+)/', $item_sxe->{'Ид'}, $matches)) {
-                $good_code = strval($matches[1]);
-                $item_code = strval($matches[2]);
+                $good_verification_code = strval($matches[1]);
+                $item_verification_code = strval($matches[2]);
             } else {
-                $good_code = strval($item_sxe->{'Ид'});
+                $good_verification_code = strval($item_sxe->{'Ид'});
             }
 
-            if (!isset($good_min_price[$good_code])) $good_min_price[$good_code] = array();
+            if (!isset($good_min_price[$good_verification_code])) $good_min_price[$good_verification_code] = array();
 
             foreach ($item_sxe->{'Цены'}->{'Цена'} as $item_price) {
-                $code = strval($item_price->{'ИдТипаЦены'});
-                if (!isset($good_min_price[$good_code][$price_types[$code]])) {
-                    $good_min_price[$good_code][$price_types[$code]] = floatval($item_price->{'ЦенаЗаЕдиницу'});
-                } else if ($good_min_price[$good_code][$price_types[$code]] > floatval($item_price->{'ЦенаЗаЕдиницу'})) {
-                    $good_min_price[$good_code][$price_types[$code]] = floatval($item_price->{'ЦенаЗаЕдиницу'});
+                $verification_code = strval($item_price->{'ИдТипаЦены'});
+                if (!isset($good_min_price[$good_verification_code][$price_types[$verification_code]])) {
+                    $good_min_price[$good_verification_code][$price_types[$verification_code]] = floatval($item_price->{'ЦенаЗаЕдиницу'});
+                } else if ($good_min_price[$good_verification_code][$price_types[$verification_code]] > floatval($item_price->{'ЦенаЗаЕдиницу'})) {
+                    $good_min_price[$good_verification_code][$price_types[$verification_code]] = floatval($item_price->{'ЦенаЗаЕдиницу'});
                 }
 
-                if ($item_code) {
-                    $item = ShopItems::findOne(['code' => $item_code]);
+                if ($item_verification_code) {
+                    $item = ShopItems::findOne(['verification_code' => $item_verification_code]);
                     if ($item) {
                         $price_item = new ShopPriceItem();
                         $price_item->shop_items_id = $item->id;
-                        $price_item->shop_price_types_id = $price_types[$code];
+                        $price_item->shop_price_types_id = $price_types[$verification_code];
                         $price_item->price = floatval($item_price->{'ЦенаЗаЕдиницу'});
                         $price_item->save();
                     }
@@ -93,8 +94,8 @@ class Offers extends Model
             }
         }
 
-        foreach ($good_min_price as $good_code => $good_prices) {
-            $good = ShopGoods::findOne(['code' => $good_code]);
+        foreach ($good_min_price as $good_verification_code => $good_prices) {
+            $good = ShopGoods::findOne(['verification_code' => $good_verification_code]);
             if ($good) {
                 foreach ($good_prices as $price_types_id => $good_price) {
                     $price_good = new ShopPriceGood();

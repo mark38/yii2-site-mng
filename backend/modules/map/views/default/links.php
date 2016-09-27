@@ -23,7 +23,7 @@ MapAsset::register($this);
                     'label' => '<i class="fa fa-cog"></i>',
                     'dropdown' => [
                         'items' => [
-                            ['label' => 'Добавить ссылку в корень', 'url' => Url::current(['mng_link' => 'add', 'links_id' => null])],
+                            ['label' => 'Добавить ссылку в корень', 'url' => Url::current(['action' => 'add', 'id' => null])],
                         ],
                     ],
                     'encodeLabel' => false,
@@ -34,18 +34,17 @@ MapAsset::register($this);
                 ])?>
 
                 <div class="box-tools pull-right">
-
-                    <input type="text" class="form-control input-sm" placeholder="Поиск...">
+                    
                     <span class="glyphicon glyphicon-search form-control-feedback"></span>
 
-                </div><!-- /.box-tools -->
-            </div><!-- /.box-header -->
+                </div>
+            </div>
             <div class="box-body links-list">
                 <?=Links::widget(['categories_id' => Yii::$app->request->get('categories_id')])?>
-            </div><!-- /.box-body -->
-        </div><!-- /.box -->
+            </div>
+        </div>
 
     </div>
 
-    <div class="col-sm-7"><?= Yii::$app->request->get('mng_link') ? $this->render('linkForm', ['link' => $link]) : ''?></div>
+    <div class="col-sm-7"><?= Yii::$app->request->get('action') ? $this->render('linkForm', ['link' => $link]) : ''?></div>
 </div>

@@ -60,6 +60,8 @@ $cols[] = [
             ['class' => 'dropdown']);
     },
 ];
+
+echo Yii::getAlias('@backend').preg_replace('/\/mng/', '', '/mng/uploads/broadcast/576d45a1d0dc6.jpg');
 ?>
 
 <div class="box box-default">

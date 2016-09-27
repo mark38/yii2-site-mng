@@ -12,12 +12,21 @@ return [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'console\controllers',
     'modules' => [
+        'shop' => [
+            'class' => 'app\modules\shop\Module',
+        ],
         'broadcast' => [
             'class' => 'app\modules\broadcast\Module',
         ],
         'certificates' => [
             'class' => 'app\modules\certificates\Module',
-        ]
+        ],
+        'ftptransfer' => [
+            'class' => 'app\modules\ftptransfer\Module',
+        ],
+        'ipGeoBase' => [
+            'class' => 'app\modules\ipGeoBase\Module',
+        ],
     ],
     'components' => [
         'log' => [

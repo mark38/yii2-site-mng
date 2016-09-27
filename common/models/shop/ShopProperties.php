@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "shop_properties".
  *
  * @property integer $id
- * @property string $code
+ * @property string $verification_code
  * @property string $name
  * @property string $anchor
  * @property string $url
@@ -32,7 +32,7 @@ class ShopProperties extends \yii\db\ActiveRecord
     {
         return [
             [['seq', 'state'], 'integer'],
-            [['code', 'name', 'anchor', 'url'], 'string', 'max' => 255],
+            [['verification_code', 'name', 'anchor', 'url'], 'string', 'max' => 255],
         ];
     }
 
@@ -43,7 +43,7 @@ class ShopProperties extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'code' => 'Code',
+            'verification_code' => 'Verification Code',
             'name' => 'Name',
             'anchor' => 'Anchor',
             'url' => 'Url',

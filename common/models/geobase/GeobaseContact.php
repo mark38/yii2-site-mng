@@ -11,6 +11,8 @@ use Yii;
  * @property integer $geobase_city_id
  * @property integer $city_name
  * @property string $phone
+ * @property string $address
+ * @property string $working_hours
  * @property integer $def
  * @property integer $seq
  *
@@ -33,7 +35,7 @@ class GeobaseContact extends \yii\db\ActiveRecord
     {
         return [
             [['geobase_city_id', 'def', 'seq'], 'integer'],
-            [['city_name', 'phone'], 'string', 'max' => 255]
+            [['city_name', 'phone', 'address', 'working_hours'], 'string', 'max' => 255]
         ];
     }
 
@@ -46,6 +48,8 @@ class GeobaseContact extends \yii\db\ActiveRecord
             'id' => 'ID',
             'geobase_city_id' => 'Geobase City ID',
             'phone' => 'Phone',
+            'address' => 'Address',
+            'working_hours' => 'Working Hours',
             'def' => 'Def',
         ];
     }

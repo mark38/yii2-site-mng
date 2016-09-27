@@ -3,12 +3,15 @@
 namespace app\modules\broadcast\controllers;
 
 use common\models\broadcast\Broadcast;
+use common\models\broadcast\BroadcastFiles;
 use common\models\User;
 use Yii;
 use common\models\broadcast\BroadcastAddress;
 use common\models\broadcast\BroadcastSend;
 use yii\console\Controller;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use yii\validators\EmailValidator;
 
 /**
  * Sending mail
@@ -26,6 +29,7 @@ class DefaultController extends Controller
         }
 
         $broadcast_send = BroadcastSend::findOne($id);
+        $broadcast_files = BroadcastFiles::find()->where(['broadcast_id' => $broadcast_send->broadcast_id])->all();
         $view = $broadcast_send->broadcast->broadcastLayout->layout_path;
         $title = $broadcast_send->broadcast->title;
         $broadcast_addresses = BroadcastAddress::find()->where(['broadcast_send_id' => $id, 'status' => 0])->all();
@@ -34,13 +38,30 @@ class DefaultController extends Controller
         /** @var $address BroadcastAddress */
         foreach ($broadcast_addresses as $address) {
             $email = $address->user_id ? $address->user->email : $address->email;
+
+            $emailValidator = new EmailValidator();
+            if (!$emailValidator->validate($email)) continue;
+
             $fio = $address->fio;
             $company = '';
 
+            //$content = preg_replace('/{{content}}/', $broadcast_send->broadcast->broadcastLayout->content, $this->handleContent($broadcast_send->broadcast));
+            $content = $this->handleContent($broadcast_send->broadcast, '', '');
+            if ($broadcast_send->broadcast->broadcastLayout->content) {
+                $content = preg_replace('/{{content}}/', $content, $broadcast_send->broadcast->broadcastLayout->content);
+            }
+
             $mailer = Yii::$app->mailer->compose($view, [
-                'content' => $this->handleContent($broadcast_send->broadcast, '', '')
-            ])
-                ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name])
+                //'content' => $this->handleContent($broadcast_send->broadcast, '', '')
+                'content' => $content
+            ]);
+            if ($broadcast_files) {
+                foreach ($broadcast_files as $file) {
+                    $attach_file = Yii::getAlias('@backend/web').preg_replace('/^'.addcslashes(Yii::$app->params['broadcast']['clearMngUrl'], '/').'/', '', $file->file);
+                    if (is_file($attach_file)) $mailer = $mailer->attach($attach_file);
+                }
+            }
+            $mailer->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name])
                 ->setTo($email)
                 ->setSubject($title);
             try {
@@ -48,7 +69,7 @@ class DefaultController extends Controller
                 $address->status = 1;
                 $address->update();
             } catch (\Exception $e) {
-                echo "ERROR\n";
+                echo "ERROR: ".$e."\n";
             }
         } try {Yii::$app->mailer->sendMultiple($messages);} catch (Exception $e) {echo "Error\n";}
 

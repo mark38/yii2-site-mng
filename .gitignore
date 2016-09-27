@@ -31,4 +31,4 @@ phpunit.phar
 /phpunit.xml
 
 # frontend
-#/frontend
+/frontend

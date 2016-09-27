@@ -68,6 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ],
             ],
+            'clientOptions' => ['config.extraPlugins' => 'codeSnippet']
         ])?>
 
         <?= Html::a('Отмена', ['/boradcast/layouts'], ['class' => 'btn btn-default btn-sm btn-flat'])?>
