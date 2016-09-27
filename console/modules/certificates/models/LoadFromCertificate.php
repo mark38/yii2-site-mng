@@ -25,12 +25,11 @@ class LoadFromCertificate extends Model
         $rows = explode(PHP_EOL, $utf8_file);
         $str = '';
         $divider = '';
-        $certificate_number = '';
+        $certificate_number = basename($file, '.txt');
         foreach ($rows as $row) {
             if ($row) {
                 preg_match('/(\D+)\s+(\d+)/', $row, $match);
                 $divider = $match[1];
-                $certificate_number = $match[2];
                 break;
             } else {
                 continue;
@@ -40,6 +39,7 @@ class LoadFromCertificate extends Model
             if (preg_match('/'.$divider.'/', $row)) {
                 if ($str) {
                     $this->saveCertificate($str, $certificate_number);
+                    print_r($certificate_number);
                 }
                 $str = '';
             }
