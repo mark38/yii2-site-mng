@@ -25,7 +25,7 @@ class LoadFromCertificate extends Model
         $rows = explode(PHP_EOL, $utf8_file);
         $str = '';
         $divider = '';
-        $certificate_number = basename($file, '.txt');
+        $certificate_number = explode('.', basename($file, '.txt'))[0];
         foreach ($rows as $row) {
             if ($row) {
                 preg_match('/(\D+)\s+(\d+)/', $row, $match);
