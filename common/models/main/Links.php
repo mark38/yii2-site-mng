@@ -41,6 +41,7 @@ use common\models\gallery\GalleryImages;
  * @property Links $parentLink
  * @property Links[] $links
  * @property Redirects[] $redirects
+ * @property GalleryImages $galleryImage
  */
 class Links extends \yii\db\ActiveRecord
 {
@@ -373,6 +374,24 @@ class Links extends \yii\db\ActiveRecord
         foreach ($links as $index => $link) {
             $link->seq = $index+1;
             $link->update();
+        }
+    }
+
+    public function getParentsIds($childId)
+    {
+        $parentsIds = array();
+        do {
+            $link = self::findOne(['id' => $childId]);
+            if ($link && $link->parent) {
+                array_push($parentsIds, $link->parent);
+                $childId = $link->parent;
+            }
+        } while($link && $link->parent != null);
+
+        if ($parentsIds) {
+            return array_reverse($parentsIds);
+        } else {
+            return false;
         }
     }
 }
