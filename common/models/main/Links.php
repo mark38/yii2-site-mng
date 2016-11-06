@@ -397,6 +397,6 @@ class Links extends \yii\db\ActiveRecord
 
     public function test()
     {
-        
+
     }
 }
