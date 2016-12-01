@@ -25,6 +25,7 @@ class News extends \yii\db\ActiveRecord
     public $prev_text;
     public $full_text;
     public $date_range;
+    public $type_name;
 
     /**
      * @inheritdoc
@@ -41,7 +42,7 @@ class News extends \yii\db\ActiveRecord
     {
         return [
             [['news_types_id', 'links_id'], 'integer'],
-            [['url', 'prev_text', 'full_text'], 'string'],
+            [['url', 'prev_text', 'full_text', 'type_name'], 'string'],
             [['date', 'date_from', 'date_to', 'date_range'], 'safe']
         ];
     }
@@ -59,7 +60,8 @@ class News extends \yii\db\ActiveRecord
             'date' => 'Дата новости',
             'prev_text' => 'Предварительный текст нововсти',
             'full_text' => 'Полный текст новости',
-            'date_range' => 'Период публикации'
+            'date_range' => 'Период публикации',
+            'type_name' => 'Тип новости'
         ];
     }
 

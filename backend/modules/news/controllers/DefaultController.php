@@ -8,7 +8,8 @@ use common\models\news\News;
 use common\models\news\NewsTypes;
 use Yii;
 use yii\web\Controller;
-use backend\widgets\gallery\GalleryManagerAction;
+//use backend\widgets\gallery\GalleryManagerAction;
+use mark38\galleryManager\GalleryManagerAction;
 
 class DefaultController extends Controller
 {
@@ -28,7 +29,11 @@ class DefaultController extends Controller
         $link = new Links();
         $news = new News();
 
-        if ($news_type) $news->news_types_id = $news_type->id;
+        if ($news_type) {
+            $news->news_types_id = $news_type->id;
+            $news->type_name = $news_type->name;
+        }
+
         if ($news_id) {
             $news = News::findOne($news_id);
             $link = Links::findOne($news->links_id);
@@ -36,6 +41,8 @@ class DefaultController extends Controller
             $news->date_range = $news->date_from && $news->date_to ? date('d.m.Y', strtotime($news->date_from)).' - '.date('d.m.Y', strtotime($news->date_to)) : null;
             $news->full_text = Contents::findOne(['links_id' => $link->id, 'seq' => 1])->text;
             $news->prev_text = Contents::findOne(['links_id' => $link->id, 'seq' => 2])->text;
+        } else {
+            $link->state = true;
         }
 
         if (Yii::$app->request->isPost) {
@@ -93,6 +100,6 @@ class DefaultController extends Controller
             $link->delete();
         }
 
-        return $this->redirect(['/news/list']);
+        return $this->redirect(['/news/index']);
     }
 }

@@ -77,7 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 echo Html::beginTag('div', ['class' => 'media-body']);
                                 echo Html::tag('strong', '<span class="text-info">'.$new_date.'</span> '.$new->link->anchor);
                                 echo Html::tag('div', $new->link->contents[1]->text);
-                                echo Html::tag('div', '<span>('.$new->newsType->name.' | '.$new->date_range.')</span>', ['class' => 'text-muted']);
+                                echo Html::tag('div', '<small>(<strong>'.$new->newsType->name.'</strong> | '.$new->date_range.')</small>', ['class' => 'text-muted']);
                                 echo Html::endTag('div');
 
                             echo Html::endTag('div');

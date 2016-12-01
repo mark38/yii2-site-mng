@@ -5,7 +5,8 @@ use yii\bootstrap\Tabs;
 use yii\bootstrap\Modal;
 use kartik\date\DatePicker;
 use kartik\daterange\DateRangePicker;
-use backend\widgets\gallery\GalleryManager;
+//use backend\widgets\gallery\GalleryManager;
+use mark38\galleryManager\GalleryManager;
 use backend\widgets\ckeditor\CKEditor;
 use iutbay\yii2kcfinder\KCFinder;
 use common\models\news\NewsTypes;
@@ -51,6 +52,7 @@ $link_close = [''];
                         'label' => 'Основные параметры',
                         'content' => '<p>' .
                             $form->field($link, 'state')->checkbox() .
+                            $form->field($news, 'type_name')->staticControl() .
                             $form->field($link, 'anchor')->label('Заголовок новости') .
                             $form->field($link, 'title')->label('Заголовок страницы (опционально)') .
                             $form->field($news, 'url')->label('Адрес внешней ссылки') .
@@ -85,7 +87,7 @@ $link_close = [''];
                                         'apiUrl' => 'gallery-manager',
                                         'webRoute' => Yii::getAlias('@frontend/web'),
                                     ]
-                                ])->label('Предварительное фото'.$news->newsType->gallery_groups_id) :
+                                ])->label('Предварительное фото')->hint('Параметры изображения: '.$news_type->galleryType->small_width.'x'.$news_type->galleryType->small_height.' / '.$news_type->galleryType->large_width.'x'.$news_type->galleryType->large_height) :
                                 '') .
                             '</p>',
                         'active' => true
@@ -93,7 +95,7 @@ $link_close = [''];
                     [
                         'label' => 'Дополнительно (системные параметры)',
                         'content' => '<p>' .
-                            $form->field($link, 'url')->staticControl() .
+                            $form->field($link, 'url') .
                             $form->field($link, 'name') .
                             '</p>',
                     ],
