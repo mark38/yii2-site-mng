@@ -11,9 +11,9 @@ if (isset($this->context->module->id)) {
 if (!$left_view) $left_view = 'left.php';
 
 
-if (Yii::$app->controller->action->id === 'login') { 
+if (Yii::$app->controller->action->id === 'login') {
 /**
- * Do not use this code in your template. Remove it. 
+ * Do not use this code in your template. Remove it.
  * Instead, use the code  $this->layout = '//main-login'; in your controller.
  */
     echo $this->render(
@@ -24,6 +24,9 @@ if (Yii::$app->controller->action->id === 'login') {
 
     if (class_exists('backend\assets\AppAsset')) {
         backend\assets\AppAsset::register($this);
+        if (class_exists('app\\modules\\'.Yii::$app->controller->module->id.'\\AppAsset')) {
+            $asset = Yii::$app->controller->module->id;
+        }
     } else {
         app\assets\AppAsset::register($this);
     }

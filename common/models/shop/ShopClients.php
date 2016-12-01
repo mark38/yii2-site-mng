@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "shop_clients".
  *
  * @property integer $id
+ * @property integer $shop_users_id
  * @property string $fio
  * @property string $city
  * @property string $street
@@ -17,6 +18,7 @@ use Yii;
  * @property string $email
  * @property string $comment
  *
+ * @property ShopUsers $shopUser
  * @property ShopClientCarts[] $shopClientCarts
  */
 class ShopClients extends \yii\db\ActiveRecord
@@ -35,10 +37,11 @@ class ShopClients extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fio', 'phone', 'city', 'street', 'home_number'], 'required'],
+            [['shop_users_id'], 'integer'],
+            /*[['fio', 'phone', 'city', 'street', 'home_number'], 'required'],
             [['fio', 'city', 'street', 'home_number', 'flat_number', 'phone', 'email'], 'string', 'max' => 255],
             [['email'], 'email'],
-            [['comment'], 'string', 'max' => 2048],
+            [['comment'], 'string', 'max' => 2048],*/
         ];
     }
 
@@ -49,6 +52,7 @@ class ShopClients extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'shop_users_id' => 'Shop Users Id',
             'fio' => 'Ваше имя',
             'city' => 'Город',
             'street' => 'Улица',
@@ -66,5 +70,10 @@ class ShopClients extends \yii\db\ActiveRecord
     public function getShopClientCarts()
     {
         return $this->hasMany(ShopClientCarts::className(), ['shop_clients_id' => 'id']);
+    }
+
+    public function getShopUser()
+    {
+        return $this->hasOne(ShopUsers::className(), ['shop_users_id' => 'id']);
     }
 }

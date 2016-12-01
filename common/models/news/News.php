@@ -14,8 +14,8 @@ use common\models\main\Links;
  * @property string $links_id
  * @property string $url
  * @property string $date
- * @property string $date_start
- * @property string $date_finish
+ * @property string $date_from
+ * @property string $date_to
  *
  * @property NewsTypes $newsTypes
  * @property Links $links
@@ -42,7 +42,7 @@ class News extends \yii\db\ActiveRecord
         return [
             [['news_types_id', 'links_id'], 'integer'],
             [['url', 'prev_text', 'full_text'], 'string'],
-            [['date', 'date_start', 'date_finish', 'date_range'], 'safe']
+            [['date', 'date_from', 'date_to', 'date_range'], 'safe']
         ];
     }
 
@@ -89,8 +89,8 @@ class News extends \yii\db\ActiveRecord
         $this->date = $this->date ? date('Y-m-d', strtotime($this->date)) : null;
         if ($this->date_range) {
             preg_match('/(\d+\.\d+\.\d+) - (\d+\.\d+\.\d+)/', $this->date_range, $match);
-            $this->date_start = isset($match[1]) ? date('Y-m-d', strtotime($match[1])) : null;
-            $this->date_finish = isset($match[2]) ? date('Y-m-d', strtotime($match[2])) : null;
+            $this->date_from = isset($match[1]) ? date('Y-m-d', strtotime($match[1])) : null;
+            $this->date_to = isset($match[2]) ? date('Y-m-d', strtotime($match[2])) : null;
         }
 
         return true;

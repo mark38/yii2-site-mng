@@ -1,42 +1,23 @@
-.links-list ul {
-    margin-bottom: 8px;
+ul.links-list div.action .caret {
+    display: none;
 }
-.links-list > ul ul {
-    margin-left: 10px;
+ul.links-list {
+    margin-bottom: 5px;
 }
-.links-list ul li {
-    margin-bottom: 2px;
-    padding: 2px 5px;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-    border-radius: 2px;
+ul.links-list ul.links-list {
+    margin-left: 15px;
 }
-
-.links-list ul li > div.row > div.action > .btn-group {
-    /*display: none;*/
-    opacity: 0.3;
-    -webkit-transition: all .2s;
-    -moz-transition: all .2s;
-    -ms-transition: all .2s;
-    -o-transition: all .2s;
-    transition: all .2s;
+ul.links-list > li > div.inner {
+    padding: 2px 2px 1px 5px;
+    border-radius: 3px;
+    transition: all .3s;
 }
-
-.links-list ul li:hover {
-    background: #eee;
+ul.links-list > li > div.inner:hover, ul.links-list > li > div.inner.active {
+    background: #f1f1f1;
 }
-.links-list ul li:hover > div.row > div.action > .btn-group, .links-list ul li > div.row > div.action > .btn-group.open {
-    /*display: block;*/
-    opacity: 1;
+ul.links-list > li > div.inner.active a.active {
+    font-weight: 600;
 }
-
-.links-list div.action ul {
-    margin: 0;
-}
-.links-list div.action ul li {
-    padding: 0;
-    margin: 2px;
-}
-.links-list div.action .caret {
+ul.links-list > li .children-block {
     display: none;
 }

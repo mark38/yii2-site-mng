@@ -7,6 +7,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\web\Controller;
+use yii\web\Response;
 use common\models\main\Categories;
 use common\models\main\Links;
 use common\models\main\Contents;
@@ -28,7 +29,7 @@ class DefaultController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['index', 'links', 'link-del', 'content', 'save-content', 'gallery-manager'],
+                        'actions' => ['index', 'links', 'get-children', 'link-del', 'content', 'save-content', 'gallery-manager'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -82,6 +83,22 @@ class DefaultController extends Controller
         }
 
         return $this->render('links', compact('category', 'link'));
+    }
+
+    public function actionGetChildren()
+    {
+        $request = Yii::$app->request;
+        if ($request->isAjax) Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $this->layout = false;
+
+        return [
+            'success' => '',
+            'content' => \backend\widgets\map\Links::widget([
+                'categories_id' => $request->post('categories_id'),
+                'parent' => $request->post('parent'),
+            ])
+        ];
     }
 
     public function actionLinkDel($links_id, $categories_id=null)

@@ -4,6 +4,7 @@ namespace common\models\shop;
 
 use Yii;
 use common\models\main\Sessions;
+use common\models\main\Links;
 
 /**
  * This is the model class for table "shop_cart_goods".
@@ -62,6 +63,11 @@ class ShopCartGoods extends \yii\db\ActiveRecord
         return $this->hasOne(ShopGoods::className(), ['id' => 'shop_goods_id']);
     }
 
+    public function getLink()
+    {
+        return $this->hasOne(Links::className(), ['id' => 'links_id'])->via('shopGood');
+    }
+
     public function getShopPriceGoods()
     {
         return $this->hasMany(ShopPriceGood::className(), ['shop_goods_id' => 'id'])->via('shopGood');
@@ -73,6 +79,16 @@ class ShopCartGoods extends \yii\db\ActiveRecord
     public function getShopCart()
     {
         return $this->hasOne(ShopCarts::className(), ['id' => 'shop_carts_id']);
+    }
+
+    public function getShopClientCart()
+    {
+        return $this->hasOne(ShopClientCarts::className(), ['shop_carts_id' => 'id'])->via('shopCart');
+    }
+
+    public function getShopClient()
+    {
+        return $this->hasOne(ShopClients::className(), ['id' => 'shop_clients_id'])->via('shopClientCart');
     }
 
     public function getSession()

@@ -18,20 +18,21 @@ MapAsset::register($this);
 
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title" style="margin-right: 10px;"><?=$category->comment?></h3>
-                <?=ButtonDropdown::widget([
-                    'label' => '<i class="fa fa-cog"></i>',
-                    'dropdown' => [
-                        'items' => [
-                            ['label' => 'Добавить ссылку в корень', 'url' => Url::current(['action' => 'add', 'id' => null])],
+                <h3 class="box-title" style="margin-right: 10px;">
+                    <?=$category->comment?>
+                    <?=ButtonDropdown::widget([
+                        'label' => '<i class="glyphicon glyphicon-option-vertical"></i>',
+                        'dropdown' => [
+                            'items' => [
+                                ['label' => 'Добавить ссылку в корень', 'url' => Url::current(['action' => 'add', 'id' => null])],
+                            ],
                         ],
-                    ],
-                    'encodeLabel' => false,
-                    'options' => [
-                        'class' => 'btn btn-default btn-xs root-action',
-                        
-                    ]
-                ])?>
+                        'encodeLabel' => false,
+                        'options' => [
+                            'class' => 'btn btn-link btn-xs root-action',
+                        ]
+                    ])?>
+                </h3>
 
                 <div class="box-tools pull-right">
                     
@@ -39,8 +40,12 @@ MapAsset::register($this);
 
                 </div>
             </div>
-            <div class="box-body links-list">
-                <?=Links::widget(['categories_id' => Yii::$app->request->get('categories_id')])?>
+            <div class="box-body">
+                <?=Links::widget([
+                    'categories_id' => Yii::$app->request->get('categories_id'),
+                    'parent' => null,
+                    'linksId' => Yii::$app->request->get('id') ? Yii::$app->request->get('id') : null
+                ])?>
             </div>
         </div>
 

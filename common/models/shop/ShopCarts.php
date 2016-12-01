@@ -77,6 +77,16 @@ class ShopCarts extends \yii\db\ActiveRecord
         return $this->hasOne(Sessions::className(), ['id' => 'sessions_id']);
     }
 
+    public function getShopClientCart()
+    {
+        return $this->hasOne(ShopClientCarts::className(), ['shop_carts_id' => 'id']);
+    }
+
+    public function getClient()
+    {
+        return $this->hasOne(ShopClients::className(), ['id' => 'shop_clients_id'])->via('shopClientCart');
+    }
+
     public function beforeSave($insert)
     {
         if ($insert) {

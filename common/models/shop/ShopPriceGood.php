@@ -2,6 +2,7 @@
 
 namespace common\models\shop;
 
+use common\models\main\Links;
 use Yii;
 
 /**
@@ -63,5 +64,10 @@ class ShopPriceGood extends \yii\db\ActiveRecord
     public function getShopGood()
     {
         return $this->hasOne(ShopGoods::className(), ['id' => 'shop_goods_id']);
+    }
+
+    public function getLink()
+    {
+        return $this->hasOne(Links::className(), ['id' => 'links_id'])->via('shopGood');
     }
 }

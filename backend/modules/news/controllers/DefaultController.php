@@ -33,7 +33,7 @@ class DefaultController extends Controller
             $news = News::findOne($news_id);
             $link = Links::findOne($news->links_id);
             $news->date = $news->date !== null ? date('d.m.Y', strtotime($news->date)) : null;
-            $news->date_range = $news->date_start && $news->date_finish ? date('d.m.Y', strtotime($news->date_start)).' - '.date('d.m.Y', strtotime($news->date_finish)) : null;
+            $news->date_range = $news->date_from && $news->date_to ? date('d.m.Y', strtotime($news->date_from)).' - '.date('d.m.Y', strtotime($news->date_to)) : null;
             $news->full_text = Contents::findOne(['links_id' => $link->id, 'seq' => 1])->text;
             $news->prev_text = Contents::findOne(['links_id' => $link->id, 'seq' => 2])->text;
         }

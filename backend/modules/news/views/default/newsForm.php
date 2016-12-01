@@ -3,12 +3,12 @@ use yii\bootstrap\Html;
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Tabs;
 use yii\bootstrap\Modal;
-use common\models\news\NewsTypes;
 use kartik\date\DatePicker;
-use backend\widgets\gallery\GalleryManager;
 use kartik\daterange\DateRangePicker;
+use backend\widgets\gallery\GalleryManager;
 use backend\widgets\ckeditor\CKEditor;
 use iutbay\yii2kcfinder\KCFinder;
+use common\models\news\NewsTypes;
 
 /** @var $this \yii\web\View */
 /** @var $news_type NewsTypes */
@@ -53,13 +53,15 @@ $link_close = [''];
                             $form->field($link, 'state')->checkbox() .
                             $form->field($link, 'anchor')->label('Заголовок новости') .
                             $form->field($link, 'title')->label('Заголовок страницы (опционально)') .
-                            $form->field($news, 'url') .
+                            $form->field($news, 'url')->label('Адрес внешней ссылки') .
                             $form->field($news, 'date')->widget(DatePicker::className(), [
                                 'options' => [
                                     'placeholder' => '___.___.______',
                                 ],
                                 'type' => DatePicker::TYPE_COMPONENT_PREPEND,
                                 'pluginOptions' => [
+                                    'todayHighlight' => true,
+                                    'todayBtn' => true,
                                     'autoclose' => true,
                                     'format' => 'dd.mm.yyyy'
                                 ]
@@ -74,15 +76,17 @@ $link_close = [''];
                                     'opens' => 'left'
                                 ]
                             ]) .
-                            $form->field($link, 'gallery_images_id')->widget(GalleryManager::className(), [
-                                'group' => false,
-                                'gallery_groups_id' => $news->newsType->gallery_groups_id,
-                                'pluginOptions' => [
-                                    'type' => 'promo',
-                                    'apiUrl' => 'gallery-manager',
-                                    'webRoute' => Yii::getAlias('@frontend/web'),
-                                ]
-                            ])->label('Предварительное фото'.$news->newsType->gallery_groups_id) .
+                            ($news->newsType->gallery_groups_id ?
+                                $form->field($link, 'gallery_images_id')->widget(GalleryManager::className(), [
+                                    'group' => false,
+                                    'gallery_groups_id' => $news->newsType->gallery_groups_id,
+                                    'pluginOptions' => [
+                                        'type' => 'promo',
+                                        'apiUrl' => 'gallery-manager',
+                                        'webRoute' => Yii::getAlias('@frontend/web'),
+                                    ]
+                                ])->label('Предварительное фото'.$news->newsType->gallery_groups_id) :
+                                '') .
                             '</p>',
                         'active' => true
                     ],
@@ -147,30 +151,6 @@ $link_close = [''];
                 ],
             ],
         ])?>
-
-        <?/*=$form->field($news, 'full_text', [
-            'template' => '{label}<div class="col-sm-12">{input}</div><div class="col-sm-10">{error}</div>',
-            'labelOptions' => ['class' => 'col-sm-12']
-        ])->widget(CKEditor::className(), [
-            'options' => ['id' => 'full-text'],
-            'preset' => 'custom',
-            'clientOptions' => [
-                'height' => 300,
-                'toolbarGroups' => [
-                    ['name' => 'document', 'groups' => ['mode', 'document', 'doctools']],
-                    ['name' => 'clipboard', 'groups' => ['clipboard', 'undo' ]],
-                    ['name' => 'editing', 'groups' => ['find', 'selection', 'spellchecker' ]],
-                    ['name' => 'insert'],
-                    ['name' => 'basicstyles', 'groups' => ['basicstyles', 'cleanup' ]],
-                    ['name' => 'paragraph', 'groups' => ['list', 'indent', 'blocks', 'align', 'bidi' ]],
-                    ['name' => 'styles'],
-                    ['name' => 'colors'],
-                    ['name' => 'tools'],
-                    ['name' => 'others'],
-                    ['name' => 'links']
-                ],
-            ],
-        ])*/?>
 
         <?= Html::a('Отмена', $link_close, ['class' => 'btn btn-default btn-sm btn-flat'])?>
         <?= Html::submitButton(($link->id ? 'Изменить' : 'Добавить'), [

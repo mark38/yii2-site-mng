@@ -66,6 +66,11 @@ class ShopGoodProperties extends \yii\db\ActiveRecord
         return $this->hasOne(ShopGoods::className(), ['id' => 'shop_goods_id']);
     }
 
+    public function getLink()
+    {
+        return $this->hasOne(Links::className(), ['id' => 'links_id'])->via('shopGood');
+    }
+
     public function getShopPriceGood()
     {
         return $this->hasOne(ShopPriceGood::className(), ['shop_goods_id' => 'id'])->via('shopGood')->groupBy(['shop_goods_id'])->orderBy(['price' => SORT_ASC]);

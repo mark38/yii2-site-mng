@@ -150,16 +150,18 @@ class Import extends Model
         $goods = array();
         foreach ($goods_sxe as $item) {
             $itemVerificationCode = false;
+            $itemsExist = 0;
             if (preg_match('/(.+)#(.+)/', $item->{'Ид'}, $matches)) {
                 $goodVerificationCode = strval($matches[1]);
                 $itemVerificationCode = strval($matches[2]);
+                $itemsExist = 1;
             } else {
                 $goodVerificationCode = strval($item->{'Ид'});
             }
 
             if (!isset($goods[$goodVerificationCode])) {
                 $goods[$goodVerificationCode] = array();
-                $goods[$goodVerificationCode] = $this->addGood($item, $goodVerificationCode);
+                $goods[$goodVerificationCode] = $this->addGood($item, $goodVerificationCode, $itemsExist);
                 if ($item->{'ЗначенияСвойств'}) $this->addPropertyValues($item->{'ЗначенияСвойств'}->{'ЗначенияСвойства'}, $goods[$goodVerificationCode]['id']);
             }
 
@@ -188,7 +190,7 @@ class Import extends Model
         }
     }
 
-    private function addGood($item, $verificationCode)
+    private function addGood($item, $verificationCode, $itemsExist=0)
     {
         $group = ShopGroups::findOne(['verification_code' => strval($item->{'Группы'}->{'Ид'})]);
         $good = ShopGoods::findOne(['verification_code' => $verificationCode]);
@@ -237,6 +239,7 @@ class Import extends Model
         $good->name = strval($item->{'Наименование'});
         $good->code = preg_replace('/^\D+0*/', '', $item->{'КодНоменклатуры'});
         $good->state = 1;
+        $good->items_exist = $itemsExist;
         $good->save();
 
         if ($item->{'Картинки'} && $item->{'Картинки'}->{'Картинка'}) {

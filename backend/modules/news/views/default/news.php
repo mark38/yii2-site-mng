@@ -1,6 +1,7 @@
 <?php
 use yii\bootstrap\Html;
 use yii\bootstrap\ButtonDropdown;
+use app\modules\news\AppAsset;
 
 /** @var $this \yii\web\View */
 /** @var $news_list \common\models\news\News */
@@ -10,6 +11,8 @@ use yii\bootstrap\ButtonDropdown;
 /** @var $link \common\models\main\Links */
 /** @var $prev_news \common\models\main\Contents */
 /** @var $full_news \common\models\main\Contents */
+
+AppAsset::register($this);
 
 $this->title = 'Новостной блок';
 $this->params['breadcrumbs'][] = $this->title;
@@ -57,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     /** @var $new \common\models\news\News */
                     foreach ($news_list as $new) {
                         $new_date = $new->date !== null ? date('d.m.Y', strtotime($new->date)) : null;
-                        $new->date_range = $news->date_start && $news->date_finish ? 'период публикации: '.date('d.m.Y', strtotime($news->date_start)).' - '.date('d.m.Y', strtotime($news->date_finish)) : 'опубликовано';
+                        $new->date_range = $new->date_from && $new->date_to ? 'период публикации: '.date('d.m.Y', strtotime($new->date_from)).' - '.date('d.m.Y', strtotime($new->date_to)) : 'опубликовано';
                         $image = $new->link->gallery_images_id ? $new->link->galleryImage->small : false;
                         $ch_link = ['', 'news' => 'ch', 'news_types_id' => $new->news_types_id, 'news_id' => $new->id];
 
@@ -72,9 +75,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 echo Html::endTag('div');
 
                                 echo Html::beginTag('div', ['class' => 'media-body']);
-                                echo Html::tag('h4', '<span class="text-mutted">'.$new_date.'</span> '.$new->link->anchor);
+                                echo Html::tag('strong', '<span class="text-info">'.$new_date.'</span> '.$new->link->anchor);
                                 echo Html::tag('div', $new->link->contents[1]->text);
-                                echo Html::tag('div', '<span>('.$new->newsType->name.' / '.$new->date_range.')</span>', ['class' => 'text-muted']);
+                                echo Html::tag('div', '<span>('.$new->newsType->name.' | '.$new->date_range.')</span>', ['class' => 'text-muted']);
                                 echo Html::endTag('div');
 
                             echo Html::endTag('div');
