@@ -23,7 +23,8 @@ class DefaultController extends Controller
      * @param $id BroadcastSend->id
      * @return bool
      */
-    public function actionSend($id) {
+    public function actionSend($id)
+    {
         if (!$id) {
             return false;
         }
@@ -80,7 +81,8 @@ class DefaultController extends Controller
         return false;
     }
 
-    public function handleContent($broadcast, $fio, $company) {
+    public function handleContent($broadcast, $fio, $company)
+    {
         $patterns = array();
         $patterns[0] = '/{{if}}/';
         $patterns[1] = '/{{company}}/';

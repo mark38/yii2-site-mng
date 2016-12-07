@@ -19,8 +19,8 @@ $this->params['breadcrumbs'][] = ['label' => 'Рассылка', 'url' => ['inde
 $this->params['breadcrumbs'][] = 'Управление';
 
 $kcfOptions = array_merge(KCFinder::$kcfDefaultOptions, [
-    'uploadURL' => Yii::$app->params['hostname'].'/uploads',
-    'uploadDir' => Yii::getAlias('@frontend/web/uploads'),
+    'uploadURL' => Yii::$app->params['hostname'].'/upload',
+    'uploadDir' => Yii::getAlias('@frontend/web/upload'),
     'access' => [
         'files' => [
             'upload' => true,
@@ -38,6 +38,8 @@ $kcfOptions = array_merge(KCFinder::$kcfDefaultOptions, [
 ]);
 
 Yii::$app->session->set('KCFINDER', $kcfOptions);
+
+echo Yii::getAlias('@app/../');
 ?>
 
 <div class="row">

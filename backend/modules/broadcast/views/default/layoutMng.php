@@ -81,9 +81,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'header' => $layout->name,
                 'toggleButton' => ['label' => 'Удалить', 'class' => 'btn btn-danger btn-flat btn-sm'],
                 'footer' => Html::a('Отмена', '#', ['data-dismiss' => 'modal', 'class' => 'btn btn-default btn-flat btn-sm']) .
-                    Html::a('Удалить', ['news-del', 'links_id' => $layout->id], ['class' => 'btn btn-danger btn-flat btn-sm']),
+                    Html::a('Удалить', ['layout-del', 'id' => $layout->id], ['class' => 'btn btn-danger btn-flat btn-sm']),
             ]);
-            echo '<p>Действительно удалить новость?</p>';
+            echo '<p>Действительно удалить шаблон?</p>';
             Modal::end();
         }?>
 
@@ -101,7 +101,7 @@ $this->params['breadcrumbs'][] = $this->title;
 // kcfinder options
 // http://kcfinder.sunhater.com/install#dynamic
 $kcfOptions = array_merge(KCFinder::$kcfDefaultOptions, [
-    'uploadURL' => '/upload',
+    'uploadURL' => Yii::$app->params['hostname'].'/upload',
     'uploadDir' => Yii::getAlias('@frontend/web/upload'),
     'access' => [
         'files' => [

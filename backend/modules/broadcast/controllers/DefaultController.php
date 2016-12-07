@@ -9,6 +9,8 @@ use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\web\Controller;
 use app\modules\broadcast\models\BroadcastForm;
+use vova07\console\ConsoleRunner;
+use common\helpers\RunConsole;
 use common\models\broadcast\Broadcast;
 use common\models\broadcast\BroadcastAddress;
 use common\models\User;
@@ -31,7 +33,7 @@ class DefaultController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['index', 'manager', 'render-send', 'send', 'address', 'status', 'layouts', 'layout-mng'],
+                        'actions' => ['index', 'manager', 'render-send', 'send', 'address', 'status', 'layouts', 'layout-mng', 'layout-del'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -119,7 +121,10 @@ class DefaultController extends Controller
     {
         $broadcast_address = BroadcastAddress::find()->joinWith(['user'])->where(['broadcast_send_id' => $broadcast_send_id])->orderBy(['user.username' => SORT_ASC])->all();
         if ($action && $action == 'send') {
-            exec('php '.Yii::getAlias('@app').'/../yii broadcast/default/send '.$broadcast_send_id.' > /dev/null 2>&1 &');
+            $runConsole = new RunConsole(['file' => preg_replace('@(frontend/|frontend|frontend\\))@', '', Yii::getAlias('@app')) . '/../yii']);
+            $runConsole->run("broadcast/default/send " . $broadcast_send_id);
+
+            //exec('php '.Yii::getAlias('@app').'/../yii broadcast/default/send '.$broadcast_send_id.' > /dev/null 2>&1 &');
         }
 
         return $this->render('send', [
@@ -176,11 +181,24 @@ class DefaultController extends Controller
 
         if ($layout->load(Yii::$app->request->post()) && $layout->save()) {
             Yii::$app->getSession()->setFlash('success', 'Изменения приняты');
-            return $this->redirect(['/boradcast/layout-mng', 'id' => $id]);
+            return $this->redirect(['/broadcast/layout-mng', 'id' => $layout->id]);
         }
 
         return $this->render('layoutMng', [
             'layout' => $layout
         ]);
+    }
+
+    public function actionLayoutDel($id)
+    {
+        $layout = BroadcastLayouts::findOne($id);
+        if ($layout) {
+            $layout->delete();
+            Yii::$app->getSession()->setFlash('success', 'Шаблон удалён из списка');
+        } else {
+            Yii::$app->getSession()->setFlash('error', 'Шаблон не найден');
+        }
+
+        return $this->redirect('/broadcast/layouts');
     }
 }

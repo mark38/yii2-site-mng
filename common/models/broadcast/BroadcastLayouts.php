@@ -10,6 +10,7 @@ use Yii;
  * @property integer $id
  * @property string $name
  * @property string $layout_path
+ * @property string $content
  *
  * @property Broadcast[] $broadcasts
  */
@@ -29,6 +30,8 @@ class BroadcastLayouts extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['name', 'layout_path'], 'required'],
+            [['content'], 'string'],
             [['name', 'layout_path'], 'string', 'max' => 255],
         ];
     }
@@ -42,6 +45,7 @@ class BroadcastLayouts extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'layout_path' => 'Layout Path',
+            'content' => 'Content',
         ];
     }
 

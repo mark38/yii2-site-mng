@@ -47,7 +47,8 @@
         "phpoffice/phpexcel": "^1.8",
         "kartik-v/yii2-widget-fileinput": "^1.0",
         "kartik-v/yii2-widget-activeform": "^1.4",
-        "philippfrenzel/yii2masonry": "^1.1"
+        "philippfrenzel/yii2masonry": "^1.1",
+        "vova07/yii2-console-runner-extension": "^0.1.0"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
