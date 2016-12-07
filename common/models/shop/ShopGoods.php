@@ -134,6 +134,6 @@ class ShopGoods extends \yii\db\ActiveRecord
 
     public function getShopGoodProperties()
     {
-        return $this->hasMany(ShopGoodProperties::className(), ['shop_goods_id' => 'id'])->innerJoin('shop_properties')->orderBy(['shop_properties.seq' => SORT_ASC]);
+        return $this->hasMany(ShopGoodProperties::className(), ['shop_goods_id' => 'id'])->innerJoin('shop_properties')->where(['shop_properties.state' => 1])->orderBy(['shop_properties.seq' => SORT_ASC]);
     }
 }
