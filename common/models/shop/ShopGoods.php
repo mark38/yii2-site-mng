@@ -136,4 +136,9 @@ class ShopGoods extends \yii\db\ActiveRecord
     {
         return $this->hasMany(ShopGoodProperties::className(), ['shop_goods_id' => 'id'])->innerJoin('shop_properties')->orderBy(['shop_properties.seq' => SORT_ASC]);
     }
+
+    public function getShopPropertyValue()
+    {
+        return $this->hasOne(ShopPropertyValues::className(), ['id' => 'shop_property_values_id'])->via('shopGoodProperties');
+    }
 }

@@ -95,6 +95,7 @@ MapAsset::register($this);
                 'preset' => 'full',
                 'clientOptions' => [
                     'height' => 300,
+                    'allowedContent' => true,
                     'toolbar' => [
                         [
                             'name' => 'row1',
