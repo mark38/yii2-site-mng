@@ -36,7 +36,7 @@ $link_close = ['list'];
     <div class="box-body">
         <?php
 
-        /*echo Html::beginTag('table', ['class' => 'table table-condensed table-hover']);
+        echo Html::beginTag('table', ['class' => 'table table-condensed table-hover']);
 
         echo Html::beginTag('thead');
         echo Html::tag('tr',
@@ -45,7 +45,7 @@ $link_close = ['list'];
             Html::tag('th', 'Наименование на сайте') .
             Html::tag('th', 'Имя латиницей')
         );
-        echo Html::endTag('thead');*/
+        echo Html::endTag('thead');
 
         /** @var \common\models\shop\ShopPropertyValues $value */
        /* foreach ($values as $num => $value) {
