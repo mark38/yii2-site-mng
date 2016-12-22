@@ -19,11 +19,11 @@ echo Html::endTag('thead');
 /** @var \common\models\shop\ShopProperties $property */
 foreach ($properties as $num => $property) {
     echo Html::tag('tr',
-        Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($num+1))) .
+        Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($num+1))) 
 //        Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($property->name))) .
 //        Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($property->anchor))) .
 //        Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($property->url))) .
-        Html::tag('td', ButtonDropdown::widget([
+        /*Html::tag('td', ButtonDropdown::widget([
             'label' => '<i class="glyphicon glyphicon-option-vertical"></i>',
             'dropdown' => [
                 'items' => [
@@ -35,8 +35,8 @@ foreach ($properties as $num => $property) {
             'options' => [
                 'class' => 'btn btn-link btn-xs clear-caret',
             ]
-        ]))
-//        ['class' => (isset(Yii::$app->request->get('properties_id')) && Yii::$app->request->get('properties_id') == $property->id ? 'active' : '')]
+        ])),
+        ['class' => (isset(Yii::$app->request->get('properties_id')) && Yii::$app->request->get('properties_id') == $property->id ? 'active' : '')]*/
     );
 }
 
