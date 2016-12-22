@@ -21,7 +21,7 @@ echo Html::endTag('thead');
 foreach ($properties as $num => $property) {
     echo Html::tag('tr',
         Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($num+1))),
-        Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($property->name))),
+        Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), '123')),
         /*Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($property->anchor))) .
         Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($property->url))) .
         Html::tag('td', ButtonDropdown::widget([
