@@ -10,7 +10,7 @@ use mark38\galleryManager\GalleryManager;
 /** @var $value \common\models\shop\ShopPropertyValues */
 /** @var \common\models\main\Contents $content */
 
-$link_close = ['properties_id' => Yii::$app->request->get('properties_id'), 'action' => 'get_values'];
+$link_close = ['', 'properties_id' => Yii::$app->request->get('properties_id'), 'action' => 'get_values'];
 ?>
 
 <div class="box box-default">
