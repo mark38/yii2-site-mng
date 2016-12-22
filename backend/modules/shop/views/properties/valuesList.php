@@ -58,7 +58,7 @@ $link_close = ['list'];
                     'label' => '<i class="glyphicon glyphicon-option-vertical"></i>',
                     'dropdown' => [
                         'items' => [
-//                            ['label' => 'Параметры', 'url' => ['', 'properties_id' => $value->shop_properties_id, 'action' => 'value_ch', 'values_id' => $value->id]],
+                            ['label' => 'Параметры', 'url' => ['', 'properties_id' => $value->shop_properties_id, 'action' => 'value_ch', 'values_id' => $value->id]],
                         ],
                         'options' => [
                             'class' => 'dropdown-menu-right'
