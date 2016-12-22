@@ -18,8 +18,8 @@ echo Html::endTag('thead');
 
 /** @var \common\models\shop\ShopProperties $property */
 foreach ($properties as $num => $property) {
-    echo Html::tag('tr',
-        Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($num+1))) 
+    echo Html::tag('tr', '<td>123</td>'
+        //Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($num+1)))
 //        Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($property->name))) .
 //        Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($property->anchor))) .
 //        Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($property->url))) .
