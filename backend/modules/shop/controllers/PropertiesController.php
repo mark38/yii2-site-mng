@@ -54,6 +54,7 @@ class PropertiesController extends Controller
 
         if (Yii::$app->request->isPost && $property && $property->load(Yii::$app->request->post()) && $property->save()) {
             Yii::$app->getSession()->setFlash('success', 'Изменения приняты');
+            return $this->redirect(['', 'action' => 'property_ch', 'properties_id' => $property->id]);
         }
 
         if (Yii::$app->request->isPost && $value && $value->load(Yii::$app->request->post()) && $value->save()) {
@@ -63,6 +64,7 @@ class PropertiesController extends Controller
             }
             Yii::$app->getSession()->setFlash('success', 'Изменения приняты');
             $values = ShopPropertyValues::find()->where(['shop_properties_id' => $properties_id])->orderBy(['name' => SORT_ASC])->all();
+            return $this->redirect(['', 'action' => 'value_ch', 'properties_id' => $properties_id, 'values_id' => $value->id]);
         }
 
         $properties = ShopProperties::find()->orderBy(['seq' => SORT_ASC])->all();

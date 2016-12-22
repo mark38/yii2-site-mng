@@ -83,6 +83,7 @@ $link_close = ['', 'properties_id' => Yii::$app->request->get('properties_id'), 
             ],
         ])?>
 
+        <div class="hide"><?=$form->field($value, 'id')->hiddenInput()?></div>
         <div class="hide"><?=$form->field($value, 'shop_properties_id')->hiddenInput()?></div>
 
         <div class="form-group">
