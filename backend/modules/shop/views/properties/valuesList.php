@@ -36,7 +36,7 @@ $link_close = ['list'];
     <div class="box-body">
         <?php
 
-        echo Html::beginTag('table', ['class' => 'table table-condensed table-hover']);
+        /*echo Html::beginTag('table', ['class' => 'table table-condensed table-hover']);
 
         echo Html::beginTag('thead');
         echo Html::tag('tr',
@@ -45,10 +45,10 @@ $link_close = ['list'];
             Html::tag('th', 'Наименование на сайте') .
             Html::tag('th', 'Имя латиницей')
         );
-        echo Html::endTag('thead');
+        echo Html::endTag('thead');*/
 
         /** @var \common\models\shop\ShopPropertyValues $value */
-        foreach ($values as $num => $value) {
+       /* foreach ($values as $num => $value) {
             echo Html::tag('tr',
                 Html::tag('td', ($num+1)) .
                 Html::tag('td', $value->name) .
@@ -73,7 +73,7 @@ $link_close = ['list'];
                 ]),
                 ['class' => (Yii::$app->request->get('properties_id') && Yii::$app->request->get('properties_id') == $property->id ? 'active' : '')]
             );
-        }
+        }*/
 
         echo Html::endTag('table');
 
