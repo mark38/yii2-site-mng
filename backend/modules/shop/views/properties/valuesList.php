@@ -19,7 +19,7 @@ $link_close = ['list'];
                 'label' => '<i class="glyphicon glyphicon-option-vertical"></i>',
                 'dropdown' => [
                     'items' => [
-                        ['label' => 'Добавить значение', 'url' => Url::to(['properties_id' => Yii::$app->request->get('properties_id'), 'action' => 'value_add'])],
+                        ['label' => 'Добавить значение', 'url' => Url::to(['', 'properties_id' => Yii::$app->request->get('properties_id'), 'action' => 'value_add'])],
                     ],
                 ],
                 'encodeLabel' => false,
