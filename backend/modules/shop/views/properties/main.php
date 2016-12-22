@@ -39,7 +39,7 @@ $this->title = 'Управление свойствами и их значени
             </div>
             <div class="box-body">
                 <?php if ($properties) {
-                    echo $this->render('propertiesList', ['properties' => $properties]);
+//                    echo $this->render('propertiesList', ['properties' => $properties]);
                 }?>
             </div>
         </div>

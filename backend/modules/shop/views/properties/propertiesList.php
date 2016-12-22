@@ -17,7 +17,7 @@ echo Html::tag('tr',
 echo Html::endTag('thead');
 
 /** @var \common\models\shop\ShopProperties $property */
-print_r($properties);
+
 /*foreach ($properties as $num => $property) {
     echo Html::tag('tr',
         Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($num+1))),
