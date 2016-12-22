@@ -38,7 +38,9 @@ $this->title = 'Управление свойствами и их значени
                 </h3>
             </div>
             <div class="box-body">
-                
+                <?php if ($properties) {
+                    echo $this->render('propertiesList', ['properties' => $properties]);
+                }?>
             </div>
         </div>
     </div>
