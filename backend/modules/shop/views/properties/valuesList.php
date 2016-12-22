@@ -48,7 +48,7 @@ $link_close = ['list'];
         echo Html::endTag('thead');
 
         /** @var \common\models\shop\ShopPropertyValues $value */
-       /* foreach ($values as $num => $value) {
+        foreach ($values as $num => $value) {
             echo Html::tag('tr',
                 Html::tag('td', ($num+1)) .
                 Html::tag('td', $value->name) .
@@ -73,7 +73,7 @@ $link_close = ['list'];
                 ]),
                 ['class' => (Yii::$app->request->get('properties_id') && Yii::$app->request->get('properties_id') == $property->id ? 'active' : '')]
             );
-        }*/
+        }
 
         echo Html::endTag('table');
 
