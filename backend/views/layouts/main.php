@@ -6,6 +6,7 @@ use yii\helpers\Html;
 
 $left_view = false;
 if (isset($this->context->module->id)) {
+    if (class_exists('@app/modules/'.$this->context->module->id.'/AppAsset')) echo 1;
     if (file_exists(Yii::getAlias('@app/modules/').$this->context->module->id.'/views/layouts/left.php')) $left_view = '../../modules/'.$this->context->module->id.'/views/layouts/left.php';
 }
 if (!$left_view) $left_view = 'left.php';
@@ -25,7 +26,8 @@ if (Yii::$app->controller->action->id === 'login') {
     if (class_exists('backend\assets\AppAsset')) {
         backend\assets\AppAsset::register($this);
         if (class_exists('app\\modules\\'.Yii::$app->controller->module->id.'\\AppAsset')) {
-            $asset = Yii::$app->controller->module->id;
+            $asset = 'app\\modules\\'.Yii::$app->controller->module->id.'\\AppAsset';
+            $asset::register($this);
         }
     } else {
         app\assets\AppAsset::register($this);

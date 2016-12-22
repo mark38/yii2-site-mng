@@ -2,6 +2,8 @@
 
 namespace common\models\shop;
 
+use common\models\gallery\GalleryImages;
+use common\models\main\Contents;
 use Yii;
 
 /**
@@ -12,6 +14,10 @@ use Yii;
  * @property string $name
  * @property string $anchor
  * @property string $url
+ * @property integer $contents_id
+ * @property integer $gallery_images_id
+ *
+ * @property GalleryImage $galleryImage
  */
 class ShopPropertyValues extends \yii\db\ActiveRecord
 {
@@ -29,7 +35,7 @@ class ShopPropertyValues extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['shop_properties_id'], 'integer'],
+            [['shop_properties_id', 'contents_id', 'gallery_images_id'], 'integer'],
             [['name', 'anchor', 'url'], 'string', 'max' => 255],
             [['shop_properties_id'], 'exist', 'skipOnError' => true, 'targetClass' => ShopProperties::className(), 'targetAttribute' => ['shop_properties_id' => 'id']],
         ];
@@ -46,6 +52,18 @@ class ShopPropertyValues extends \yii\db\ActiveRecord
             'name' => 'Name',
             'anchor' => 'Anchor',
             'url' => 'Url',
+            'contents_id' => 'Contents ID',
+            'gallery_images_id' => 'Gallery Images ID'
         ];
+    }
+
+    public function actionGetContent()
+    {
+        return $this->hasOne(Contents::className(), ['contents_id' => 'id']);
+    }
+
+    public function actionGetGalleryImage()
+    {
+        return $this->hasOne(GalleryImages::className(), ['gallery_images_id' => 'id']);
     }
 }

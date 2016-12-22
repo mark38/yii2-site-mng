@@ -1,12 +1,20 @@
 <?php
 /** @var $this \yii\web\View */
 
-$items[] = ['label' => 'Обмен товара с 1с', 'options' => ['class' => 'header']];
+$items[] = ['label' => 'Параметры', 'options' => ['class' => 'header']];
 $items[] = [
-    'label' => 'Запустить обработку import.xml',
+    'label' => 'Свойства товара',
+    'icon' => 'fa fa-circle-thin',
+    'url' => ['/shop/properties/list'],
+];
+
+$items[] = ['label' => 'Импорт данных', 'options' => ['class' => 'header']];
+$items[] = [
+    'label' => 'Обмен данными с 1с',
     'icon' => 'fa fa-circle-thin',
     'url' => ['/shop/hand-import'],
 ];
+
 $items[] = ['label' => 'Поддержка', 'options' => ['class' => 'header']];
 $items[] = [
     'label' => 'Важно',

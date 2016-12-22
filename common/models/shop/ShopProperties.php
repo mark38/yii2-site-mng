@@ -17,6 +17,8 @@ use Yii;
  */
 class ShopProperties extends \yii\db\ActiveRecord
 {
+    public $state = true;
+
     /**
      * @inheritdoc
      */
@@ -56,5 +58,31 @@ class ShopProperties extends \yii\db\ActiveRecord
     {
         $q = static::find()->orderBy(['seq' => SORT_DESC])->one();
         return ($q ? $q->seq : 0);
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if (!$this->seq) {
+                $property = self::find()->orderBy(['seq' => SORT_DESC])->one();
+                $this->seq = $property->seq + 1;
+            }
+            return true;
+        }
+
+        return true;
+    }
+
+    public function afterDelete()
+    {
+        $properties = self::find()->orderBy(['seq' => SORT_ASC])->all();
+        if ($properties) {
+            foreach ($properties as $seq => $property) {
+                $property->seq = $seq + 1;
+                $property->update();
+            }
+        }
+
+        return true;
     }
 }

@@ -108,3 +108,7 @@ a.desc:after {
 .menu-button {
     width: 100%;
 }
+
+.clear-caret span.caret {
+    display: none;
+}

@@ -18,7 +18,7 @@ MapAsset::register($this);
 
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title" style="margin-right: 10px;">
+                <h3 class="box-title">
                     <?=$category->comment?>
                     <?=ButtonDropdown::widget([
                         'label' => '<i class="glyphicon glyphicon-option-vertical"></i>',
