@@ -21,10 +21,10 @@ echo Html::endTag('thead');
 foreach ($properties as $num => $property) {
     echo Html::tag('tr',
         Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($num+1))) .
-        Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($property->name))),
+        Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($property->name))) .
         Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($property->anchor))) .
         Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($property->url))) .
-        /*Html::tag('td', ButtonDropdown::widget([
+        Html::tag('td', ButtonDropdown::widget([
             'label' => '<i class="glyphicon glyphicon-option-vertical"></i>',
             'dropdown' => [
                 'items' => [
@@ -36,7 +36,7 @@ foreach ($properties as $num => $property) {
             'options' => [
                 'class' => 'btn btn-link btn-xs clear-caret',
             ]
-        ])),*/
+        ])),
         ['class' => (Yii::$app->request->get('properties_id') && Yii::$app->request->get('properties_id') == $property->id ? 'active' : '')]
     );
 }
