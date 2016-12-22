@@ -58,7 +58,7 @@ $link_close = ['list'];
                     'label' => '<i class="glyphicon glyphicon-option-vertical"></i>',
                     'dropdown' => [
                         'items' => [
-                            ['label' => 'Параметры', 'url' => ['', 'properties_id' => $value->shop_properties_id, 'action' => 'value_ch', 'values_id' => $value->id]],
+//                            ['label' => 'Параметры', 'url' => ['', 'properties_id' => $value->shop_properties_id, 'action' => 'value_ch', 'values_id' => $value->id]],
                         ],
                         'options' => [
                             'class' => 'dropdown-menu-right'
@@ -68,8 +68,8 @@ $link_close = ['list'];
                     'options' => [
                         'class' => 'btn btn-link btn-xs clear-caret',
                     ]
-                ]), ['class' => 'text-right']),
-                ['class' => (Yii::$app->request->get('properties_id') && Yii::$app->request->get('properties_id') == $property->id ? 'active' : '')]
+                ]), ['class' => 'text-right'])
+//                ['class' => (Yii::$app->request->get('properties_id') && Yii::$app->request->get('properties_id') == $property->id ? 'active' : '')]
             );
         }
 
