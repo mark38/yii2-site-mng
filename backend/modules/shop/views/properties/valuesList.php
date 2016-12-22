@@ -49,7 +49,7 @@ $link_close = ['list'];
 
         /** @var \common\models\shop\ShopPropertyValues $value */
         foreach ($values as $num => $value) {
-            /*echo Html::tag('tr',
+            echo Html::tag('tr',
                 Html::tag('td', ($num+1)) .
                 Html::tag('td', $value->name) .
                 Html::tag('td', $value->anchor) .
@@ -68,11 +68,9 @@ $link_close = ['list'];
                     'options' => [
                         'class' => 'btn btn-link btn-xs clear-caret',
                     ]
-                ]), [
-                    'class' => 'text-right'
-                ]),
+                ]), ['class' => 'text-right']),
                 ['class' => (Yii::$app->request->get('properties_id') && Yii::$app->request->get('properties_id') == $property->id ? 'active' : '')]
-            );*/
+            );
         }
 
         echo Html::endTag('table');
