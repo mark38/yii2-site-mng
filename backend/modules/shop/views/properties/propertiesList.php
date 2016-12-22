@@ -36,7 +36,7 @@ foreach ($properties as $num => $property) {
                 'class' => 'btn btn-link btn-xs clear-caret',
             ]
         ])),
-        ['class' => (Yii::$app->request->get('properties_id') && Yii::$app->request->get('properties_id') == $property->id ? 'active' : '')]
+        ['class' => (isset(Yii::$app->request->get('properties_id')) && Yii::$app->request->get('properties_id') == $property->id ? 'active' : '')]
     );
 }
 
