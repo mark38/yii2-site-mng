@@ -69,7 +69,7 @@ $link_close = ['list'];
                         'class' => 'btn btn-link btn-xs clear-caret',
                     ]
                 ]), ['class' => 'text-right']),
-                ['class' => (Yii::$app->request->get('properties_id') == $value->shop_properties_id ? 'active' : '')]
+                ['class' => (Yii::$app->request->get('values_id') && Yii::$app->request->get('values_id') == $value->id ? 'active' : '')]
             );
         }
 
