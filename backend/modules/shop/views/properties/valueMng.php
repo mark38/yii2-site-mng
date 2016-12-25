@@ -6,9 +6,12 @@ use yii\helpers\Url;
 use backend\widgets\ckeditor\CKEditor;
 use iutbay\yii2kcfinder\KCFinder;
 use mark38\galleryManager\GalleryManager;
+use common\models\gallery\GalleryGroups;
 
 /** @var $value \common\models\shop\ShopPropertyValues */
 /** @var \common\models\main\Contents $content */
+
+$property = \common\models\shop\ShopProperties::findOne($value->shop_properties_id);
 
 $link_close = ['', 'properties_id' => Yii::$app->request->get('properties_id'), 'action' => 'get_values'];
 ?>
@@ -38,15 +41,20 @@ $link_close = ['', 'properties_id' => Yii::$app->request->get('properties_id'), 
         <?=$form->field($value, 'name')?>
         <?=$form->field($value, 'anchor')?>
         <?=$form->field($value, 'url')?>
-        <?=$form->field($value, 'gallery_images_id')->widget(GalleryManager::className(), [
-            'group' => false,
-            'gallery_groups_id' => 1,
-            'pluginOptions' => [
-                'type' => 'promo',
-                'apiUrl' => 'gallery-manager',
-                'webRoute' => Yii::getAlias('@frontend/web'),
-            ]
-        ])?>
+        <?php
+        if (Yii::$app->params['shop']['propertyGallery'] && key_exists($property->name, Yii::$app->params['shop']['propertyGallery'])) {
+            $galleryGroup = GalleryGroups::findOne(Yii::$app->params['shop']['propertyGallery'][$property->name]);
+            echo $form->field($value, 'gallery_images_id')->widget(GalleryManager::className(), [
+                'group' => false,
+                'gallery_groups_id' => $galleryGroup->id,
+                'pluginOptions' => [
+                    'type' => $galleryGroup->galleryType->name,
+                    'apiUrl' => 'gallery-manager',
+                    'webRoute' => Yii::getAlias('@frontend/web'),
+                ]
+            ])->hint($galleryGroup->galleryType->small_width.'x'.$galleryGroup->galleryType->small_height.'px');
+        }
+        ?>
         <?=$form->field($content, 'text', [
             'template' => '{label}<div class="col-sm-12">{input}</div><div class="col-sm-10">{error}</div>',
             'labelOptions' => ['class' => 'col-sm-12']
@@ -81,7 +89,7 @@ $link_close = ['', 'properties_id' => Yii::$app->request->get('properties_id'), 
                     ],
                 ],
             ],
-        ])?>
+        ])->label(false)?>
 
         <div class="hide"><?=$form->field($value, 'id')->hiddenInput()?></div>
         <div class="hide"><?=$form->field($value, 'shop_properties_id')->hiddenInput()?></div>

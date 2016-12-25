@@ -5,6 +5,10 @@ return [
     'adminEmail' => 'info@site.ru',
     'supportEmail' => 'info@site.ru',
     'user.passwordResetTokenExpire' => 3600,
+    'monthsParentCase' => ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'],
+    'rating' => [
+        'max' => 5
+    ],
     'shop' => [
         'phpAuthUser' => 'admin',
         'phpAuthPw' => 'p7Nr5Bzu',
@@ -36,8 +40,16 @@ return [
             'other' => 7,
             'logo' => 8
         ],
+        'propertyGalleryType' => 'brands',
+        'propertyGallery' => [
+            'Производитель' => 17827,
+            'Бренд' => 17827,
+        ],
         'galleryLink' => [4, 9],
-        'hitShopProperty' => ['id' => 9, 'value' => 'Беларусь'],
-        'promoShopProperty' => ['id' => 2, 'value' => 'Gesser'],
+        'hitShopProperty' => ['id' => 23, 'value' => '1'],
+        'promoShopProperty' => ['id' => 22, 'value' => '1'],
+        'promoProductsId' => [
+            467 => [17513, 17103],
+        ],
     ]
 ];

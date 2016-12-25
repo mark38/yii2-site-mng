@@ -93,6 +93,9 @@ class News extends \yii\db\ActiveRecord
             preg_match('/(\d+\.\d+\.\d+) - (\d+\.\d+\.\d+)/', $this->date_range, $match);
             $this->date_from = isset($match[1]) ? date('Y-m-d', strtotime($match[1])) : null;
             $this->date_to = isset($match[2]) ? date('Y-m-d', strtotime($match[2])) : null;
+        } else {
+            $this->date_from = null;
+            $this->date_to = null;
         }
 
         return true;

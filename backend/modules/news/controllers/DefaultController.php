@@ -2,14 +2,13 @@
 
 namespace app\modules\news\controllers;
 
+use Yii;
+use yii\web\Controller;
+use mark38\galleryManager\GalleryManagerAction;
 use common\models\main\Contents;
 use common\models\main\Links;
 use common\models\news\News;
 use common\models\news\NewsTypes;
-use Yii;
-use yii\web\Controller;
-//use backend\widgets\gallery\GalleryManagerAction;
-use mark38\galleryManager\GalleryManagerAction;
 
 class DefaultController extends Controller
 {
@@ -49,6 +48,8 @@ class DefaultController extends Controller
             $link->load(Yii::$app->request->post());
             $link->parent = $news_type->links_id;
             $link->categories_id = $news_type->categories_id !== null ? $news_type->categories_id : $news_type->link->categories_id;
+            $link->views_id = $news_type->views_id;
+            $link->title = $link->title ? $link->title : $link->anchor;
             $link->save();
 
             $news->load(Yii::$app->request->post());

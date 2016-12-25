@@ -6,6 +6,7 @@ use Yii;
 use common\models\main\Links;
 use common\models\main\Categories;
 use common\models\gallery\GalleryTypes;
+use common\models\main\Views;
 
 /**
  * This is the model class for table "news_types".
@@ -16,11 +17,13 @@ use common\models\gallery\GalleryTypes;
  * @property string $name
  * @property integer $gallery_types_id
  * @property integer $gallery_groups_id
+ * @property integer $views_id
  *
  * @property News[] $news
  * @property Categories $categories
  * @property Links $links
  * @property GalleryTypes $galleryTypes
+ * @property Views $view
  */
 class NewsTypes extends \yii\db\ActiveRecord
 {
@@ -38,7 +41,7 @@ class NewsTypes extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['categories_id', 'links_id', 'gallery_types_id', 'gallery_groups_id'], 'integer'],
+            [['categories_id', 'links_id', 'gallery_types_id', 'gallery_groups_id', 'views_id'], 'integer'],
             [['name'], 'string', 'max' => 255]
         ];
     }
@@ -54,6 +57,7 @@ class NewsTypes extends \yii\db\ActiveRecord
             'links_id' => 'Links ID',
             'name' => 'Name',
             'gallery_types_id' => 'Gallery Types ID',
+            'views_id' => 'Views ID',
         ];
     }
 
@@ -87,5 +91,10 @@ class NewsTypes extends \yii\db\ActiveRecord
     public function getGalleryType()
     {
         return $this->hasOne(GalleryTypes::className(), ['id' => 'gallery_types_id']);
+    }
+
+    public function getView()
+    {
+        return $this->hasOne(Views::className(), ['id' => 'views_id']);
     }
 }

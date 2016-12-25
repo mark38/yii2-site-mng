@@ -2,9 +2,9 @@
 
 namespace common\models\shop;
 
-use common\models\gallery\GalleryImages;
-use common\models\main\Contents;
 use Yii;
+use common\models\main\Contents;
+use common\models\gallery\GalleryImages;
 
 /**
  * This is the model class for table "shop_property_values".
@@ -57,13 +57,13 @@ class ShopPropertyValues extends \yii\db\ActiveRecord
         ];
     }
 
-    public function actionGetContent()
+    public function getContent()
     {
-        return $this->hasOne(Contents::className(), ['contents_id' => 'id']);
+        return $this->hasOne(Contents::className(), ['id' => 'contents_id']);
     }
 
-    public function actionGetGalleryImage()
+    public function getGalleryImage()
     {
-        return $this->hasOne(GalleryImages::className(), ['gallery_images_id' => 'id']);
+        return $this->hasOne(GalleryImages::className(), ['id' => 'gallery_images_id']);
     }
 }
