@@ -39,7 +39,7 @@ use dmstr\widgets\Alert;
     <div class="pull-right hidden-xs">
         <b>Version</b> 2.0
     </div>
-    <strong>Copyright &copy; <?=date('Y')?>
+    <strong>Copyright &copy; 2016 &mdash; <?=date('Y')?>
 </footer>
 
 <!-- Control Sidebar -->

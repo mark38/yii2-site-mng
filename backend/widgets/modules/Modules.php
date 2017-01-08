@@ -33,7 +33,7 @@ class Modules extends Widget
 
         $modules = \common\models\main\Modules::find()->where(['visible' => 1])->orderBy(['seq' => SORT_ASC])->all();
         if ($modules) {
-            $model_items = array();
+            /*$model_items = array();
             foreach ($modules as $model) {
                 $model_items[] = [
                     'label' => $model->name,
@@ -43,7 +43,14 @@ class Modules extends Widget
             $items[] = [
                 'label' => 'Модули',
                 'items' => $model_items
-            ];
+            ];*/
+
+            foreach ($modules as $model) {
+                $items[] = [
+                    'label' => $model->name,
+                    'url' => [$model->url],
+                ];
+            }
         }
 
         echo Nav::widget([

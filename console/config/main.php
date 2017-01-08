@@ -27,6 +27,9 @@ return [
         'ipGeoBase' => [
             'class' => 'app\modules\ipGeoBase\Module',
         ],
+        'sms' => [
+            'class' => 'app\modules\sms\Module',
+        ],
     ],
     'components' => [
         'log' => [

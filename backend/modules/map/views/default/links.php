@@ -35,7 +35,7 @@ MapAsset::register($this);
                 </h3>
 
                 <div class="box-tools pull-right">
-                    
+
                     <span class="glyphicon glyphicon-search form-control-feedback"></span>
 
                 </div>

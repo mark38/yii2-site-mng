@@ -9,7 +9,6 @@ use yii\filters\VerbFilter;
 use yii\helpers\Url;
 use yii\web\Controller;
 use app\modules\broadcast\models\BroadcastForm;
-use vova07\console\ConsoleRunner;
 use common\helpers\RunConsole;
 use common\models\broadcast\Broadcast;
 use common\models\broadcast\BroadcastAddress;
