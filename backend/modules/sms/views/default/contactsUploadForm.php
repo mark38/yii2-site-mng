@@ -24,7 +24,6 @@ use yii\bootstrap\Html;
     <?=$form->field($upload, 'uploadFile')->fileInput()?>
 
     <?php
-    echo Html::submitButton('Отправить');
     if (!Yii::$app->request->isAjax) {
         echo Html::submitButton('Отправить');
     }
