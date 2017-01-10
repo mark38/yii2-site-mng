@@ -9,9 +9,9 @@ use Yii;
  *
  * @property integer $id
  * @property string $content
- * @property integer $created_at
  * @property string $comment
  * @property integer $contact_send
+ * @property integer $created_at
  *
  * @property SmsSend[] $smsSends
  */
@@ -32,7 +32,7 @@ class SmsContent extends \yii\db\ActiveRecord
     {
         return [
             [['content'], 'string'],
-            [['created_at', 'contact_send'], 'integer'],
+            [['contact_send', 'created_at'], 'integer'],
             [['comment'], 'string', 'max' => 255],
         ];
     }
@@ -44,10 +44,10 @@ class SmsContent extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'content' => 'Текст SMS',
+            'content' => 'Текст SMS-сообщения',
+            'comment' => 'Комментарий',
+            'contact_send' => 'Contact Send',
             'created_at' => 'Created At',
-            'comment' => 'Комменттарий',
-            'contact_send' => 'Contact Send'
         ];
     }
 
@@ -61,7 +61,7 @@ class SmsContent extends \yii\db\ActiveRecord
 
     public function beforeSave($insert)
     {
-        if (parent::beforeSave($insert)) {
+        if ($insert) {
             $this->created_at = time();
         }
 

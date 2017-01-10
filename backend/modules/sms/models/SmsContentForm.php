@@ -10,7 +10,7 @@ use common\models\sms\SmsSendContacts;
 
 class SmsContentForm extends SmsContent
 {
-    public $contacts;
+    public $contacts = '';
 
     public function rules()
     {
@@ -32,11 +32,10 @@ class SmsContentForm extends SmsContent
 
         if ($this->id) {
             $send = SmsSend::findOne(['sms_content_id' => $this->id, 'status' => 0]);
-            if ($send) {
+            /*if ($send) {
                 $sendContacts = SmsSendContacts::find()->innerJoinWith(['smsContact'])->where(['sms_contacts.control' => false, 'sms_send_id' => $send->id])->all();
                 if ($sendContacts) {
                     $this->contacts = '';
-                    /** @var SmsSendContacts $sendContact */
                     foreach ($sendContacts as $i => $sendContact) {
                         $this->contacts .= '+'.$sendContact->smsContact->phone;
                         $fio = $sendContact->smsContact->name;
@@ -50,7 +49,7 @@ class SmsContentForm extends SmsContent
                         if ($i < count($sendContacts) - 1) $this->contacts .= ', ';
                     }
                 }
-            }
+            }*/
         }
     }
 

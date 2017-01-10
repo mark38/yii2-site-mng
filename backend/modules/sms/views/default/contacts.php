@@ -42,7 +42,7 @@ $this->title = 'Список контактов для SMS-рассылок';
             <div class="box-body">
                 <table class="table table-hover table-condensed">
                     <thead>
-                    <tr><th>#</th><th>Телефон</th><th>ФИО</th><th>Пол</th><th>Состояние</th><th class="text-right">Действие</th></tr>
+                    <tr><th>#</th><th>Телефон</th><th>ФИО</th><th>Пол</th><th>Отдравлять сообщение</th><th class="text-right">Действие</th></tr>
                     </thead>
                     <tbody>
                     <?php

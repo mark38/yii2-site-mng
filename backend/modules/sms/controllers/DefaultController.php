@@ -18,6 +18,7 @@ use common\models\sms\SmsContacts;
 use yii\bootstrap\Html;
 use app\modules\sms\models\SmsModel;
 use app\modules\sms\models\UploadFileForm;
+use yii\web\UploadedFile;
 
 /**
  * Default controller for the `sms` module
@@ -213,18 +214,25 @@ class DefaultController extends Controller
         }
         
         $upload = new UploadFileForm();
-        /*if ($request->isPost) {
-            $upload->uploadFile = UploadedFile::getInstance($upload, 'uploadFile');
-            if ($upload->upload()) {
-                return;
-            }
-        }*/
 
         if (count($_FILES) > 0) {
-            return [
-                'success' => true,
-                'content' => count($_FILES)
-            ];
+            /*if ($request->isPost) {
+                $upload->uploadFile = UploadedFile::getInstance($upload, 'uploadFile');
+                if ($upload->upload()) {
+                }
+            }*/
+
+            $uploadFile = isset($_FILES[0]) ? $_FILES[0] : $_FILES;
+            if (move_uploaded_file($uploadFile['tmp_name'], 'uploads/sms/' . basename($uploadFile['name']))) {
+                $runConsole = new RunConsole(['file' => preg_replace('@(frontend/|frontend|frontend\\))@', '', Yii::getAlias('@app')) . '/../yii']);
+                $runConsole->run("sms/default/upload " . 'backend/web/uploads/sms/' . basename($uploadFile['name']));
+
+                return [
+                    'success' => true,
+                    'content' => $_FILES[0]['name']
+                ];
+            }
+
         }
         
         $content = $this->render('contactsUploadForm', ['upload' => $upload]);

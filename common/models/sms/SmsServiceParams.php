@@ -9,6 +9,7 @@ use Yii;
  *
  * @property string $service_name
  * @property string $smsru_api_id
+ * @property string $smsru_from
  */
 class SmsServiceParams extends \yii\db\ActiveRecord
 {
@@ -26,7 +27,7 @@ class SmsServiceParams extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['service_name', 'smsru_api_id'], 'string', 'max' => 255],
+            [['service_name', 'smsru_api_id', 'smsru_from'], 'string', 'max' => 255],
         ];
     }
 
@@ -38,6 +39,7 @@ class SmsServiceParams extends \yii\db\ActiveRecord
         return [
             'service_name' => 'Service Name',
             'smsru_api_id' => 'Smsru Api ID',
+            'smsru_from' => 'Smsru From',
         ];
     }
 }

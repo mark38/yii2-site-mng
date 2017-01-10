@@ -9,8 +9,8 @@ use Yii;
  *
  * @property integer $id
  * @property integer $sms_content_id
- * @property integer $created_at
  * @property integer $status
+ * @property integer $created_at
  *
  * @property SmsContent $smsContent
  * @property SmsSendContacts[] $smsSendContacts
@@ -31,7 +31,7 @@ class SmsSend extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['sms_content_id', 'created_at', 'status'], 'integer'],
+            [['sms_content_id', 'status', 'created_at'], 'integer'],
             [['sms_content_id'], 'exist', 'skipOnError' => true, 'targetClass' => SmsContent::className(), 'targetAttribute' => ['sms_content_id' => 'id']],
         ];
     }
@@ -44,8 +44,8 @@ class SmsSend extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'sms_content_id' => 'Sms Content ID',
-            'created_at' => 'Created Ad',
             'status' => 'Status',
+            'created_at' => 'Created At',
         ];
     }
 
@@ -67,7 +67,7 @@ class SmsSend extends \yii\db\ActiveRecord
 
     public function beforeSave($insert)
     {
-        if ($insert) {
+        if (parent::beforeSave($insert)) {
             $this->created_at = time();
         }
 

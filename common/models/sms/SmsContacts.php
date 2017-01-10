@@ -12,18 +12,23 @@ use Yii;
  * @property string $name
  * @property string $surname
  * @property string $patronymic
+ * @property string $dob
  * @property integer $female
  * @property string $male
+ * @property string $email
+ * @property string $card_number
+ * @property string $delivery_address
+ * @property string $date_registration
  * @property integer $control
  * @property integer $state
+ * @property integer $created_at
  *
  * @property SmsSendContacts[] $smsSendContacts
  */
 class SmsContacts extends \yii\db\ActiveRecord
 {
-    public $genders = ['Не важно', 'Мужской', 'Женский'];
-    public $gender;
-    public $state = true;
+    public $gender = 0;
+    public $genders = ['Не указано', 'Мужской', 'Женский'];
 
     /**
      * @inheritdoc
@@ -39,10 +44,12 @@ class SmsContacts extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['female', 'control', 'state'], 'integer'],
-            [['phone', 'name', 'surname', 'patronymic', 'male'], 'string', 'max' => 255],
+            [['dob', 'date_registration'], 'safe'],
+            [['female', 'control', 'state', 'created_at', 'gender'], 'integer'],
+            [['phone', 'name', 'surname', 'patronymic', 'male', 'email', 'card_number'], 'string', 'max' => 255],
+            [['email'], 'email'],
+            [['delivery_address'], 'string', 'max' => 512],
             [['phone'], 'unique'],
-            [['gender'], 'safe'],
         ];
     }
 
@@ -53,15 +60,21 @@ class SmsContacts extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'phone' => 'Phone',
+            'phone' => 'Мобильный телефон',
             'name' => 'Имя',
             'surname' => 'Фамилия',
             'patronymic' => 'Отчество',
+            'dob' => 'Дата рождения',
             'female' => 'Female',
             'male' => 'Male',
+            'email' => 'Адрес электронной почты',
+            'card_number' => 'Card Number',
+            'delivery_address' => 'Delivery Address',
+            'date_registration' => 'Date Registration',
             'control' => 'Control',
             'gender' => 'Пол',
-            'state' => 'Доставлять SMS-сообщения',
+            'state' => 'Желание получать оповещения',
+            'created_at' => 'Created At',
         ];
     }
 
@@ -75,6 +88,10 @@ class SmsContacts extends \yii\db\ActiveRecord
 
     public function beforeSave($insert)
     {
+        if ($insert) {
+            $this->created_at = time();
+        }
+
         $this->phone = preg_replace('/[^0-9]/', '', $this->phone);
         if (strlen($this->phone) == 11 && substr($this->phone, 0, 1) == 8) {
             $this->phone = '7'.substr($this->phone, 1);

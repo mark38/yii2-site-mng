@@ -25,6 +25,7 @@ use yii\bootstrap\Html;
     <?=$form->field($contact, 'name')?>
     <?=$form->field($contact, 'patronymic')?>
     <?=$form->field($contact, 'gender')->dropDownList($contact->genders)?>
+    <?=$form->field($contact, 'dob')->textInput(['placeholder' => 'дд.мм.гггг'])?>
     <?=$form->field($contact, 'state')->checkbox()?>
     <div class="hide"><?=$form->field($contact, 'id')->hiddenInput()?></div>
 

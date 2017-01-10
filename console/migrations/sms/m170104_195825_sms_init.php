@@ -17,23 +17,31 @@ class m170104_195825_sms_init extends Migration
             'name' => $this->string(255),
             'surname' => $this->string(255),
             'patronymic' => $this->string(255),
+            'dob' => $this->date(),
             'female' => $this->boolean(),
             'male' => $this->string(),
+            'email' => $this->string(255),
+            'card_number' => $this->string(255),
+            'delivery_address' => $this->string(512),
+            'date_registration' => $this->date(),
             'control' => $this->boolean()->defaultValue(true),
             'state' => $this->boolean()->defaultValue(true),
+            'created_at' => $this->integer(),
         ], $tableOptions);
 
         $this->createTable('sms_content', [
             'id' => $this->primaryKey(),
             'content' => $this->text(),
+            'comment' => $this->string(255),
+            'contact_send' => $this->boolean()->defaultValue(true),
             'created_at' => $this->integer()
         ], $tableOptions);
 
         $this->createTable('sms_send', [
             'id' => $this->primaryKey(),
             'sms_content_id' => $this->integer(),
-            'created_at' => $this->integer(),
             'status' => $this->boolean()->defaultValue(false),
+            'created_at' => $this->integer(),
         ], $tableOptions);
 
         $this->addForeignKey('fk-sms_send-sms_content_id', 'sms_send', 'sms_content_id', 'sms_content', 'id', 'CASCADE', 'CASCADE');
@@ -47,10 +55,22 @@ class m170104_195825_sms_init extends Migration
 
         $this->addForeignKey('fk-sms_send_contacts-sms_send_id', 'sms_send_contacts', 'sms_send_id', 'sms_send', 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk-sms_send_contacts-sms_contacts_id', 'sms_send_contacts', 'sms_contacts_id', 'sms_contacts', 'id', 'CASCADE', 'CASCADE');
+
+        $this->createTable('sms_service_params', [
+            'id' => $this->primaryKey(),
+            'service_name' => $this->string(255),
+            'smsru_api_id' => $this->string(255),
+            'smsru_from' => $this->string(255)
+        ], $tableOptions);
+
+        $this->insert('sms_service_params', [
+            'id' => 1
+        ]);
     }
 
     public function down()
     {
+        $this->dropTable('sms_service_params');
         $this->dropTable('sms_send_contacts');
         $this->dropTable('sms_send');
         $this->dropTable('sms_content');
