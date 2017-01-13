@@ -222,10 +222,15 @@ class DefaultController extends Controller
                 }
             }*/
 
+            if (!is_dir(Yii::getAlias('@app/web/uploads/sms'))) {
+                mkdir(Yii::getAlias('@app/web/uploads/sms'), 0777, true);
+            }
+
             $uploadFile = isset($_FILES[0]) ? $_FILES[0] : $_FILES;
             if (move_uploaded_file($uploadFile['tmp_name'], 'uploads/sms/' . basename($uploadFile['name']))) {
                 $runConsole = new RunConsole(['file' => preg_replace('@(backend/|backend|backend\\))@', '', Yii::getAlias('@app')) . '/../yii']);
-                $runConsole->run("sms/default/upload " . '../../backend/web/uploads/sms/' . basename($uploadFile['name']));
+
+                $runConsole->run("sms/default/upload " . Yii::getAlias('@app/web/uploads/sms/') . basename($uploadFile['name']));
 
                 return [
                     'success' => true,
