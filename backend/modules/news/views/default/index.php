@@ -20,10 +20,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="row">
 
-    <div class="col-sm-5">
-
-        <div class="box box-default">
-            <div class="box-header with-border">
+    <div class="col-md-3">
+        <div class="box box-primary">
+            <div class="box-body">
                 <?php
                 $action = '<i class="fa fa-plus"></i> Добавить новость';
                 if (count($news_types) > 1) {
@@ -31,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     foreach ($news_types as $type) {
                         $items[] = [
                             'label' => $type->name,
-                            'url' => ['', 'news' => 'add', 'news_types_id' => $type->id],
+                            'url' => ['mng', 'news_types_id' => $type->id],
                         ];
                     }
                     echo ButtonDropdown::widget([
@@ -45,6 +44,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 } else {
                     echo Html::a($action, ['', 'news' => 'add', 'news_types_id' => 1], ['class' => 'btn btn-sm btn-default btn-flat']);
                 }?>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+
+        <div class="box box-default">
+            <div class="box-header with-border">
+
+                <h3>Список нововстей</h3>
 
                 <div class="box-tools pull-right">
                     <div class="has-feedback">
@@ -52,7 +61,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         <span class="glyphicon glyphicon-search form-control-feedback"></span>
                     </div>
                 </div>
-            </div><!-- /.box-header -->
+
+            </div>
 
             <div class="box-body">
                 <?php if ($news_list) {
@@ -62,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         $new_date = $new->date !== null ? date('d.m.Y', strtotime($new->date)) : null;
                         $new->date_range = $new->date_from && $new->date_to ? 'период публикации: '.date('d.m.Y', strtotime($new->date_from)).' - '.date('d.m.Y', strtotime($new->date_to)) : 'опубликовано';
                         $image = $new->link->gallery_images_id ? $new->link->galleryImage->small : false;
-                        $ch_link = ['', 'news' => 'ch', 'news_types_id' => $new->news_types_id, 'news_id' => $new->id];
+                        $ch_link = ['mng', 'news_types_id' => $new->news_types_id, 'id' => $new->id];
 
                         echo '<div class="row">' .
                             '<div class="col-sm-10">';

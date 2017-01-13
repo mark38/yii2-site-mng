@@ -48,7 +48,8 @@
         "kartik-v/yii2-widget-fileinput": "^1.0",
         "kartik-v/yii2-widget-activeform": "^1.4",
         "philippfrenzel/yii2masonry": "^1.1",
-        "vova07/yii2-console-runner-extension": "^0.1.0"
+        "vova07/yii2-console-runner-extension": "^0.1.0",
+        "zelenin/smsru": "^4.1"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

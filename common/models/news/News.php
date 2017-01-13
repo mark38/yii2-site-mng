@@ -17,7 +17,7 @@ use common\models\main\Links;
  * @property string $date_from
  * @property string $date_to
  *
- * @property NewsTypes $newsTypes
+ * @property NewsTypes $newsType
  * @property Links $links
  */
 class News extends \yii\db\ActiveRecord

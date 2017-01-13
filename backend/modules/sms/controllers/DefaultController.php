@@ -35,7 +35,7 @@ class DefaultController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['error'],
+                        'actions' => ['error', 'smsru-result'],
                         'allow' => true,
                     ],
                     [
@@ -254,6 +254,30 @@ class DefaultController extends Controller
 
         $objWriter = new \PHPExcel_Writer_Excel2007($objPHPExcel);
         $objWriter->save('php://output');
+    }
+
+    public function actionSmsruResult()
+    {
+        $this->layout = false;
+
+        $result = Yii::$app->request;
+        if ($result->post('data')) {
+            foreach ($result->post('data') as $entry) {
+                $lines = explode("\n", $entry);
+                if ($lines[0] == "sms_status") {
+                    $sms_id = $lines[1];
+                    $sms_status = $lines[2];
+
+                    $smsSendContact = SmsSendContacts::findOne(['smsru_id' => $sms_id]);
+                    if ($smsSendContact) {
+                        $smsSendContact->smsru_result_code = $sms_status;
+                        $smsSendContact->update();
+                    }
+                }
+            }
+        }
+
+        return "100";
     }
 
 }

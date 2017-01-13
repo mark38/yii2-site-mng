@@ -11,6 +11,8 @@ use Yii;
  * @property integer $sms_send_id
  * @property integer $sms_contacts_id
  * @property integer $status
+ * @property integer $smsru_id
+ * @property integer $smsru_result_code
  *
  * @property SmsContacts $smsContact
  * @property SmsSend $smsSend
@@ -31,7 +33,7 @@ class SmsSendContacts extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['sms_send_id', 'sms_contacts_id', 'status'], 'integer'],
+            [['sms_send_id', 'sms_contacts_id', 'status', 'smsru_id', 'smsru_result_code'], 'integer'],
             [['sms_contacts_id'], 'exist', 'skipOnError' => true, 'targetClass' => SmsContacts::className(), 'targetAttribute' => ['sms_contacts_id' => 'id']],
             [['sms_send_id'], 'exist', 'skipOnError' => true, 'targetClass' => SmsSend::className(), 'targetAttribute' => ['sms_send_id' => 'id']],
         ];
@@ -47,6 +49,8 @@ class SmsSendContacts extends \yii\db\ActiveRecord
             'sms_send_id' => 'Sms Send ID',
             'sms_contacts_id' => 'Sms Contacts ID',
             'status' => 'Status',
+            'smsru_id' => 'Smsru ID',
+            'smsru_result_code' => 'Smsru Result Code',
         ];
     }
 

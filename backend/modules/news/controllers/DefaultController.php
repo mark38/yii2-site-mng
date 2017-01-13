@@ -3,8 +3,11 @@
 namespace app\modules\news\controllers;
 
 use Yii;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use mark38\galleryManager\GalleryManagerAction;
+use app\modules\news\models\NewsForm;
 use common\models\main\Contents;
 use common\models\main\Links;
 use common\models\news\News;
@@ -17,6 +20,35 @@ class DefaultController extends Controller
         return [
             'gallery-manager' => [
                 'class' => GalleryManagerAction::className(),
+            ],
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['error'],
+                        'allow' => true,
+                    ],
+                    [
+                        'actions' => ['index', 'mng', 'news-del'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'logout' => ['post'],
+                ],
             ],
         ];
     }
@@ -84,13 +116,20 @@ class DefaultController extends Controller
 
         $news_list = News::find()->orderBy(['date' => SORT_DESC])->all();
 
-        return $this->render('news', [
+        return $this->render('index', [
             'news_list' => $news_list,
             'news_type' => $news_type,
             'news_types' => NewsTypes::find()->orderBy(['name' => SORT_ASC])->all(),
             'news' => $news,
             'link' => $link,
         ]);
+    }
+
+    public function actionMng($news_types_id, $id=null)
+    {
+        $news = $id ? NewsForm::findOne($id) : new NewsForm();
+
+        return $this->render('newsForm', compact('news'));
     }
 
     public function actionNewsDel($links_id)

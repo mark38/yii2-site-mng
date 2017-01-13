@@ -113,6 +113,10 @@ a.desc:after {
     display: none;
 }
 
+.box-header h3 {
+    margin: 0;
+}
+
 .box-header > .box-tools > .has-feedback {
     margin-top: 5px;
 }
