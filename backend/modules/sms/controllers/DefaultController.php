@@ -215,7 +215,7 @@ class DefaultController extends Controller
         
         $upload = new UploadFileForm();
 
-        if (isset($_FILES) && count($_FILES) > 0) {
+        if (count($_FILES) > 0) {
             /*if ($request->isPost) {
                 $upload->uploadFile = UploadedFile::getInstance($upload, 'uploadFile');
                 if ($upload->upload()) {

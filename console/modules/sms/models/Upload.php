@@ -29,7 +29,7 @@ class Upload extends Model
                     $contact = new SmsContacts();
                     $contact->phone = $phone;
                 }
-
+                
                 list($surname, $name, $patronymic) = preg_split('/\s/', trim($dataSheet->getCell('A'.$row->getRowIndex())));
                 $contact->surname = $surname ? $surname : '';
                 $contact->name = $name ? $name : '';
