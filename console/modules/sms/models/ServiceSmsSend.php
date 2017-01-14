@@ -17,8 +17,9 @@ class ServiceSmsSend extends Module
 
         if (!$smsSend) return false;
 
+        $smsSendContacts = SmsSendContacts::find()->where(['sms_send_id' => $sms_send_id, 'sms_send_contacts.status' => 0])->all();
         /** @var SmsSendContacts $smsSendContact */
-        foreach (SmsSendContacts::find()->where(['sms_send_id' => $smsSend->id, 'status' => 0])->all() as &$smsSendContact) {
+        foreach ( as &$smsSendContact) {
             echo $smsSendContact->id."\n";
             /*$content = self::handleContent($smsSend->smsContent->content, $smsSendContact->smsContact);
 
