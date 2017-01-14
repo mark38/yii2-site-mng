@@ -51,7 +51,7 @@ class Upload extends Model
                     default: $contact->gender = 0;
                 }
 
-                $contact->delivery_address = trim($dataSheet->getCell('I'.$row->getRowIndex()));
+//                $contact->delivery_address = trim($dataSheet->getCell('I'.$row->getRowIndex()));
                 $contact->control = 1;
 
                 if ($contact->validate()) {
