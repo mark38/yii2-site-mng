@@ -18,8 +18,9 @@ class ServiceSmsSend extends Module
         if (!$smsSend) return false;
 
         /** @var SmsSendContacts $smsSendContact */
-        foreach (SmsSendContacts::find()->where(['sms_send_id' => $smsSend->id, 'status' => false])->all() as &$smsSendContact) {
-            $content = self::handleContent($smsSend->smsContent->content, $smsSendContact->smsContact);
+        foreach (SmsSendContacts::find()->where(['sms_send_id' => $smsSend->id, 'status' => 0])->all() as &$smsSendContact) {
+            echo $smsSendContact->id."\n";
+            /*$content = self::handleContent($smsSend->smsContent->content, $smsSendContact->smsContact);
 
             $client = new \Zelenin\SmsRu\Api(new \Zelenin\SmsRu\Auth\ApiIdAuth($smsServiceParam->smsru_api_id));
 
@@ -27,7 +28,7 @@ class ServiceSmsSend extends Module
             $result = $client->smsSend($sms);
 
             $smsSendContact = SmsSendContacts::findOne($smsSendContact->id);
-            SmsSendContacts::updateAll(['smsru_id' => $result->ids[0], 'smsru_result_code' => $result->code], ['id' => $smsSendContact->id]);
+            SmsSendContacts::updateAll(['smsru_id' => $result->ids[0], 'smsru_result_code' => $result->code], ['id' => $smsSendContact->id]);*/
         }
 
         $smsSend->status = 1;
