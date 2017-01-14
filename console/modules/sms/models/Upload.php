@@ -29,11 +29,11 @@ class Upload extends Model
                     $contact = new SmsContacts();
                     $contact->phone = $phone;
                 }
-                
-                list($surname, $name, $patronymic) = preg_split('/\s/', trim($dataSheet->getCell('A'.$row->getRowIndex())));
-                $contact->surname = $surname ? $surname : '';
-                $contact->name = $name ? $name : '';
-                $contact->patronymic = $patronymic ? $patronymic : '';
+
+                $fio = preg_split('/\s/', $dataSheet->getCell('A'.$row->getRowIndex()));
+                $contact->surname = isset($fio[0]) ? $fio[0] : '';
+                $contact->name = isset($fio[1]) ? $fio[1] : '';
+                $contact->patronymic = isset($fio[2]) ? $fio[2] : '';
 
                 $unixDate = (trim($dataSheet->getCell('B'.$row->getRowIndex())) - 25569) * 86400;
                 $contact->dob = gmdate("Y-m-d", $unixDate);
