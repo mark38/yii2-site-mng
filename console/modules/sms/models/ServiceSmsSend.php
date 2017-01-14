@@ -26,12 +26,8 @@ class ServiceSmsSend extends Module
             $sms = new \Zelenin\SmsRu\Entity\Sms($smsSendContact->smsContact->phone, $content);
             $result = $client->smsSend($sms);
 
-
-
-            $smsSendContact->status = 1;
-            $smsSendContact->smsru_id = $result->ids[0];
-            $smsSendContact->smsru_result_code = $result->code;
-            $smsSendContact->update();
+            $smsSendContact = SmsSendContacts::findOne($smsSendContact->id);
+            SmsSendContacts::updateAll(['smsru_id' => $result->ids[0], 'smsru_result_code' => $result->code], ['id' => $smsSendContact->id]);
         }
 
         $smsSend->status = 1;
