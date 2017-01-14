@@ -30,7 +30,10 @@ class Upload extends Model
                     $contact->phone = $phone;
                 }
 
-                list($contact->surname, $contact->name, $contact->patronymic) = preg_split('/\s/', trim($dataSheet->getCell('A'.$row->getRowIndex())));
+                list($surname, $name, $patronymic) = preg_split('/\s/', trim($dataSheet->getCell('A'.$row->getRowIndex())));
+                $contact->surname = $surname ? $surname : '';
+                $contact->name = $name ? $name : '';
+                $contact->patronymic = $patronymic ? $patronymic : '';
 
                 $unixDate = (trim($dataSheet->getCell('B'.$row->getRowIndex())) - 25569) * 86400;
                 $contact->dob = gmdate("Y-m-d", $unixDate);
