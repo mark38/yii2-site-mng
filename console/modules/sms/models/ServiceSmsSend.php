@@ -18,13 +18,15 @@ class ServiceSmsSend extends Module
         if (!$smsSend) return false;
 
         /** @var SmsSendContacts $smsSendContact */
-        foreach (SmsSendContacts::find()->where(['sms_send_id' => $smsSend->id, 'status' => false])->all() as $smsSendContact) {
+        foreach (SmsSendContacts::find()->where(['sms_send_id' => $smsSend->id, 'status' => false])->all() as &$smsSendContact) {
             $content = self::handleContent($smsSend->smsContent->content, $smsSendContact->smsContact);
 
             $client = new \Zelenin\SmsRu\Api(new \Zelenin\SmsRu\Auth\ApiIdAuth($smsServiceParam->smsru_api_id));
 
             $sms = new \Zelenin\SmsRu\Entity\Sms($smsSendContact->smsContact->phone, $content);
             $result = $client->smsSend($sms);
+
+
 
             $smsSendContact->status = 1;
             $smsSendContact->smsru_id = $result->ids[0];
