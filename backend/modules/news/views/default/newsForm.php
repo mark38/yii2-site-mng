@@ -26,10 +26,10 @@ $linkClose = ['index'];
 $imageSmallLabel = '';
 if ($galleryImage->small) {
     $imageSmallLabel = Html::beginTag('div', ['id' => 'image-small-preview']) .
-        Html::tag('div', Html::button('Удалить', [
+        Html::button('Удалить', [
             'class' => 'btn btn-default btn-sm btn-flat',
             'onclick' => '$(".image-small").val(""); $("#image-small-preview").fadeOut();'
-        ])) .
+        ]) .
         Html::img($galleryImage->small) .
         Html::endTag('div');
 }
@@ -37,10 +37,10 @@ if ($galleryImage->small) {
 $imageLargeLabel = '';
 if ($galleryImage->large) {
     $imageLargeLabel = Html::beginTag('div', ['id' => 'image-large-preview']) .
-        Html::tag('div', Html::button('Удалить', [
+        Html::button('Удалить', [
             'class' => 'btn btn-default btn-sm btn-flat',
             'onclick' => '$(".image-large").val(""); $("#image-large-preview").fadeOut();'
-        ])) .
+        ]) .
         Html::img($galleryImage->large) .
         Html::endTag('div');
 }
@@ -90,7 +90,7 @@ if ($galleryImage->large) {
                                     Html::endTag('p'),
                                 'active' => true
                             ],
-                            /*[
+                            [
                                 'label' => 'Контент',
                                 'content' => Html::beginTag('p') .
                                     $form->field($news, 'prev_text')->textarea(['maxlength' => true, 'rows' => 2, 'id' => 'prev-text']) .
@@ -128,15 +128,21 @@ if ($galleryImage->large) {
                                         ],
                                     ]) .
                                     Html::endTag('p'),
-                            ],*/
+                            ],
                             ($newsType->gallery_groups_id ? [
                                 'label' => 'Баннер',
                                 'content' => Html::beginTag('p') .
                                     $form->field($galleryImage, 'id')->hiddenInput()->label(false) .
                                     $form->field($galleryImage, 'small')->hiddenInput(['class' => 'form-control image-small'])->label(false) .
                                     $form->field($galleryImage, 'large')->hiddenInput(['class' => 'form-control image-large'])->label(false) .
-                                    $form->field($galleryImage, 'imageSmall')->fileInput()->label($galleryImage->getAttributeLabel('imageSmall') . $imageSmallLabel) .
-                                    $form->field($galleryImage, 'imageLarge')->fileInput()->label($galleryImage->getAttributeLabel('imageLarge') . $imageLargeLabel) .
+                                    $form->field($galleryImage, 'imageSmall')->fileInput()->label(
+                                        $galleryImage->getAttributeLabel('imageSmall') .
+                                        ' ('.$newsType->galleryType->small_width.'x'.$newsType->galleryType->small_height.' px)' .
+                                        $imageSmallLabel) .
+                                    $form->field($galleryImage, 'imageLarge')->fileInput()->label(
+                                        $galleryImage->getAttributeLabel('imageLarge') .
+                                        ' ('.$newsType->galleryType->large_width.'x'.$newsType->galleryType->large_height.' px)' .
+                                        $imageLargeLabel) .
                                     Html::endTag('p'),
                             ] : ''),
                             [

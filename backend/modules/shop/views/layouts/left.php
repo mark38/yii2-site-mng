@@ -1,6 +1,13 @@
 <?php
 /** @var $this \yii\web\View */
 
+$items[] = ['label' => 'Клиенты', 'options' => ['class' => 'header']];
+$items[] = [
+    'label' => 'Заказы',
+    'icon' => 'fa fa-circle-thin',
+    'url' => ['/shop/clients/orders'],
+];
+
 $items[] = ['label' => 'Параметры', 'options' => ['class' => 'header']];
 $items[] = [
     'label' => 'Свойства товара',

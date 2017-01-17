@@ -194,8 +194,8 @@ class DefaultController extends Controller
                 $galleryImage->upload();
                 $galleryImage->save();
 
-                /*Yii::$app->getSession()->setFlash('success', 'Изменения приняты');
-                return $this->redirect(['mng', 'news_types_id' => $newsType->id, 'id' => $news->id]);*/
+                Yii::$app->getSession()->setFlash('success', 'Изменения приняты');
+                return $this->redirect(['mng', 'news_types_id' => $newsType->id, 'id' => $news->id]);
             }
         }
 

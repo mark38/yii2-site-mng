@@ -30,6 +30,14 @@ class GalleryImagesForm extends GalleryImages
         $this->imageLarge = $this->large;
     }
 
+    public function attributeLabels()
+    {
+        return array_merge(parent::attributeLabels(), [
+            'imageSmall' => 'Предварительное изображение',
+            'imageLarge' => 'Полноразмерное изображение',
+        ]);
+    }
+
     public function upload()
     {
         $galleryType = GalleryTypes::findOne(GalleryGroups::findOne($this->gallery_groups_id)->gallery_types_id);
@@ -52,7 +60,7 @@ class GalleryImagesForm extends GalleryImages
             } else {
                 if (!$this->small && $this->linksId) {
                     $galleryImage = $this::findOne(Links::findOne($this->linksId)->gallery_images_id);
-                    if (isset($galleryImage->small)) unlink(Yii::getAlias('@frontend/web'.$galleryImage->small));
+                    if ($galleryImage && $galleryImage->small) unlink(Yii::getAlias('@frontend/web'.$galleryImage->small));
                 }
             }
 
@@ -68,7 +76,7 @@ class GalleryImagesForm extends GalleryImages
             } else {
                 if (!$this->large && $this->linksId) {
                     $galleryImage = isset($galleryImage) ? $galleryImage : $this::findOne(Links::findOne($this->linksId)->gallery_images_id);
-                    if (isset($galleryImage->large)) unlink(Yii::getAlias('@frontend/web'.$galleryImage->large));
+                    if ($galleryImage && $galleryImage->large) unlink(Yii::getAlias('@frontend/web'.$galleryImage->large));
                 }
             }
 

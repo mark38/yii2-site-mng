@@ -1,0 +1,20 @@
+#image-small-preview {
+    margin: 5px 0;
+}
+#image-small-preview button {
+    display: block;
+    margin-bottom: 5px;
+}
+#image-small-preview img {
+    max-width: 250px;
+}
+#image-large-preview {
+    margin: 5px 0;
+}
+#image-large-preview button {
+    display: block;
+    margin-bottom: 5px;
+}
+#image-large-preview img {
+    max-width: 350px;
+}
