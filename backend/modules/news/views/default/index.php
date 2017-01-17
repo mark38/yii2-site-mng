@@ -2,15 +2,13 @@
 use yii\bootstrap\Html;
 use yii\bootstrap\ButtonDropdown;
 use app\modules\news\AppAsset;
+use yii\bootstrap\Nav;
 
-/** @var $this \yii\web\View */
-/** @var $news_list \common\models\news\News */
-/** @var $news_type \common\models\news\NewsTypes */
-/** @var $news_types \common\models\news\NewsTypes */
-/** @var $news \common\models\news\News */
-/** @var $link \common\models\main\Links */
-/** @var $prev_news \common\models\main\Contents */
-/** @var $full_news \common\models\main\Contents */
+/**
+ * @var $this \yii\web\View
+ * @var $newsList \common\models\news\News
+ * @var $newsTypes \common\models\news\NewsTypes
+ */
 
 AppAsset::register($this);
 
@@ -25,12 +23,12 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-body">
                 <?php
                 $action = '<i class="fa fa-plus"></i> Добавить новость';
-                if (count($news_types) > 1) {
+                if (count($newsTypes) > 1) {
                     $items = array();
-                    foreach ($news_types as $type) {
+                    foreach ($newsTypes as $newsType) {
                         $items[] = [
-                            'label' => $type->name,
-                            'url' => ['mng', 'news_types_id' => $type->id],
+                            'label' => $newsType->name,
+                            'url' => ['mng', 'news_types_id' => $newsType->id],
                         ];
                     }
                     echo ButtonDropdown::widget([
@@ -43,6 +41,32 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]);
                 } else {
                     echo Html::a($action, ['', 'news' => 'add', 'news_types_id' => 1], ['class' => 'btn btn-sm btn-default btn-flat']);
+                }?>
+
+                <hr>
+
+                <?php if ($newsTypes) {
+                    $items = [];
+                    $amount = 0;
+                    foreach ($newsTypes as $newsType) {
+                        $amount += count($newsType->news);
+                        $items[] = [
+                            'url' => ['index', 'news_types_id' => $newsType->id],
+                            'label' => $newsType->name . Html::tag('span', count($newsType->news), ['class' => 'badge pull-right']),
+                            'active' => Yii::$app->request->get('news_types_id') && Yii::$app->request->get('news_types_id') == $newsType->id ? true : false
+                        ];
+                    }
+                    $items[] = [
+                        'url' => ['index'],
+                        'label' => 'Все нововсти' . Html::tag('span', $amount, ['class' => 'badge pull-right']),
+                        'active' => !Yii::$app->request->get('news_types_id') ? true : false
+                    ];
+
+                    echo Nav::widget([
+                        'items' => $items,
+                        'encodeLabels' => false,
+                        'options' => ['class' => 'nav nav-pills nav-stacked']
+                    ]);
                 }?>
             </div>
         </div>
@@ -65,10 +89,10 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
 
             <div class="box-body">
-                <?php if ($news_list) {
+                <?php if ($newsList) {
                     $i = 0;
                     /** @var $new \common\models\news\News */
-                    foreach ($news_list as $new) {
+                    foreach ($newsList as $new) {
                         $new_date = $new->date !== null ? date('d.m.Y', strtotime($new->date)) : null;
                         $new->date_range = $new->date_from && $new->date_to ? 'период публикации: '.date('d.m.Y', strtotime($new->date_from)).' - '.date('d.m.Y', strtotime($new->date_to)) : 'опубликовано';
                         $image = $new->link->gallery_images_id ? $new->link->galleryImage->small : false;
@@ -110,15 +134,5 @@ $this->params['breadcrumbs'][] = $this->title;
         </div><!-- /.box -->
 
     </div>
-
-    <?php if (Yii::$app->request->get('news')) {?>
-        <div class="col-sm-7">
-            <?= $this->render('newsForm', [
-                'news_type' => $news_type,
-                'news' => $news,
-                'link' => $link,
-            ])?>
-        </div>
-    <?php }?>
 
 </div>

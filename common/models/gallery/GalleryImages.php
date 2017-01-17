@@ -17,7 +17,7 @@ use Yii;
  * @property integer $seq
  *
  * @property GalleryGroups[] $galleryGroups
- * @property GalleryGroups $galleryGroups0
+ * @property GalleryGroups $galleryGroup
  */
 class GalleryImages extends \yii\db\ActiveRecord
 {
@@ -68,7 +68,7 @@ class GalleryImages extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getGalleryGroups0()
+    public function getGalleryGroup()
     {
         return $this->hasOne(GalleryGroups::className(), ['id' => 'gallery_groups_id']);
     }

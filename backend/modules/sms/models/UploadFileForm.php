@@ -4,9 +4,13 @@ namespace app\modules\sms\models;
 
 use Yii;
 use yii\base\Model;
+use yii\web\UploadedFile;
 
 class UploadFileForm extends Model
 {
+    /**
+     * @var UploadedFile
+     */
     public $uploadFile;
 
     public function rules()

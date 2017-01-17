@@ -2,6 +2,8 @@
 
 namespace app\modules\news\controllers;
 
+use common\models\gallery\GalleryImages;
+use common\models\gallery\GalleryImagesForm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -12,6 +14,7 @@ use common\models\main\Contents;
 use common\models\main\Links;
 use common\models\news\News;
 use common\models\news\NewsTypes;
+use yii\web\UploadedFile;
 
 class DefaultController extends Controller
 {
@@ -53,11 +56,21 @@ class DefaultController extends Controller
         ];
     }
 
-    public function actionIndex($news_id=null)
+    public function actionIndex($news_types_id=null)
     {
-        $news_type = Yii::$app->request->get('news_types_id') ? NewsTypes::findOne(Yii::$app->request->get('news_types_id')) : false;
+//        $news_type = Yii::$app->request->get('news_types_id') ? NewsTypes::findOne(Yii::$app->request->get('news_types_id')) : false;
+        $newsList = News::find();
+        if ($news_types_id) {
+            $newsList = $newsList->where(['news_types_id' => $news_types_id]);
+        }
+        $newsList = $newsList->orderBy(['date' => SORT_DESC])->all();
 
-        $link = new Links();
+        return $this->render('index', [
+            'newsList' => $newsList,
+            'newsTypes' => NewsTypes::find()->orderBy(['name' => SORT_ASC])->all(),
+        ]);
+
+        /*$link = new Links();
         $news = new News();
 
         if ($news_type) {
@@ -122,14 +135,71 @@ class DefaultController extends Controller
             'news_types' => NewsTypes::find()->orderBy(['name' => SORT_ASC])->all(),
             'news' => $news,
             'link' => $link,
-        ]);
+        ]);*/
     }
 
     public function actionMng($news_types_id, $id=null)
     {
-        $news = $id ? NewsForm::findOne($id) : new NewsForm();
+        $newsType = NewsTypes::findOne($news_types_id);
 
-        return $this->render('newsForm', compact('news'));
+        if ($id) {
+            $news = NewsForm::findOne($id);
+            $link = Links::findOne($news->links_id);
+        } else {
+            $news = new NewsForm();
+            $link = new Links();
+        }
+
+        $galleryImage = isset($link->gallery_images_id) ? GalleryImagesForm::findOne($link->gallery_images_id) : new GalleryImagesForm();
+        $galleryImage->gallery_groups_id = $newsType->gallery_groups_id;
+
+        if (Yii::$app->request->isPost) {
+            $link->load(Yii::$app->request->post());
+            $link->parent = $newsType->links_id;
+            $link->categories_id = $newsType->categories_id !== null ? $newsType->categories_id : $newsType->link->categories_id;
+            $link->views_id = $newsType->views_id;
+            $link->title = $link->title ? $link->title : $link->anchor;
+            $link->save();
+
+            $news->load(Yii::$app->request->post());
+            $news->links_id = $link->id;
+            $news->save();
+
+            if ($news->id) {
+                $content = Contents::findOne(['links_id' => $link->id, 'seq' => 1]);
+                if (!$content) {
+                    $content = new Contents();
+                }
+                $content->links_id = $link->id;
+                $content->seq = 1;
+                $content->text = $news->full_text;
+                $content->save();
+                $parent_conten_id = $content->id;
+
+                $content = Contents::findOne(['parent' => $parent_conten_id, 'seq' => 2]);
+                if (!$content) {
+                    $content = new Contents();
+                }
+                $content->links_id = $link->id;
+                $content->parent = $parent_conten_id;
+                $content->seq = 2;
+                $content->text = $news->prev_text;
+                $content->save();
+
+                $galleryImage->load(Yii::$app->request->post());
+                $galleryImage->linksId = $link->id;
+                $galleryImage->name = $link->name;
+                $galleryImage->imageSmall = UploadedFile::getInstance($galleryImage, 'imageSmall');
+                $galleryImage->imageLarge = UploadedFile::getInstance($galleryImage, 'imageLarge');
+                $galleryImage->upload();
+                $galleryImage->save();
+
+                /*Yii::$app->getSession()->setFlash('success', 'Изменения приняты');
+                return $this->redirect(['mng', 'news_types_id' => $newsType->id, 'id' => $news->id]);*/
+            }
+        }
+
+        return $this->render('newsForm', compact('newsType', 'link', 'news', 'galleryImage'));
     }
 
     public function actionNewsDel($links_id)
