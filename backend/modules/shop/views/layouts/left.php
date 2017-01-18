@@ -1,11 +1,16 @@
 <?php
-/** @var $this \yii\web\View */
+use yii\bootstrap\Html;
+
+/**
+ * @var $this \yii\web\View
+ */
 
 $items[] = ['label' => 'Клиенты', 'options' => ['class' => 'header']];
 $items[] = [
     'label' => 'Заказы',
     'icon' => 'fa fa-circle-thin',
     'url' => ['/shop/clients/orders'],
+    'encode' => false,
 ];
 
 $items[] = ['label' => 'Параметры', 'options' => ['class' => 'header']];

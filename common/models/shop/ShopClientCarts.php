@@ -12,8 +12,8 @@ use Yii;
  * @property integer $shop_carts_id
  * @property string $comment
  *
- * @property ShopClients $shopClients
- * @property ShopCarts $shopCarts
+ * @property ShopClients $shopClient
+ * @property ShopCarts $shopCart
  */
 class ShopClientCarts extends \yii\db\ActiveRecord
 {
@@ -54,7 +54,7 @@ class ShopClientCarts extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getShopClients()
+    public function getShopClient()
     {
         return $this->hasOne(ShopClients::className(), ['id' => 'shop_clients_id']);
     }
@@ -62,7 +62,7 @@ class ShopClientCarts extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getShopCarts()
+    public function getShopCart()
     {
         return $this->hasOne(ShopCarts::className(), ['id' => 'shop_carts_id']);
     }
