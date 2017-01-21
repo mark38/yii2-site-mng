@@ -34,8 +34,8 @@ if ($cartItems) {
         
         $products .= '<tr>' .
                 '<td>'.Html::tag('small', $cartItem->link->anchor).'<br>'.$characteristicsList.'</td>' .
-                '<td><nobr>'.$cartItem->amount.' '.Html::tag('small', 'шт.', ['class' => 'text-muted']).'</nobr></td>' .
                 '<td><nobr>'.$cartItem->price.' '.Html::tag('small', 'руб.', ['class' => 'text-muted']).'</nobr></td>' .
+                '<td><nobr>'.$cartItem->amount.' '.Html::tag('small', 'шт.', ['class' => 'text-muted']).'</nobr></td>' .
                 '<td>'.Html::a('<i class="fa fa-external-link" aria-hidden="true"></i>', $cartItem->link->url, ['target' => '_blank']).'</td>' .
             '</tr>';
     }
@@ -50,8 +50,8 @@ if ($cartGoods) {
 
         $products .= '<tr>' .
                 '<td>'.Html::tag('small', $good->link->anchor).'</td>' .
-                '<td><nobr>'.$cartGood->amount.' '.Html::tag('small', 'шт.', ['class' => 'text-muted']).'</nobr></td>' .
                 '<td><nobr>'.$cartGood->price.' '.Html::tag('small', 'руб.', ['class' => 'text-muted']).'</nobr></td>' .
+                '<td><nobr>'.$cartGood->amount.' '.Html::tag('small', 'шт.', ['class' => 'text-muted']).'</nobr></td>' .
                 '<td>'.Html::a('<i class="fa fa-external-link" aria-hidden="true"></i>', $cartGood->link->url, ['target' => '_blank']).'</td>' .
             '</tr>';
     }
