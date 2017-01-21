@@ -15,8 +15,8 @@ use common\models\main\Links;
  * @property integer $amount
  * @property string $price
  *
- * @property ShopGoods $shopGoods
- * @property ShopCarts $shopCarts
+ * @property ShopGoods $shopGood
+ * @property ShopCarts $shopCart
  */
 class ShopCartGoods extends \yii\db\ActiveRecord
 {

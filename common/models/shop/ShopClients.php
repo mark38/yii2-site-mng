@@ -2,6 +2,7 @@
 
 namespace common\models\shop;
 
+use common\models\User;
 use Yii;
 
 /**
@@ -20,6 +21,7 @@ use Yii;
  *
  * @property ShopUsers $shopUser
  * @property ShopClientCarts[] $shopClientCarts
+ * @property User $user
  */
 class ShopClients extends \yii\db\ActiveRecord
 {
@@ -74,6 +76,11 @@ class ShopClients extends \yii\db\ActiveRecord
 
     public function getShopUser()
     {
-        return $this->hasOne(ShopUsers::className(), ['shop_users_id' => 'id']);
+        return $this->hasOne(ShopUsers::className(), ['id' => 'shop_users_id']);
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::className(), ['user_id' => 'id'])->via('shopUser');
     }
 }

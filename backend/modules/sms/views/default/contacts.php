@@ -78,6 +78,5 @@ Modal::begin([
         'data-url' => Url::to(['contact']),
     ]
 ]);
-
 Modal::end();
 ?>

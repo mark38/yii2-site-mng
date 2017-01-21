@@ -1,5 +1,7 @@
 <?php
 use yii\bootstrap\Html;
+use yii\bootstrap\Modal;
+use yii\helpers\Url;
 
 /**
  * @var $this \yii\web\View
@@ -11,14 +13,18 @@ $this->title = 'Заказы';
 ?>
 
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-3">
+        <div class="box box-primary">
+            <div class="box-body"></div>
+        </div>
+    </div>
+    <div class="col-md-9">
 
         <div class="box box-default">
             <div class="box-body">
-                <table class="table table-hover table-condensed table-bordered">
+                <table class="table table-hover table-condensed">
                     <thead>
-                    <tr><th rowspan="2">#</th><th rowspan="2">Дата заказа</th><th colspan="4">Адрес доставки</th><th colspan="4">Контактная информация</th><th colspan="2">Заказ</th></tr>
-                    <tr><th>Город</th><th>Улица</th><th>Дом</th><th>Квартира</th><th>Имя</th><th>Телефон</th><th>Email</th><th>Комментарий</th><th>Кол-во</th><th>Сумма, руб.</th></tr>
+                    <tr><th>#</th><th>Дата</th><th>Город</th><th>Имя</th><th>Телефон</th><th>Email</th><th>Кол-во</th><th>Сумма, руб.</th><th class="text-right">Действия</th></tr>
                     </thead>
                     <tbody>
                     <?php if ($shopClientCarts) {
@@ -35,3 +41,17 @@ $this->title = 'Заказы';
 
     </div>
 </div>
+
+<?php
+Modal::begin([
+    'header' => '',
+    'footer' => Html::button('Закрыть', ['data-dismiss' => 'modal', 'class' => 'btn btn-default btn-flat btn-sm btn-close']),
+    'options' => [
+        'class' => 'modal-preview fade',
+        'id' => 'modal-order',
+        'data-url' => Url::to(['order']),
+    ],
+    'size' => 'modal-lg'
+]);
+Modal::end();
+?>

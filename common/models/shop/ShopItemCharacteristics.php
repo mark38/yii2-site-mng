@@ -14,7 +14,7 @@ use Yii;
  * @property integer $state
  *
  * @property ShopItem $shopItems
- * @property ShopCharacteristics $shopCharacteristics
+ * @property ShopCharacteristics $shopCharacteristic
  */
 class ShopItemCharacteristics extends \yii\db\ActiveRecord
 {

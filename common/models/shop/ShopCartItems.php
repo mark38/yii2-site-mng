@@ -2,9 +2,9 @@
 
 namespace common\models\shop;
 
-use common\models\main\Links;
 use Yii;
 use common\models\main\Sessions;
+use common\models\main\Links;
 
 /**
  * This is the model class for table "shop_cart_items".
@@ -17,6 +17,8 @@ use common\models\main\Sessions;
  *
  * @property ShopItems $shopItems
  * @property ShopCarts $shopCarts
+ * @property ShopGoods $shopGood
+ * @property Links $link
  */
 class ShopCartItems extends \yii\db\ActiveRecord
 {
