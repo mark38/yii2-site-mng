@@ -47,7 +47,7 @@ if ($galleryImage->large) {
 ?>
 
 <div class="row">
-    <div class="col-md-7">
+    <div class="col-md-8">
 
         <div class="box box-default">
             <div class="box-body">
@@ -137,11 +137,11 @@ if ($galleryImage->large) {
                                     $form->field($galleryImage, 'large')->hiddenInput(['class' => 'form-control image-large'])->label(false) .
                                     $form->field($galleryImage, 'imageSmall')->fileInput()->label(
                                         $galleryImage->getAttributeLabel('imageSmall') .
-                                        ' ('.$newsType->galleryType->small_width.'x'.$newsType->galleryType->small_height.' px)' .
+                                        ' ('.$newsType->galleryType->small_width.'x'.$newsType->galleryType->small_height.'px)' .
                                         $imageSmallLabel) .
                                     $form->field($galleryImage, 'imageLarge')->fileInput()->label(
                                         $galleryImage->getAttributeLabel('imageLarge') .
-                                        ' ('.$newsType->galleryType->large_width.'x'.$newsType->galleryType->large_height.' px)' .
+                                        ' ('.$newsType->galleryType->large_width.'x'.$newsType->galleryType->large_height.'px)' .
                                         $imageLargeLabel) .
                                     Html::endTag('p'),
                             ] : ''),

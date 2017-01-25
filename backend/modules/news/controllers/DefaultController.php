@@ -2,19 +2,17 @@
 
 namespace app\modules\news\controllers;
 
-use common\models\gallery\GalleryImages;
-use common\models\gallery\GalleryImagesForm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
-use mark38\galleryManager\GalleryManagerAction;
+use yii\web\UploadedFile;
 use app\modules\news\models\NewsForm;
+use common\models\gallery\GalleryImagesForm;
 use common\models\main\Contents;
 use common\models\main\Links;
 use common\models\news\News;
 use common\models\news\NewsTypes;
-use yii\web\UploadedFile;
 
 class DefaultController extends Controller
 {
@@ -71,7 +69,10 @@ class DefaultController extends Controller
         } else {
             $news = new NewsForm();
             $link = new Links();
+            $link->state = true;
         }
+
+        $news->news_types_id = $news_types_id;
 
         $galleryImage = isset($link->gallery_images_id) ? GalleryImagesForm::findOne($link->gallery_images_id) : new GalleryImagesForm();
         $galleryImage->gallery_groups_id = $newsType->gallery_groups_id;

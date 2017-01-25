@@ -89,49 +89,21 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
 
             <div class="box-body">
-                <?php if ($newsList) {
-                    $i = 0;
-                    /** @var $new \common\models\news\News */
-                    foreach ($newsList as $new) {
-                        $new_date = $new->date !== null ? date('d.m.Y', strtotime($new->date)) : null;
-                        $new->date_range = $new->date_from && $new->date_to ? 'период публикации: '.date('d.m.Y', strtotime($new->date_from)).' - '.date('d.m.Y', strtotime($new->date_to)) : 'опубликовано';
-                        $image = $new->link->gallery_images_id ? $new->link->galleryImage->small : false;
-                        $ch_link = ['mng', 'news_types_id' => $new->news_types_id, 'id' => $new->id];
-
-                        echo '<div class="row">' .
-                            '<div class="col-sm-10">';
-
-
-                            echo Html::beginTag('div', ['class' => 'media']);
-
-                                echo Html::beginTag('div', ['class' => 'media-left media-middle']);
-                                echo Html::a(Html::img($image, ['class' => 'media-object media-object', 'style' => 'max-height: 100px;']), $ch_link);
-                                echo Html::endTag('div');
-
-                                echo Html::beginTag('div', ['class' => 'media-body']);
-                                echo Html::tag('strong', '<span class="text-info">'.$new_date.'</span> '.$new->link->anchor);
-                                echo Html::tag('div', $new->link->contents[1]->text);
-                                echo Html::tag('div', '<small>(<strong>'.$new->newsType->name.'</strong> | '.$new->date_range.')</small>', ['class' => 'text-muted']);
-                                echo Html::endTag('div');
-
-                            echo Html::endTag('div');
-
-                        echo '</div><div class="col-sm-2 text-right">';
-
-                            echo '<ul class="list-inline">' .
-                                    '<li>'.Html::a('<i class="fa fa-pencil-square-o"></i>', $ch_link).'</li>' .
-                                    '<li>'.Html::a('<i class="fa fa-external-link"></i>', $new->link->url, ['target' => '_blank']).'</li>' .
-                                 '</ul>';
-
-                        echo '</div></div>';
-
-                        if ($i < count($news_list) - 1) echo '<hr>';
-
-                        $i += 1;
-                    }
-                }?>
-            </div><!-- /.box-body -->
-        </div><!-- /.box -->
+                <table class="table table-hover table-condensed">
+                    <thead><tr><th>#</th><th>Изображение</th><th>Дата</th><th>Период</th><th>Заголовок</th><th>Предварительное описание</th><th>Статус</th><th class="text-right">Действие</th></tr></thead>
+                    <tbody>
+                    <?php if ($newsList) {
+                        /** @var \common\models\news\News $new */
+                        foreach ($newsList as $i => $new) {
+                            echo $this->render('new', ['new' => $new, 'num' => ($i + 1)]);
+                        }
+                    } else {
+                        echo Html::tag('tr', Html::tag('td', '<em>По заданным параметрам записей не найдено.</em>', ['class' => 'text-muted text-center', 'colspan' => 8]));
+                    }?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
 
     </div>
 
