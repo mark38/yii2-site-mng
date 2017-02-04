@@ -20,8 +20,9 @@ use common\models\news\NewsTypes;
 
 $this->title = 'Редактирование нововсти';
 $this->params['breadcrumbs'][] = ['label' => 'Все новости', 'url' => 'index'];
+$this->params['breadcrumbs'][] = ['label' => $newsType->name, 'url' => ['index', 'news_types_id' => $newsType->id]];
 
-$linkClose = ['index'];
+$linkClose = ['index', 'news_types_id' => $newsType->id];
 
 $imageSmallLabel = '';
 if ($galleryImage->small) {
@@ -167,7 +168,7 @@ if ($galleryImage->large) {
                 <div class="row">
                 </div>
 
-                <?= Html::a('Отмена', $link_close, ['class' => 'btn btn-default btn-sm btn-flat'])?>
+                <?= Html::a('Отмена', $linkClose, ['class' => 'btn btn-default btn-sm btn-flat'])?>
                 <?= Html::submitButton(($link->id ? 'Изменить' : 'Добавить'), [
                     'class' => 'btn btn-primary btn-flat btn-sm',
                     'name' => 'signup-button',
