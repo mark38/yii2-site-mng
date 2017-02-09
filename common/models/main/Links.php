@@ -89,7 +89,7 @@ class Links extends \yii\db\ActiveRecord
             'title' => 'Заголовок',
             'keywords' => 'Заполнение meta-тека "Keywords"',
             'description' => 'Заполнение meta-тека "Description"',
-            'gallery_images_id' => 'Изображение ссылки',
+            'gallery_images_id' => 'Изображение',
             'start' => 'Главная',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',

@@ -1,14 +1,16 @@
 <?php
-use yii\bootstrap\ActiveForm;
+use kartik\form\ActiveForm;
 use yii\bootstrap\Tabs;
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use common\models\main\Layouts;
 use common\models\main\Views;
-use mark38\galleryManager\GalleryManager;
 
-/** @var $link \common\models\main\Links */
+/**
+ * @var $this \yii\web\View
+ * @var $galleryImage \common\models\gallery\GalleryImagesForm
+ */
 
 $link_close = ['/map/links', 'categories_id' => Yii::$app->request->get('categories_id')];
 $layouts = array();
@@ -17,21 +19,33 @@ foreach (Layouts::find()->orderBy(['seq' => SORT_ASC])->all() as $layout) {
 }
 $views = array();
 foreach (Views::find()->orderBy(['seq' => SORT_ASC])->all() as $view) $views[$view->id] = $view->comment . ' &mdash; '.$view->name;
+
+$imageSmallLabel = '';
+if ($galleryImage->small) {
+    $imageSmallLabel = Html::beginTag('div', ['id' => 'image-small-preview']) .
+        Html::button('Удалить', [
+            'class' => 'btn btn-default btn-sm btn-flat',
+            'onclick' => '$(".image-small").val(""); $("#image-small-preview").fadeOut();'
+        ]) .
+        '<br>' .
+        Html::img($galleryImage->small, ['style' => 'max-width:60%;']) .
+        Html::endTag('div');
+}
+
+$imageLargeLabel = '';
+if ($galleryImage->large) {
+    $imageLargeLabel = Html::beginTag('div', ['id' => 'image-large-preview']) .
+        Html::button('Удалить', [
+            'class' => 'btn btn-default btn-sm btn-flat',
+            'onclick' => '$(".image-large").val(""); $("#image-large-preview").fadeOut();'
+        ]) .
+        '<br>' .
+        Html::img($galleryImage->large, ['style' => 'max-width:80%;']) .
+        Html::endTag('div');
+}
 ?>
 
-<?php $form = ActiveForm::begin([
-    'method' => 'post',
-    'layout' => 'horizontal',
-    'fieldConfig' => [
-        'horizontalCssClasses' => [
-            'label' => 'col-sm-4',
-            'offset' => 'col-sm-offset-4',
-            'wrapper' => 'col-sm-5',
-            'error' => '',
-            'hint' => '',
-        ],
-    ],
-]); ?>
+<?php $form = ActiveForm::begin(); ?>
 
 <div class="box box-default">
     <div class="box-header with-border">
@@ -46,24 +60,30 @@ foreach (Views::find()->orderBy(['seq' => SORT_ASC])->all() as $view) $views[$vi
                 'items' => [
                     [
                         'label' => 'Основные параметры',
-                        'content' => '<p>' .
+                        'content' => Html::beginTag('p') .
                             $form->field($link, 'state')->checkbox() .
                             $form->field($link, 'start')->checkbox() .
                             $form->field($link, 'anchor') .
                             $form->field($link, 'name')->hint('(не обязательно)') .
                             $form->field($link, 'title') .
-                            $form->field($link, 'gallery_images_id')->widget(GalleryManager::className(), [
-                                'group' => false,
-                                'gallery_groups_id' => 1,
-                                'pluginOptions' => [
-                                    'type' => 'links',
-                                    'apiUrl' => 'gallery-manager',
-                                    'webRoute' => Yii::getAlias('@frontend/web'),
-                                ],
-                                //'options' => ['id' => 'gallery-upload'],
-                            ]) .
-                            '</p>',
+                            Html::endTag('p'),
                         'active' => true
+                    ],
+                    [
+                        'label' => 'Медиа',
+                        'content' => Html::beginTag('p') .
+                            $form->field($galleryImage, 'id')->hiddenInput()->label(false) .
+                            $form->field($galleryImage, 'small')->hiddenInput(['class' => 'form-control image-small'])->label(false) .
+                            $form->field($galleryImage, 'large')->hiddenInput(['class' => 'form-control image-large'])->label(false) .
+                            $form->field($galleryImage, 'imageSmall')->fileInput()->label(
+                                $galleryImage->getAttributeLabel('imageSmall') .
+                                ' ('.$galleryImage->galleryGroup->galleryType->small_width.'x'.$galleryImage->galleryGroup->galleryType->small_height.'px)' .
+                                $imageSmallLabel) .
+                            $form->field($galleryImage, 'imageLarge')->fileInput()->label(
+                                $galleryImage->getAttributeLabel('imageLarge') .
+                                ' ('.$galleryImage->galleryGroup->galleryType->large_width.'x'.$galleryImage->galleryGroup->galleryType->large_height.'px)' .
+                                $imageLargeLabel) .
+                            Html::endTag('p'),
                     ],
                     [
                         'label' => 'Дополнительно (системные параметры)',

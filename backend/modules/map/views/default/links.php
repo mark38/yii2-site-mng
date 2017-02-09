@@ -4,9 +4,12 @@ use yii\bootstrap\ButtonDropdown;
 use backend\widgets\map\Links;
 use backend\modules\map\MapAsset;
 
-/** @var $this \yii\web\View */
-/** @var $category \common\models\main\Categories */
-/** @var $link \common\models\main\Links */
+/**
+ * @var $this \yii\web\View
+ * @var $category \common\models\main\Categories
+ * @var $link Links
+ * @var $galleryImage \common\models\gallery\GalleryImagesForm
+ */
 
 $this->title = 'Управление ссылками';
 $this->params['breadcrumbs'][] = $this->title;
@@ -51,5 +54,5 @@ MapAsset::register($this);
 
     </div>
 
-    <div class="col-sm-7"><?= Yii::$app->request->get('action') ? $this->render('linkForm', ['link' => $link]) : ''?></div>
+    <div class="col-sm-7"><?= Yii::$app->request->get('action') ? $this->render('linkForm', ['link' => $link, 'galleryImage' => $galleryImage]) : ''?></div>
 </div>

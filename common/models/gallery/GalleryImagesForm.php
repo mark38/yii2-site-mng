@@ -18,7 +18,7 @@ class GalleryImagesForm extends GalleryImages
     {
         return array_merge(parent::rules(), [
             [['linksId'], 'integer'],
-            [['imageSmall', 'imageLarge'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
+            [['imageSmall', 'imageLarge'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg'],
         ]);
     }
 

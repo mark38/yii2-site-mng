@@ -2,6 +2,8 @@
 
 namespace app\modules\map\controllers;
 
+use common\models\gallery\GalleryImages;
+use common\models\gallery\GalleryImagesForm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -12,6 +14,7 @@ use common\models\main\Categories;
 use common\models\main\Links;
 use common\models\main\Contents;
 use mark38\galleryManager\GalleryManagerAction;
+use yii\web\UploadedFile;
 
 class DefaultController extends Controller
 {
@@ -71,6 +74,9 @@ class DefaultController extends Controller
             $link->state = 1;
         }
 
+        $galleryImage = isset($link->gallery_images_id) ? GalleryImagesForm::findOne($link->gallery_images_id) : new GalleryImagesForm();
+        $galleryImage->gallery_groups_id = 1;
+
         if ($link->load(Yii::$app->request->post()) && $link->save()) {
             if (!$link->contents) {
                 $content = new Contents();
@@ -78,11 +84,20 @@ class DefaultController extends Controller
                 $content->seq = 1;
                 $content->save();
             }
+
+            $galleryImage->load(Yii::$app->request->post());
+            $galleryImage->linksId = $link->id;
+            $galleryImage->name = $link->name;
+            $galleryImage->imageSmall = UploadedFile::getInstance($galleryImage, 'imageSmall');
+            $galleryImage->imageLarge = UploadedFile::getInstance($galleryImage, 'imageLarge');
+            $galleryImage->upload();
+            $galleryImage->save();
+
             Yii::$app->getSession()->setFlash('success', 'Изменения приняты');
             return $this->redirect(['', 'categories_id' => $categories_id, 'id' => $link->id, 'action' => $action]);
         }
 
-        return $this->render('links', compact('category', 'link'));
+        return $this->render('links', compact('category', 'link', 'galleryImage'));
     }
 
     public function actionGetChildren()

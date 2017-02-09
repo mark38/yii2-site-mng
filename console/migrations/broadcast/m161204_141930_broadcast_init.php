@@ -60,6 +60,13 @@ class m161204_141930_broadcast_init extends Migration
 
         $this->addForeignKey('fk-broadcast_address-broadcast_send_id', 'broadcast_address', 'broadcast_send_id', 'broadcast_send', 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk-broadcast_address-user_id', 'broadcast_address', 'user_id', 'user', 'id', 'CASCADE', 'CASCADE');
+
+        $this->insert('modules', [
+            'name' => 'Email-рассылка',
+            'url' => '/broadcast/index',
+            'visible' => 1,
+            'icon' => 'fa fa-envelope-o',
+        ]);
     }
 
     public function down()
@@ -69,6 +76,8 @@ class m161204_141930_broadcast_init extends Migration
         $this->dropTable('broadcast_files');
         $this->dropTable('broadcast');
         $this->dropTable('broadcast_layouts');
+
+        $this->delete('modules', ['url' => '/broadcast/index']);
     }
 
     /*

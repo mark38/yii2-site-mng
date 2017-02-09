@@ -66,6 +66,13 @@ class m170104_195825_sms_init extends Migration
         $this->insert('sms_service_params', [
             'id' => 1
         ]);
+
+        $this->insert('modules', [
+            'name' => 'SMS-рассылка',
+            'url' => '/sms/index',
+            'visible' => 1,
+            'icon' => 'fa fa-shopping-cart',
+        ]);
     }
 
     public function down()
@@ -75,6 +82,8 @@ class m170104_195825_sms_init extends Migration
         $this->dropTable('sms_send');
         $this->dropTable('sms_content');
         $this->dropTable('sms_contacts');
+
+        $this->delete('modules', ['url' => '/sms/index']);
     }
 
     /*

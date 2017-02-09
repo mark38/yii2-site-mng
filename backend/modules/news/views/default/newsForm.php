@@ -5,9 +5,7 @@ use yii\bootstrap\Tabs;
 use yii\bootstrap\Modal;
 use kartik\date\DatePicker;
 use kartik\daterange\DateRangePicker;
-use mark38\galleryManager\GalleryManager;
 use backend\widgets\ckeditor\CKEditor;
-use iutbay\yii2kcfinder\KCFinder;
 use common\models\news\NewsTypes;
 
 /**
@@ -131,7 +129,7 @@ if ($galleryImage->large) {
                                     Html::endTag('p'),
                             ],
                             ($newsType->gallery_groups_id ? [
-                                'label' => 'Баннер',
+                                'label' => 'Медиа',
                                 'content' => Html::beginTag('p') .
                                     $form->field($galleryImage, 'id')->hiddenInput()->label(false) .
                                     $form->field($galleryImage, 'small')->hiddenInput(['class' => 'form-control image-small'])->label(false) .

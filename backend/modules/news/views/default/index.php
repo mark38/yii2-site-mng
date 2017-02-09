@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]
                     ]);
                 } else {
-                    echo Html::a($action, ['', 'news' => 'add', 'news_types_id' => 1], ['class' => 'btn btn-sm btn-default btn-flat']);
+                    echo Html::a($action, ['mng', 'news_types_id' => 1], ['class' => 'btn btn-sm btn-default btn-flat']);
                 }?>
 
                 <hr>

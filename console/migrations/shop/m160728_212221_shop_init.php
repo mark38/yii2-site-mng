@@ -233,6 +233,13 @@ class m160728_212221_shop_init extends Migration
 
         $this->addForeignKey('fk-shop_client_carts-shop_clients_id', 'shop_client_carts', 'shop_clients_id', 'shop_clients', 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk-shop_client_carts-shop_carts_id', 'shop_client_carts', 'shop_carts_id', 'shop_carts', 'id', 'CASCADE', 'CASCADE');
+
+        $this->insert('modules', [
+            'name' => 'Интернет-магазин',
+            'url' => '/shop/index',
+            'visible' => 1,
+            'icon' => 'fa fa-shopping-cart',
+        ]);
     }
 
     public function down()
@@ -261,6 +268,8 @@ class m160728_212221_shop_init extends Migration
         $this->dropTable('shop_units');
         $this->dropTable('shop_groups');
         $this->dropTable('shop_users');
+
+        $this->delete('modules', ['url' => '/shop/index']);
     }
 
     /*

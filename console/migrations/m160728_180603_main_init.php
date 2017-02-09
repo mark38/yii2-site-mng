@@ -216,44 +216,15 @@ class m160728_180603_main_init extends Migration
         $this->insert('modules', [
             'name' => 'Новости',
             'url' => '/news/index',
-            'visible' => 1,
-            'icon' => 'fa fa-newspaper-o',
-            'seq' => 1
+            'visible' => true,
+            'icon' => 'fa fa-newspaper-o'
         ]);
+
         $this->insert('modules', [
             'name' => 'Фотогалерея',
             'url' => '/gallery/index',
-            'visible' => 1,
-            'icon' => 'fa fa-file-image-o',
-            'seq' => 2
-        ]);
-        $this->insert('modules', [
-            'name' => 'Интернет-магазин',
-            'url' => '/shop/index',
-            'visible' => 1,
-            'icon' => 'fa fa-shopping-cart',
-            'seq' => 3
-        ]);
-        $this->insert('modules', [
-            'name' => 'Недвижимость',
-            'url' => '/realty/index',
-            'visible' => 0,
-            'icon' => 'fa fa-home',
-            'seq' => 4
-        ]);
-        $this->insert('modules', [
-            'name' => 'Email-рассылка',
-            'url' => '/broadcast/index',
-            'visible' => 1,
-            'icon' => 'fa fa-envelope-o',
-            'seq' => 5
-        ]);
-        $this->insert('modules', [
-            'name' => 'Обмен справками РЖД',
-            'url' => '/certificates/index',
-            'visible' => 0,
-            'icon' => 'fa fa-archive',
-            'seq' => 6
+            'visible' => true,
+            'icon' => 'fa fa-file-image-o'
         ]);
     }
 
