@@ -36,6 +36,9 @@ return [
         'certificates' => [
             'class' => 'app\modules\certificates\Module',
         ],
+        'auctionmb' => [
+            'class' => 'app\modules\auctionmb\Module',
+        ],
     ],
     'components' => [
         'request' => [
