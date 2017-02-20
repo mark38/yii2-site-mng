@@ -91,7 +91,7 @@ class SmsContentForm extends SmsContent
                     $contactElements = preg_split('/\:|\:\s/', trim($contact));
                     if ($contactElements) {
                         $phone = $contactElements[0];
-                        $fio = $contactElements[1];
+                        $fio = isset($contactElements[1]) ? $contactElements[1] : '';
                         $gender = isset($contactElements[2]) ? $contactElements[2] : '';
                     } else {
                         $phone = $contact;

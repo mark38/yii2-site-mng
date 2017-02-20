@@ -11,8 +11,6 @@ $this->title = 'Текст сообщения';
 
 $this->params['breadcrumbs'][] = ['label' => 'Сообщения', 'url' => 'index'];
 
-print_r($content);
-
 ?>
 
 <div class="row">
