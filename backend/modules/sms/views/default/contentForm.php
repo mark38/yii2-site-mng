@@ -4,12 +4,14 @@ use yii\bootstrap\Html;
 use kartik\checkbox\CheckboxX;
 
 /** @var $this \yii\web\View */
-/** @var $content \common\models\sms\SmsContent */
+/** @var $content \backend\modules\sms\models\SmsContentForm */
 /** @var $contactsCount */
 
 $this->title = 'Текст сообщения';
 
 $this->params['breadcrumbs'][] = ['label' => 'Сообщения', 'url' => 'index'];
+
+print_r($content);
 
 ?>
 
@@ -23,7 +25,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Сообщения', 'url' => 'ind
                 <?=$form->field($content, 'comment')?>
                 <?=$form->field($content, 'content')->textarea()->label($content->getAttributeLabel('content').' &mdash; <span>'.mb_strlen($content->content, 'utf-8').'</span> (без учёта подставляемых слов согласно паттернов)')->hint('1 СМС сообщение &mdash; до 70 русских / 160 латинских символов')?>
                 <?=$form->field($content, 'contact_send')->checkbox(['label' => 'Подготовить к отправке всем клиентам из списка контактов ('.$contactsCount.')'])?>
-                <?/*=$form->field($content, 'contacts')->textarea()*/?>
+                <?=$form->field($content, 'contacts')->textarea()?>
 
                 <?=Html::a('Отмена', ['index'], ['class' => 'btn btn-default btn-flat btn-sm'])?>
 
