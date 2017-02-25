@@ -5,13 +5,13 @@ $items[] = ['label' => 'Аукцион MB', 'options' => ['class' => 'header']];
 $items[] = [
     'label' => 'Лоты',
     'icon' => 'fa fa-list',
-    'url' => ['/auctionmb/lots'],
-    'active' => Yii::$app->controller->action->id == 'lots' ? true : false,
+    'url' => ['/auctionmb/index'],
+    'active' => Yii::$app->controller->action->id == 'index' ? true : false,
 ];
 $items[] = [
-    'label' => 'Типы лотов',
+    'label' => 'Аукционы',
     'icon' => 'fa fa-id-card-o',
-    'url' => ['/auctionmb/types'],
+    'url' => ['/auctionmb/lots'],
     'active' => Yii::$app->controller->action->id == 'types' ? true : false,
 ];
 

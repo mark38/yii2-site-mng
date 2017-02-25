@@ -9,11 +9,11 @@ use Yii;
  *
  * @property integer $id
  * @property integer $auctionmb_users_id
- * @property integer $auctionmb_lots_id
+ * @property integer $auctionmb_id
  * @property integer $created_at
  *
- * @property AuctionmbLots $auctionmbLots
- * @property AuctionmbUsers $auctionmbUsers
+ * @property Auctionmb $auctionmb
+ * @property AuctionmbUsers $auctionmbUser
  */
 class AuctionmbBets extends \yii\db\ActiveRecord
 {
@@ -31,8 +31,8 @@ class AuctionmbBets extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['auctionmb_users_id', 'auctionmb_lots_id', 'created_at'], 'integer'],
-            [['auctionmb_lots_id'], 'exist', 'skipOnError' => true, 'targetClass' => AuctionmbLots::className(), 'targetAttribute' => ['auctionmb_lots_id' => 'id']],
+            [['auctionmb_users_id', 'auctionmb_id', 'created_at'], 'integer'],
+            [['auctionmb_id'], 'exist', 'skipOnError' => true, 'targetClass' => Auctionmb::className(), 'targetAttribute' => ['auctionmb_id' => 'id']],
             [['auctionmb_users_id'], 'exist', 'skipOnError' => true, 'targetClass' => AuctionmbUsers::className(), 'targetAttribute' => ['auctionmb_users_id' => 'id']],
         ];
     }
@@ -44,8 +44,8 @@ class AuctionmbBets extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'auctionmb_users_id' => 'Пользователь',
-            'auctionmb_lots_id' => 'Лот',
+            'auctionmb_users_id' => 'Auctionmb Users ID',
+            'auctionmb_id' => 'Auctionmb ID',
             'created_at' => 'Created At',
         ];
     }
@@ -53,15 +53,15 @@ class AuctionmbBets extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAuctionmbLots()
+    public function getAuctionmb()
     {
-        return $this->hasOne(AuctionmbLots::className(), ['id' => 'auctionmb_lots_id']);
+        return $this->hasOne(Auctionmb::className(), ['id' => 'auctionmb_id']);
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAuctionmbUsers()
+    public function getAuctionmbUser()
     {
         return $this->hasOne(AuctionmbUsers::className(), ['id' => 'auctionmb_users_id']);
     }

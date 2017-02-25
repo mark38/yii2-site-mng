@@ -2,25 +2,21 @@
 use yii\bootstrap\Html;
 use kartik\form\ActiveForm;
 use yii\bootstrap\Tabs;
-use yii\bootstrap\Modal;
-use kartik\date\DatePicker;
-use kartik\daterange\DateRangePicker;
 use backend\widgets\ckeditor\CKEditor;
-use common\models\news\NewsTypes;
+use yii\bootstrap\Modal;
 
 /**
  * @var $this \yii\web\View
- * @var $news \app\modules\news\models\NewsForm
+ * @var $auctionmbLot \common\models\auctionmb\AuctionmbLotForm
  * @var $link \common\models\main\Links
  * @var $galleryImage \common\models\gallery\GalleryImagesForm
- * @var $newsType NewsTypes
  */
 
-$this->title = 'Редактирование нововсти';
-$this->params['breadcrumbs'][] = ['label' => 'Все новости', 'url' => 'index'];
-$this->params['breadcrumbs'][] = ['label' => $newsType->name, 'url' => ['index', 'news_types_id' => $newsType->id]];
+$this->title = 'Управление лотом';
+$this->params['breadcrumbs'][] = ['label' => 'Все лоты', 'url' => 'index'];
+$this->params['breadcrumbs'][] = $this->title;
 
-$linkClose = ['index', 'news_types_id' => $newsType->id];
+$linkClose = ['index'];
 
 $imageSmallLabel = '';
 if ($galleryImage->small) {
@@ -48,7 +44,7 @@ if ($galleryImage->large) {
 <div class="row">
     <div class="col-md-8">
 
-        <div class="box box-default">
+        <div class="box box-primary">
             <div class="box-body">
 
                 <?php $form=ActiveForm::begin(); ?>
@@ -60,40 +56,33 @@ if ($galleryImage->large) {
                                 'label' => 'Основные параметры',
                                 'content' => Html::beginTag('p') .
                                     $form->field($link, 'state')->checkbox() .
-                                    $form->field($news, 'news_types_id')->dropDownList($news->newsTypes) .
-                                    $form->field($link, 'anchor')->label('Заголовок новости') .
+                                    $form->field($auctionmbLot, 'seconds') .
+                                    $form->field($auctionmbLot, 'bets') .
+                                    $form->field($link, 'anchor')->label('Наименование лота') .
                                     $form->field($link, 'title')->label('Заголовок страницы (опционально)') .
-                                    $form->field($news, 'url')->label('Адрес внешней ссылки') .
-                                    $form->field($news, 'date')->widget(DatePicker::className(), [
-                                        'type' => DatePicker::TYPE_COMPONENT_PREPEND,
-                                        'pluginOptions' => [
-                                            'todayHighlight' => true,
-                                            'todayBtn' => true,
-                                            'autoclose' => true,
-                                            'format' => 'dd.mm.yyyy'
-                                        ],
-                                        'options' => [
-                                            'placeholder' => 'ДД.ММ.ГГГГ',
-                                        ],
-                                    ]) .
-                                    $form->field($news, 'date_range')->widget(DateRangePicker::classname(), [
-                                        'convertFormat' => true,
-                                        'pluginOptions' => [
-                                            'locale' => [
-                                                'format' => 'd.m.Y',
-                                                'separator' => ' - '
-                                            ],
-                                            'opens' => 'left'
-                                        ],
-                                    ]) .
                                     Html::endTag('p'),
                                 'active' => true
                             ],
                             [
+                                'label' => 'Медиа',
+                                'content' => Html::beginTag('p') .
+                                    $form->field($galleryImage, 'id')->hiddenInput()->label(false) .
+                                    $form->field($galleryImage, 'small')->hiddenInput(['class' => 'form-control image-small'])->label(false) .
+                                    $form->field($galleryImage, 'large')->hiddenInput(['class' => 'form-control image-large'])->label(false) .
+                                    $form->field($galleryImage, 'imageSmall')->fileInput()->label(
+                                        $galleryImage->getAttributeLabel('imageSmall') .
+                                        ' ('.$galleryImage->galleryGroup->galleryType->small_width.'x'.$galleryImage->galleryGroup->galleryType->small_height.'px)' .
+                                        $imageSmallLabel) .
+                                    $form->field($galleryImage, 'imageLarge')->fileInput()->label(
+                                        $galleryImage->getAttributeLabel('imageLarge') .
+                                        ' ('.$galleryImage->galleryGroup->galleryType->large_width.'x'.$galleryImage->galleryGroup->galleryType->large_height.'px)' .
+                                        $imageLargeLabel) .
+                                    Html::endTag('p'),
+                            ],
+                            [
                                 'label' => 'Контент',
                                 'content' => Html::beginTag('p') .
-                                    $form->field($news, 'prev_text')->textarea(['maxlength' => true, 'rows' => 2, 'id' => 'prev-text']) .
-                                    $form->field($news, 'full_text')->widget(CKEditor::className(), [
+                                    $form->field($auctionmbLot, 'text')->widget(CKEditor::className(), [
                                         'options' => ['id' => 'full-text'],
                                         'preset' => 'full',
                                         'clientOptions' => [
@@ -128,27 +117,12 @@ if ($galleryImage->large) {
                                     ]) .
                                     Html::endTag('p'),
                             ],
-                            ($newsType->gallery_groups_id ? [
-                                'label' => 'Медиа',
-                                'content' => Html::beginTag('p') .
-                                    $form->field($galleryImage, 'id')->hiddenInput()->label(false) .
-                                    $form->field($galleryImage, 'small')->hiddenInput(['class' => 'form-control image-small'])->label(false) .
-                                    $form->field($galleryImage, 'large')->hiddenInput(['class' => 'form-control image-large'])->label(false) .
-                                    $form->field($galleryImage, 'imageSmall')->fileInput()->label(
-                                        $galleryImage->getAttributeLabel('imageSmall') .
-                                        ' ('.$newsType->galleryType->small_width.'x'.$newsType->galleryType->small_height.'px)' .
-                                        $imageSmallLabel) .
-                                    $form->field($galleryImage, 'imageLarge')->fileInput()->label(
-                                        $galleryImage->getAttributeLabel('imageLarge') .
-                                        ' ('.$newsType->galleryType->large_width.'x'.$newsType->galleryType->large_height.'px)' .
-                                        $imageLargeLabel) .
-                                    Html::endTag('p'),
-                            ] : ''),
                             [
                                 'label' => 'Дополнительно (системные параметры)',
                                 'content' => Html::beginTag('p') .
                                     $form->field($link, 'url') .
                                     $form->field($link, 'name') .
+                                    $form->field($link, 'seq')->label('Порядковый номер') .
                                     Html::endTag('p'),
                             ],
                             [
@@ -176,7 +150,7 @@ if ($galleryImage->large) {
                         'header' => $link->anchor.' '.Html::a('<i class="fa fa-external-link"></i>', $link->url, ['target' => '_blank']),
                         'toggleButton' => ['label' => 'Удалить', 'class' => 'btn btn-danger btn-flat btn-sm'],
                         'footer' => Html::a('Отмена', '#', ['data-dismiss' => 'modal', 'class' => 'btn btn-default btn-flat btn-sm']) .
-                            Html::a('Удалить', ['news-del', 'links_id' => $link->id], ['class' => 'btn btn-danger btn-flat btn-sm']),
+                            Html::a('Удалить', ['lot-del', 'id' => $auctionmbLot->id], ['class' => 'btn btn-danger btn-flat btn-sm']),
                     ]);
                     echo '<p>Действительно удалить элемент?</p>';
                     Modal::end();

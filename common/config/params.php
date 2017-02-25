@@ -53,28 +53,9 @@ return [
         ],
     ],
     'auctionmb' => [
-        'phpAuthUser' => 'admin',
-        'phpAuthPw' => 'p7Nr5Bzu',
-        'fileLimit' => 10485760,
-        'uploadDir' => '/web/uploads/auctionmb',
-        'gallery' => [
-            'good' => 4,
-            'group' => 9,
-            'color' => 5,
-            'Pogonazh' => 6,
-            'other' => 7,
-            'logo' => 8
-        ],
-        'propertyGalleryType' => 'brands',
-        'propertyGallery' => [
-            'Производитель' => 17827,
-            'Бренд' => 17827,
-        ],
-        'galleryLink' => [4, 9],
-        'hitShopProperty' => ['id' => 23, 'value' => '1'],
-        'promoShopProperty' => ['id' => 22, 'value' => '1'],
-        'promoProductsId' => [
-            467 => [17513, 17103],
-        ],
+        'categoriesId' => 4,
+        'layoutsId' => 1,
+        'viewsId' => 3,
+        'galleryGroupsId' => 2,
     ]
 ];

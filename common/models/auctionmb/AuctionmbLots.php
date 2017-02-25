@@ -2,21 +2,19 @@
 
 namespace common\models\auctionmb;
 
+use common\models\main\Links;
 use Yii;
 
 /**
  * This is the model class for table "auctionmb_lots".
  *
  * @property integer $id
- * @property integer $auctionmb_types_id
- * @property integer $auctionmb_users_id
- * @property integer $state
- * @property integer $created_at
- * @property integer $updated_at
+ * @property integer $links_id
+ * @property integer $seconds
+ * @property integer $bets
  *
- * @property AuctionmbBets[] $auctionmbBets
- * @property AuctionmbUsers $auctionmbUsers
- * @property AuctionmbTypes $auctionmbTypes
+ * @property Auctionmb[] $auctionmbs
+ * @property Links $link
  */
 class AuctionmbLots extends \yii\db\ActiveRecord
 {
@@ -34,9 +32,8 @@ class AuctionmbLots extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['auctionmb_types_id', 'auctionmb_users_id', 'state', 'created_at', 'updated_at'], 'integer'],
-            [['auctionmb_users_id'], 'exist', 'skipOnError' => true, 'targetClass' => AuctionmbUsers::className(), 'targetAttribute' => ['auctionmb_users_id' => 'id']],
-            [['auctionmb_types_id'], 'exist', 'skipOnError' => true, 'targetClass' => AuctionmbTypes::className(), 'targetAttribute' => ['auctionmb_types_id' => 'id']],
+            [['links_id', 'seconds', 'bets'], 'integer'],
+            [['links_id'], 'exist', 'skipOnError' => true, 'targetClass' => Links::className(), 'targetAttribute' => ['links_id' => 'id']],
         ];
     }
 
@@ -47,35 +44,30 @@ class AuctionmbLots extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'auctionmb_types_id' => 'Тип',
-            'auctionmb_users_id' => 'Пользователь',
-            'state' => 'Состояние',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'links_id' => 'Links ID',
+            'seconds' => 'Seconds',
+            'bets' => 'Bets',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAuctionmbBets()
+    public function getAuctionmbs()
     {
-        return $this->hasMany(AuctionmbBets::className(), ['auctionmb_lots_id' => 'id']);
+        return $this->hasMany(Auctionmb::className(), ['auctionmb_lots_id' => 'id']);
+    }
+
+    public function getAuctionmbActive()
+    {
+        return $this->hasOne(Auctionmb::className(), ['auctionmb_lots_id' => 'id'])->where(['auctionmb.state' => true])->orderBy(['auctionmb.id' => SORT_DESC])->one();
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAuctionmbUsers()
+    public function getLink()
     {
-        return $this->hasOne(AuctionmbUsers::className(), ['id' => 'auctionmb_users_id']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAuctionmbTypes()
-    {
-        return $this->hasOne(AuctionmbTypes::className(), ['id' => 'auctionmb_types_id']);
+        return $this->hasOne(Links::className(), ['id' => 'links_id']);
     }
 }

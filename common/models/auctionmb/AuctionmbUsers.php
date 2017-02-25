@@ -2,20 +2,23 @@
 
 namespace common\models\auctionmb;
 
-use common\models\User;
 use Yii;
+use common\models\User;
 
 /**
  * This is the model class for table "auctionmb_users".
  *
  * @property integer $id
  * @property integer $user_id
+ * @property integer $friend_user_id
+ * @property integer $balance_bets
  * @property string $name
- * @property string $surname
- * @property string $patronymic
+ * @property string $phone
  *
+ * @property Auctionmb[] $auctionmbs
  * @property AuctionmbBets[] $auctionmbBets
- * @property AuctionmbLots[] $auctionmbLots
+ * @property AuctionmbTakings[] $auctionmbTakings
+ * @property User $friendUser
  * @property User $user
  */
 class AuctionmbUsers extends \yii\db\ActiveRecord
@@ -34,8 +37,9 @@ class AuctionmbUsers extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user_id'], 'integer'],
-            [['name', 'surname', 'patronymic'], 'string', 'max' => 255],
+            [['user_id', 'friend_user_id', 'balance_bets'], 'integer'],
+            [['name', 'phone'], 'string', 'max' => 255],
+            [['friend_user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['friend_user_id' => 'id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
@@ -47,11 +51,20 @@ class AuctionmbUsers extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'user_id' => 'Пользователь системы',
-            'name' => 'Имя',
-            'surname' => 'Фамилия',
-            'patronymic' => 'Отчество',
+            'user_id' => 'User ID',
+            'friend_user_id' => 'Friend User ID',
+            'balance_bets' => 'Balance Bets',
+            'name' => 'Name',
+            'phone' => 'Phone',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAuctionmbs()
+    {
+        return $this->hasMany(Auctionmb::className(), ['auctionmb_users_id' => 'id']);
     }
 
     /**
@@ -65,9 +78,17 @@ class AuctionmbUsers extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getAuctionmbLots()
+    public function getAuctionmbTakings()
     {
-        return $this->hasMany(AuctionmbLots::className(), ['auctionmb_users_id' => 'id']);
+        return $this->hasMany(AuctionmbTakings::className(), ['auctionmb_users_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFriendUser()
+    {
+        return $this->hasOne(User::className(), ['id' => 'friend_user_id']);
     }
 
     /**
