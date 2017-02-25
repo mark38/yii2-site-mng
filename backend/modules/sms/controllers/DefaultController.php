@@ -78,7 +78,7 @@ class DefaultController extends Controller
 
     public function actionContent($id = null)
     {
-        $content = $id ? SmsContentForm::findOne($id) : new SmsContent();
+        $content = $id ? SmsContentForm::findOne($id) : new SmsContentForm();
         $contactsCount = SmsContacts::find()->where(['control' => true, 'state' => true])->count();
 
         if ($content->load(Yii::$app->request->post()) && $content->save()) {
