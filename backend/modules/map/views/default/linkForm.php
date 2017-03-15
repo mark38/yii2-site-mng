@@ -94,6 +94,7 @@ if ($galleryImage->large) {
                             $form->field($link, 'url') .
                             $form->field($link, 'css_class') .
                             $form->field($link, 'icon') .
+                            $form->field($link, 'seq') .
                             '</p>',
                     ],
                     [

@@ -188,9 +188,11 @@ class Links extends \yii\db\ActiveRecord
         }
 
         if ($insert) {
-            $this->child_exist = 0;
-            $this->level = 1;
-            $this->seq = $this->findLastSequence($this->categories_id, $this->parent) + 1;
+            if (!$this->seq) {
+                $this->child_exist = 0;
+                $this->level = 1;
+                $this->seq = $this->findLastSequence($this->categories_id, $this->parent) + 1;
+            }
 
             if ($this->parent) {
                 $parent_link = self::findOne($this->parent);
@@ -220,51 +222,6 @@ class Links extends \yii\db\ActiveRecord
 
         return true;
     }
-
-    /*public function beforeSave($insert)
-    {
-        if (!$this->name) {
-            $this->name = $this->anchor2translit(preg_replace('/\s\/.+$/', '', $this->anchor));
-        }
-
-        if ($this->start == 1) {
-            $this->url = '/';
-        } else {
-            $this->url = $this->parent ? preg_replace('/\/$/', '', self::findOne($this->parent)->url).'/'.$this->name : '/'.$this->name;
-        }
-
-        if ($insert) {
-            $this->child_exist = 0;
-            $this->level = 1;
-            $this->seq = $this->findLastSequence($this->categories_id, $this->parent) + 1;
-
-            if ($this->parent) {
-                $parent_link = self::findOne($this->parent);
-                $this->level = $parent_link->level + 1;
-                if ($parent_link->child_exist == 0) {
-                    $parent_link->child_exist = 1;
-                    $parent_link->save();
-                }
-            }
-
-            if (self::findOne(['url' => $this->url])) {
-                Yii::$app->getSession()->setFlash('danger', 'Адрес страницы (URL) уже существует на сайте. Вам следует указать другое наименование латиницай.');
-                return false;
-            }
-
-            return true;
-        } else {
-            echo 'UPDATE'.$this->url.'<br>';
-            $link = self::findOne([$this->id]);
-            if ($link && $this->url != $link->url) {
-                $redirect = new Redirects();
-                $redirect->links_id = $link->id;
-                $redirect->url = $link->url;
-                $redirect->save();
-            }
-            return true;
-        }
-    }*/
 
     public function afterDelete()
     {
