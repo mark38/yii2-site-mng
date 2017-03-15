@@ -86,16 +86,23 @@ class Auctionmb extends \yii\db\ActiveRecord
         return $this->hasMany(AuctionmbBets::className(), ['auctionmb_id' => 'id'])->orderBy(['id' => SORT_DESC]);
     }
 
+    public function getLastBet() {
+        return $this->auctionmbBets ? $this->auctionmbBets[0] : null;
+    }
+
     public function getLastBetId() {
-        return $this->auctionmbBets[0]->id;
+        return $this->auctionmbBets ? $this->auctionmbBets[0]->id : null;
     }
 
     public function getLeftTime() {
         if (!$this->state) {
             return 0;
         }
-        $seconds = $this->auctionmbLot->seconds;
-        $lastBetTime = $this->auctionmbBets[0]->created_at;
-        return floor(( $lastBetTime + $seconds - time()));
+        $seconds = $this->auctionmbLot ? $this->auctionmbLot->seconds : 0;
+        $lastBetTime = $this->auctionmbBets ? $this->auctionmbBets[0]->created_at : 0;
+        $createdTime = $this->created_at;
+        return $lastBetTime ? floor(($lastBetTime + $seconds - time())) : floor(($createdTime + $seconds - time()));
     }
+
+
 }
