@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="col-md-3">
         <div class="box box-primary">
-            <div class="box-body">
+            <div class="box-header with-border">
                 <?php
                 $action = '<i class="fa fa-plus"></i> Добавить новость';
                 if (count($newsTypes) > 1) {
@@ -42,9 +42,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 } else {
                     echo Html::a($action, ['mng', 'news_types_id' => 1], ['class' => 'btn btn-sm btn-default btn-flat']);
                 }?>
-
-                <hr>
-
+            </div>
+            <div class="box-body">
                 <?php if ($newsTypes) {
                     $items = [];
                     $amount = 0;
@@ -56,14 +55,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             'active' => Yii::$app->request->get('news_types_id') && Yii::$app->request->get('news_types_id') == $newsType->id ? true : false
                         ];
                     }
-                    $items[] = [
-                        'url' => ['index'],
-                        'label' => 'Все нововсти' . Html::tag('span', $amount, ['class' => 'badge pull-right']),
-                        'active' => !Yii::$app->request->get('news_types_id') ? true : false
-                    ];
 
                     echo Nav::widget([
-                        'items' => $items,
+                        'items' => array_merge(array([
+                            'url' => ['index'],
+                            'label' => 'Все нововсти' . Html::tag('span', $amount, ['class' => 'badge pull-right']),
+                            'active' => !Yii::$app->request->get('news_types_id') ? true : false
+                        ]), $items),
                         'encodeLabels' => false,
                         'options' => ['class' => 'nav nav-pills nav-stacked']
                     ]);

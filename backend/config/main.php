@@ -21,6 +21,9 @@ return [
         'gallery' => [
             'class' => 'app\modules\gallery\Module',
         ],
+        'items' => [
+            'class' => 'app\modules\items\Module',
+        ],
         'shop' => [
             'class' => 'app\modules\shop\Module',
         ],
