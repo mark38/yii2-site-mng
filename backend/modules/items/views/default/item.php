@@ -17,7 +17,7 @@ $state = $item->state ? Html::tag('small', 'Активна', ['class' => 'text-s
     <td><?=$item->url?></td>
     <td><?=$item->name?></td>
     <td><?=$item->title?></td>
-    <td><?=Html::tag('small', $item->content->text)?></td>
+    <td><?=Html::tag('small', $item->content ? $item->content->text : null)?></td>
     <td><?=$item->price?></td>
     <td><?=$item->old_price?></td>
     <td><?=$state?></td>
