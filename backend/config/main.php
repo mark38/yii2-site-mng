@@ -45,6 +45,9 @@ return [
         'auctionmb' => [
             'class' => 'app\modules\auctionmb\Module',
         ],
+        'user' => [
+            'class' => 'app\modules\user\Module',
+        ],
     ],
     'components' => [
         'request' => [

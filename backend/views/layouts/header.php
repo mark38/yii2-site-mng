@@ -28,7 +28,8 @@ use backend\widgets\modules\Modules;
                         <span class="hidden-xs"><?=Yii::$app->user->identity->username?></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a href="#">Профиль</a></li>
+                        <li>
+                            <?= Html::a('Профиль', ['/user/profile'], ['data-method' => 'post'])?>
                         <li>
                             <?= Html::a('Выход', ['/site/logout'], ['data-method' => 'post'])?>
                         </li>
