@@ -14,7 +14,7 @@ $chLink = ['view', 'form_types_id' => $form->form_types_id, 'id' => $form->id];
         $column = $field->name;
         switch ($field->name) {
             case 'created_at':
-                echo $form->$column ? '<td>'.date('d.m.Y', $form->$column).'</td>' : '<td></td>';
+                echo $form->$column ? '<td>'.date('d.m.Y H:i', $form->$column).'</td>' : '<td></td>';
                 break;
             case 'form_select1_id':
                 echo $form->$column ? '<td>'.$form->formSelect1->name.'</td>' : '<td></td>';

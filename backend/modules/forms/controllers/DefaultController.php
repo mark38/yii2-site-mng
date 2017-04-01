@@ -64,7 +64,7 @@ class DefaultController extends Controller
         } else {
             $fields = FormFields::find()->select(['name'])->distinct()->all();
         }
-        $forms = $forms->orderBy(['form_types_id' => SORT_ASC])->all();
+        $forms = $forms->orderBy(['id' => SORT_DESC])->all();
 
         return $this->render('index', [
             'fields' => $fields,
