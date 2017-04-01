@@ -24,6 +24,9 @@ return [
         'items' => [
             'class' => 'app\modules\items\Module',
         ],
+        'forms' => [
+            'class' => 'app\modules\forms\Module',
+        ],
         'shop' => [
             'class' => 'app\modules\shop\Module',
         ],

@@ -49,6 +49,7 @@ class Modules extends Widget
                 $items[] = [
                     'label' => $model->name,
                     'url' => [$model->url],
+                    'active' => preg_match('/'.Yii::$app->controller->module->id.'/', $model->url),
                 ];
             }
         }

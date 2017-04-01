@@ -58,15 +58,15 @@ class Forms extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'form_types_id' => 'Form Types ID',
-            'user_id' => 'User ID',
-            'sessions_id' => 'Sessions ID',
-            'fio' => 'Fio',
-            'phone' => 'Phone',
+            'form_types_id' => 'Тип формы',
+            'user_id' => 'Пользователь',
+            'sessions_id' => 'Сессися',
+            'fio' => 'ФИО',
+            'phone' => 'Телефон',
             'email' => 'Email',
-            'comment' => 'Comment',
-            'form_select1_id' => 'Form Select1 ID',
-            'created_at' => 'Created At'
+            'comment' => 'Сообщение',
+            'form_select1_id' => 'Интересующая дверь',
+            'created_at' => 'Дата отправки'
         ];
     }
 
@@ -100,6 +100,13 @@ class Forms extends \yii\db\ActiveRecord
     public function getUser()
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFields() {
+        return $this->hasMany(FormFields::className(), ['id' => 'form_types_id']);
     }
 
     public function beforeSave($insert)

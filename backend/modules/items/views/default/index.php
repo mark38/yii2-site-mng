@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     echo Nav::widget([
                         'items' => array_merge(array([
                             'url' => ['index'],
-                            'label' => 'Все элумунты' . Html::tag('span', $amount, ['class' => 'badge pull-right']),
+                            'label' => 'Все элементы' . Html::tag('span', $amount, ['class' => 'badge pull-right']),
                             'active' => !Yii::$app->request->get('item_types_id') ? true : false
                         ]), $itemList),
                         'encodeLabels' => false,
