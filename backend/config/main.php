@@ -48,6 +48,9 @@ return [
         'user' => [
             'class' => 'app\modules\user\Module',
         ],
+        'settings' => [
+            'class' => 'app\modules\settings\Module',
+        ],
     ],
     'components' => [
         'request' => [
