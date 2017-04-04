@@ -4,7 +4,7 @@ use yii\db\Migration;
 use yii\console\controllers\MigrateController;
 
 
-class m170402_161551_insert_admin_in_rbac extends Migration
+class m170402_161551_rbac_init extends Migration
 {
     public function up()
     {
