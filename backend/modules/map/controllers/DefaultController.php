@@ -32,7 +32,7 @@ class DefaultController extends Controller
                         'allow' => true,
                     ],
                     [
-                        'actions' => ['index', 'links', 'get-children', 'link-del', 'content', 'save-content', 'gallery-manager'],
+                        'actions' => ['index', 'links', 'get-children', 'link-del', 'content', 'save-content', 'save-link', 'gallery-manager'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -151,6 +151,9 @@ class DefaultController extends Controller
         $contents = Contents::find()->where(['links_id' => $links_id])->orderBy(['seq' => SORT_ASC])->all();
 
         if (Yii::$app->request->post()) {
+            $link->load(Yii::$app->request->post()['links']);
+            $link->save();
+
             foreach ($contents as $index => $content) {
                 if (Yii::$app->request->post('content-'.$index)) {
                     $contents[$index]->load(Yii::$app->request->post());
@@ -180,6 +183,24 @@ class DefaultController extends Controller
                         $contents[$index]->save();
                     }
                 }
+            }
+
+            return [
+                'flash' => 'success',
+                'message' => 'Изменения приняты'
+            ];
+        }
+    }
+
+    public function actionSaveLink($links_id)
+    {
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+
+            $link = Links::findOne($links_id);
+            if (Yii::$app->request->post()) {
+                $link->load(Yii::$app->request->post());
+                $link->save();
             }
 
             return [

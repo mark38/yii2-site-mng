@@ -9,6 +9,7 @@ use common\models\main\Views;
 
 /**
  * @var $this \yii\web\View
+ * @var $link \common\models\main\Links
  * @var $galleryImage \common\models\gallery\GalleryImagesForm
  */
 
@@ -100,6 +101,7 @@ if ($galleryImage->large) {
                     [
                         'label' => 'SEO',
                         'content' => '<p>' .
+                            $form->field($link, 'h1') .
                             $form->field($link, 'keywords')->textarea() .
                             $form->field($link, 'description')->textarea() .
                             $form->field($link, 'priority') .

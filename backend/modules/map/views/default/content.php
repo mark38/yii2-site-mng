@@ -21,10 +21,37 @@ MapAsset::register($this);
 ?>
 
 <div class="row">
+
+    <div class="col-sm-6">
+        <div class="box box-default">
+            <div class="box-body">
+                <?php
+                $form = ActiveForm::begin([
+                    'action' => Url::to(['save-link', 'links_id' => Yii::$app->request->get('links_id')]),
+                    'options' => [
+                        'onsubmit' => "return false;",
+                        'id' => 'form-link',
+                    ]
+                ]);
+
+                echo $form->field($link, 'title')->label('Заголовок (title)');
+                echo $form->field($link, 'h1')->label('Заголовок (h1)');
+
+                echo Html::submitButton('Сохранить', [
+                    'onclick' => "link.save()",
+                    'class' => 'btn btn-sm btn-primary btn-flat'
+                ]);
+
+                ActiveForm::end();
+                ?>
+            </div>
+        </div>
+    </div>
+
     <div class="col-sm-6">
         <div class="box box-default">
             <div class="box-header with-border">
-                <h3 class="box-title">Параметры ссылки</h3> <?=Html::a('<i class="fa fa-external-link"></i>', $link->url, ['target' => '_blank'])?>
+                <h3 class="box-title">Отсальные параметры ссылки</h3> <?=Html::a('<i class="fa fa-external-link"></i>', $link->url, ['target' => '_blank'])?>
                 <div class="box-tools pull-right"></div>
             </div>
             <div class="box-body">
@@ -69,94 +96,98 @@ MapAsset::register($this);
                 </div>
             </div>
         </div>
+
     </div>
+
 </div>
 
-<div>
-    <?php
-    foreach ($contents as $index => $content) {
-        $form = ActiveForm::begin([
-            'action' => Url::to(['save-content', 'links_id' => Yii::$app->request->get('links_id'), 'categories_id' => Yii::$app->request->get('categories_id')]),
-            'options' => [
-                'onsubmit' => "return false;",
-                'id' => 'form-content-'.$index,
-                'style' => 'margin-bottom: 30px;'
-            ]
-        ]);
-        echo Html::beginTag('div', ['class' => 'row']);
-
-        echo Html::tag('div',
-            $form->field($contents[$index], 'text')->widget(CKEditor::className(), [
+<div class="box box-primary">
+    <div class="box-body">
+        <?php
+        foreach ($contents as $index => $content) {
+            $form = ActiveForm::begin([
+                'action' => Url::to(['save-content', 'links_id' => Yii::$app->request->get('links_id'), 'categories_id' => Yii::$app->request->get('categories_id')]),
                 'options' => [
-                    'rows' => 6,
-                    'name' => 'content-'.$index,
-                    'id' => 'content-'.$index
-                ],
-                'preset' => 'full',
-                'clientOptions' => [
-                    'height' => 300,
-                    'allowedContent' => true,
-                    'toolbar' => [
-                        [
-                            'name' => 'row1',
-                            'items' => [
-                                'Maximize', 'Source', '-',
-                                'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-',
-                                'Bold', 'Italic', 'Underline', 'Strike', '-',
-                                'Subscript', 'Superscript', 'RemoveFormat', '-',
-                                'TextColor', 'BGColor', '-',
-                                'NumberedList', 'BulletedList', '-',
-                                'Outdent', 'Indent', '-', 'Blockquote', '-',
-                                'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'list', 'indent', 'blocks', 'align', 'bidi', '-',
+                    'onsubmit' => "return false;",
+                    'id' => 'form-content-'.$index
+                ]
+            ]);
+
+            echo Html::beginTag('div', ['class' => 'row']);
+
+            echo Html::tag('div',
+                $form->field($contents[$index], 'text')->widget(CKEditor::className(), [
+                    'options' => [
+                        'rows' => 6,
+                        'name' => 'content-'.$index,
+                        'id' => 'content-'.$index
+                    ],
+                    'preset' => 'full',
+                    'clientOptions' => [
+                        'height' => 300,
+                        'allowedContent' => true,
+                        'toolbar' => [
+                            [
+                                'name' => 'row1',
+                                'items' => [
+                                    'Maximize', 'Source', '-',
+                                    'Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-',
+                                    'Bold', 'Italic', 'Underline', 'Strike', '-',
+                                    'Subscript', 'Superscript', 'RemoveFormat', '-',
+                                    'TextColor', 'BGColor', '-',
+                                    'NumberedList', 'BulletedList', '-',
+                                    'Outdent', 'Indent', '-', 'Blockquote', '-',
+                                    'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', 'list', 'indent', 'blocks', 'align', 'bidi', '-',
+                                ],
                             ],
-                        ],
-                        [
-                            'name' => 'row2',
-                            'items' => [
-                                'Link', 'Unlink', 'Anchor', '-',
-                                'ShowBlocks', '-',
-                                'Image', 'Table', 'HorizontalRule', 'SpecialChar', 'Iframe', '-',
-                                'NewPage', 'Print', 'Templates', '-',
-                                'Undo', 'Redo', '-',
-                                'Find', 'SelectAll', 'Format', 'Font', 'FontSize',
+                            [
+                                'name' => 'row2',
+                                'items' => [
+                                    'Link', 'Unlink', 'Anchor', '-',
+                                    'ShowBlocks', '-',
+                                    'Image', 'Table', 'HorizontalRule', 'SpecialChar', 'Iframe', '-',
+                                    'NewPage', 'Print', 'Templates', '-',
+                                    'Undo', 'Redo', '-',
+                                    'Find', 'SelectAll', 'Format', 'Font', 'FontSize',
+                                ],
                             ],
                         ],
                     ],
-                ],
-                //'clientOptions' => ['config.extraPlugins' => 'codeSnippet']
-            ])->label(false),
-            ['class' => 'col-sm-9']
-        );
+                    //'clientOptions' => ['config.extraPlugins' => 'codeSnippet']
+                ])->label(false),
+                ['class' => 'col-sm-9']
+            );
 
-        echo Html::beginTag('div', ['class' => 'col-sm-3']);
-        echo $form->field($contents[$index], 'css_class');
-        echo $form->field($contents[$index], 'seq');
-        echo Html::submitButton('Сохранить', [
-            'onclick' => "content.save({$index})",
-            'class' => 'btn btn-sm btn-primary btn-flat'
-        ]);
-        if ($index > 0) {
-            echo '&nbsp;';
-            Modal::begin([
-                'header' => 'Блок контента #'.($index + 1),
-                'toggleButton' => ['label' => 'Удалить', 'class' => 'btn btn-danger btn-flat btn-sm'],
-                'footer' => Html::a('Отмена', '#', ['data-dismiss' => 'modal', 'class' => 'btn btn-default btn-flat btn-sm']) .
-                    Html::a('Удалить', Url::current(['action' => 'del', 'id' => $content->id]), ['class' => 'btn btn-danger btn-flat btn-sm']),
+            echo Html::beginTag('div', ['class' => 'col-sm-3']);
+            echo $form->field($contents[$index], 'css_class');
+            echo $form->field($contents[$index], 'seq');
+            echo Html::submitButton('Сохранить', [
+                'onclick' => "content.save({$index})",
+                'class' => 'btn btn-sm btn-primary btn-flat'
             ]);
-            echo '<p>Контент будет удалён со всем содержимым.</p><p>Действительно удалить?</p>';
-            Modal::end();
+            if ($index > 0) {
+                echo '&nbsp;';
+                Modal::begin([
+                    'header' => 'Блок контента #'.($index + 1),
+                    'toggleButton' => ['label' => 'Удалить', 'class' => 'btn btn-danger btn-flat btn-sm'],
+                    'footer' => Html::a('Отмена', '#', ['data-dismiss' => 'modal', 'class' => 'btn btn-default btn-flat btn-sm']) .
+                        Html::a('Удалить', Url::current(['action' => 'del', 'id' => $content->id]), ['class' => 'btn btn-danger btn-flat btn-sm']),
+                ]);
+                echo '<p>Контент будет удалён со всем содержимым.</p><p>Действительно удалить?</p>';
+                Modal::end();
+            }
+
+            echo Html::endTag('div');
+
+            echo Html::endTag('div');
+            ActiveForm::end();
+
+            echo '<hr>';
         }
 
-        echo Html::endTag('div');
-
-        echo Html::endTag('div');
-        ActiveForm::end();
-
-        echo '<hr>';
-    }
-
-    echo Html::tag('div', Html::a('<i class="fa fa-plus"></i> Добавить блок с контентом', Url::current(['action' => 'add']), ['class' => 'btn btn-default btn-flat']), ['class' => 'text-center']);
-    ?>
+        echo Html::tag('div', Html::a('<i class="fa fa-plus"></i> Добавить блок с контентом', Url::current(['action' => 'add']), ['class' => 'btn btn-default btn-flat']), ['class' => 'text-center']);
+        ?>
+    </div>
 </div>
 
 

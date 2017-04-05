@@ -34,6 +34,7 @@ use common\models\gallery\GalleryImages;
  * @property string $css_class
  * @property string $icon
  * @property integer $avg_rating
+ * @property string $h1
  *
  * @property Contents[] $contents
  * @property Layouts $layouts
@@ -63,7 +64,7 @@ class Links extends \yii\db\ActiveRecord
             [['anchor'], 'required'],
             [['categories_id', 'layouts_id', 'views_id', 'parent', 'child_exist', 'level', 'seq', 'gallery_images_id', 'start', 'created_at', 'updated_at', 'state', 'content_nums'], 'integer'],
             [['priority', 'avg_rating'], 'number'],
-            [['url', 'name', 'anchor', 'css_class', 'icon'], 'string', 'max' => 255],
+            [['url', 'name', 'anchor', 'css_class', 'icon', 'h1'], 'string', 'max' => 255],
             [['title', 'keywords', 'description'], 'string', 'max' => 1024],
             [['url'], 'unique']
         ];
@@ -99,6 +100,7 @@ class Links extends \yii\db\ActiveRecord
             'css_class' => 'Класы стилей',
             'icon' => 'Иконка',
             'avg_rating' => 'Средний рейтинг',
+            'h1' => 'h1',
         ];
     }
 
