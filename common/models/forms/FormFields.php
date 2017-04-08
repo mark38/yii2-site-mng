@@ -11,6 +11,7 @@ use Yii;
  * @property integer $form_types_id
  * @property string $name
  * @property integer $visible
+ * @property string $label
  *
  * @property FormTypes $formTypes
  */
@@ -31,7 +32,7 @@ class FormFields extends \yii\db\ActiveRecord
     {
         return [
             [['form_types_id', 'visible'], 'integer'],
-            [['name'], 'string', 'max' => 255],
+            [['name', 'label'], 'string', 'max' => 255],
             [['form_types_id'], 'exist', 'skipOnError' => true, 'targetClass' => FormTypes::className(), 'targetAttribute' => ['form_types_id' => 'id']],
         ];
     }
@@ -46,6 +47,7 @@ class FormFields extends \yii\db\ActiveRecord
             'form_types_id' => 'Form Types ID',
             'name' => 'Name',
             'visible' => 'Visible',
+            'label' => 'Label'
         ];
     }
 
