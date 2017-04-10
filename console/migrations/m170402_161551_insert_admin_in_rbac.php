@@ -1,16 +1,12 @@
 <?php
 
 use yii\db\Migration;
-use yii\console\controllers\MigrateController;
 
 
-class m170402_161551_rbac_init extends Migration
+class m170402_161551_insert_admin_in_rbac extends Migration
 {
     public function up()
     {
-        $migration = new MigrateController('migrate', Yii::$app);
-        $migration->run('up', ['migrationPath' => '@yii/rbac/migrations', 'interactive' => false]);
-
         $this->insert('{{%auth_item}}', [
             'name' => 'admin',
             'type' => 1,
@@ -34,9 +30,6 @@ class m170402_161551_rbac_init extends Migration
         $this->delete('{{%auth_item}}', [
             'name' => 'admin'
         ]);
-
-        /*$migration = new MigrateController('migrate', Yii::$app);
-        $migration->run('down', ['migrationPath' => '@yii/rbac/migrations', 'interactive' => false]);*/
     }
 
     /*
