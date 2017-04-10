@@ -43,7 +43,7 @@ $this->title = 'Управление пользователями';
                                     'format' => 'raw',
                                     'attribute' => 'status',
                                     'value' => function($data) {
-                                        return $data->status == 10 ? '<span class="text-success">активен</span>' : '<span class="text-danger">неактивен</span>';
+                                        return $data->status == 10 ? '<span class="text-success">активен</span>' : '<span class="text-danger">заблокирован</span>';
                                     }
                                 ],
                                 [

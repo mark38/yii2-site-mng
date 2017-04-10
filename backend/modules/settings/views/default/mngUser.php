@@ -1,9 +1,9 @@
 <?php
 
 use yii\helpers\Html;
-use yii\bootstrap\ActiveForm;
+use kartik\form\ActiveForm;
 use yii\bootstrap\Modal;
-use kartik\popover\PopoverX;
+use kartik\builder\Form;
 
 /**
  * @var $user \common\models\User;
@@ -27,9 +27,8 @@ if(Yii::$app->request->get('id')) {
     </div>
     <div class="box-body">
         <?php $form = ActiveForm::begin([
-            'method' => 'post',
-            'ajaxDataType' => 'json',
-            'layout' => 'horizontal',
+            'type' => ActiveForm::TYPE_HORIZONTAL,
+            'formConfig' => ['labelSpan' => 2]
         ]); ?>
 
         <?= $form->field($user, 'username')->textInput(['maxlength' => true]) ?>

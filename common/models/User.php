@@ -54,6 +54,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['role', 'string']
         ];
     }
 
@@ -64,6 +65,7 @@ class User extends ActiveRecord implements IdentityInterface
             'email' => 'Email',
             'status' => 'Статус',
             'created_at' => 'Дата создания',
+            'role' => 'Роль'
         ];
     }
 
