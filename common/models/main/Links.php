@@ -39,7 +39,7 @@ use common\models\gallery\GalleryImages;
  * @property Contents[] $contents
  * @property Layouts $layouts
  * @property Views $views
- * @property Categories $categories
+ * @property Categories $category
  * @property Links $parentLink
  * @property Links[] $links
  * @property Redirects[] $redirects

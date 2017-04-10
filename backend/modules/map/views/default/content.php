@@ -13,8 +13,8 @@ use iutbay\yii2kcfinder\KCFinder;
 /** @var $contents \common\models\main\Contents */
 
 $this->title = 'Управление контентом';
-$this->params['breadcrumbs'][] = ['label' => 'Управление ссылками', 'url' => ['/map/links', 'categories_id' => $link->categories_id]];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = ['label' => 'Карта сайта', 'url' => ['/map/index', 'categories_id' => $link->categories_id]];
+$this->params['breadcrumbs'][] = ['label' => 'Управление ссылками "'.$link->category->comment.'"', 'url' => ['/map/links', 'categories_id' => $link->categories_id]];
 
 MapAsset::register($this);
 
