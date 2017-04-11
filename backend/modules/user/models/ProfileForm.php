@@ -13,6 +13,8 @@ class ProfileForm extends Model
     public $password;
     public $password_repeat;
     public $user_id;
+    public $role;
+    public $status;
 
     public function rules()
     {
@@ -20,7 +22,7 @@ class ProfileForm extends Model
             [['username', 'email'], 'trim'],
             [['username', 'email'], 'required'],
             [['username', 'email'], 'string', 'max' => 255],
-            [['user_id'], 'integer'],
+            [['user_id', 'role', 'status'], 'integer'],
             [['email'], 'email'],
             /*[['password', 'password_repeat'], 'required'],*/
             [['password', 'password_repeat'], 'string', 'min' => 6],
@@ -31,8 +33,13 @@ class ProfileForm extends Model
     public function save()
     {
         $user = User::findOne($this->user_id);
+        if (!$user) {
+            $user = new User();
+        }
         $user->username = $this->username;
         $user->email = $this->email;
+        $user->role = $this->role;
+        $user->status = $this->status;
         if ($this->password) {
             $user->setPassword($this->password);
             $user->generateAuthKey();
@@ -49,6 +56,8 @@ class ProfileForm extends Model
             'email' => 'Электронная почта',
             'password' => 'Пароль',
             'password_repeat' => 'Повтор папроя',
+            'role' => 'Группа',
+            'status' => 'Статус'
         ];
     }
 }
