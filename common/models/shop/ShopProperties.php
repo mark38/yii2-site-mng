@@ -14,6 +14,7 @@ use Yii;
  * @property string $url
  * @property integer $seq
  * @property integer $state
+ * @property string $unit
  */
 class ShopProperties extends \yii\db\ActiveRecord
 {
@@ -35,6 +36,7 @@ class ShopProperties extends \yii\db\ActiveRecord
         return [
             [['seq', 'state'], 'integer'],
             [['verification_code', 'name', 'anchor', 'url'], 'string', 'max' => 255],
+            [['unit'], 'string', 'max' => 32],
         ];
     }
 
@@ -45,12 +47,13 @@ class ShopProperties extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'verification_code' => 'Verification Code',
-            'name' => 'Name',
-            'anchor' => 'Anchor',
-            'url' => 'Url',
-            'seq' => 'Seq',
+            'verification_code' => 'Код',
+            'name' => 'Наименование',
+            'anchor' => 'Наименование на сайте',
+            'url' => 'Имя латиницей',
+            'seq' => 'Порядковый номер',
             'state' => 'State',
+            'unit' => 'Еденица измерения',
         ];
     }
 

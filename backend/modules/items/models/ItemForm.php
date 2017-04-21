@@ -12,9 +12,9 @@ class ItemForm extends Items
 
     public function rules()
     {
-        return [array_merge(parent::rules(),[
+        return array_merge(parent::rules(),[
             [['text'], 'string'],
-        ])];
+        ]);
     }
 
     public function afterFind()
@@ -26,8 +26,8 @@ class ItemForm extends Items
 
     public function attributeLabels()
     {
-        return [array_merge(parent::attributeLabels(), [
+        return array_merge(parent::attributeLabels(), [
             'text' => 'Контент',
-        ])];
+        ]);
     }
 }

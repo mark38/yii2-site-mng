@@ -2,8 +2,8 @@
 
 namespace common\models\shop;
 
-use common\models\main\Links;
 use Yii;
+use common\models\main\Links;
 
 /**
  * This is the model class for table "shop_group_properties".

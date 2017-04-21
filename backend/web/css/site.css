@@ -40,6 +40,10 @@ a {
     cursor: pointer;
 }
 
+.root-action .caret {
+    display: none;
+}
+
 /* add sorting icons to gridview sort links */
 a.asc:after, a.desc:after {
     position: relative;

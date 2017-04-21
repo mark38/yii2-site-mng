@@ -14,10 +14,13 @@ use common\models\main\Links;
  * @property string $name
  *
  * @property ShopGoods[] $shopGoods
+ * @property ShopGroupProperties[] $shopGroupProperties
  * @property Links $link
  */
 class ShopGroups extends \yii\db\ActiveRecord
 {
+    public $groupProperties;
+
     /**
      * @inheritdoc
      */
@@ -33,7 +36,8 @@ class ShopGroups extends \yii\db\ActiveRecord
     {
         return [
             [['links_id'], 'integer'],
-            [['verification_code', 'name'], 'string', 'max' => 255]
+            [['verification_code', 'name'], 'string', 'max' => 255],
+            ['groupProperties', 'each', 'rule' => ['integer']],
         ];
     }
 
@@ -47,6 +51,7 @@ class ShopGroups extends \yii\db\ActiveRecord
             'links_id' => 'Links ID',
             'verification_code' => 'Verification Code',
             'name' => 'Name',
+            'groupProperties' => 'Свойства номенклатуры в группе',
         ];
     }
 
@@ -56,6 +61,11 @@ class ShopGroups extends \yii\db\ActiveRecord
     public function getShopGoods()
     {
         return $this->hasMany(ShopGoods::className(), ['shop_groups_id' => 'id']);
+    }
+
+    public function getShopGroupProperties()
+    {
+        return $this->hasMany(ShopGroupProperties::className(), ['shop_groups_id' => 'id']);
     }
 
     /**

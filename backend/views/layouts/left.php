@@ -9,7 +9,7 @@ $items[] = [
 ];
 $items[] = [
     'label' => 'Карта сайта',
-    'icon' => 'fa fa-sitemap',
+    'icon' => 'sitemap',
     'url' => ['/map/index']
 ];
 
@@ -22,7 +22,7 @@ if ($modules) {
     foreach ($modules as $model) {
         $items[] = [
             'label' => $model->name,
-            'icon' => $model->icon,
+            'icon' => (preg_replace('/fa fa-/', '', $model->icon)),
             'url' => [$model->url],
         ];
     }

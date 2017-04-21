@@ -35,6 +35,8 @@ $link_close = [''];
         <?=$form->field($property, 'name')?>
         <?=$form->field($property, 'anchor')?>
         <?=$form->field($property, 'url')?>
+        <?=$form->field($property, 'unit')?>
+        <?=$form->field($property, 'seq')?>
         <?=$form->field($property, 'range')->checkbox()?>
         <?=$form->field($property, 'state')->checkbox()?>
 

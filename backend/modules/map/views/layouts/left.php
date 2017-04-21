@@ -7,15 +7,15 @@ $items[] = ['label' => 'Категории сайта', 'options' => ['class' =>
 foreach (Categories::find()->where(['visible' => 1])->orderBy(['seq' => SORT_ASC])->all() as $category) {
     $items[] = [
         'label' => $category->comment,
-        'icon' => 'fa fa-sitemap',
+        'icon' => 'sitemap',
         'url' => ['/map/links', 'categories_id' => $category->id],
         'active' => $this->context->module->id == 'map' && Yii::$app->request->get('categories_id') == $category->id ? true : false,
     ];
 }
 $items[] = ['label' => 'Дополнительно', 'options' => ['class' => 'header']];
-$items[] = ['label' => 'Редиректы', 'icon' => 'fa fa-reply', 'url' => '#'];
-$items[] = ['label' => 'Шаблоны', 'icon' => 'fa fa-circle-thin', 'url' => '#'];
-$items[] = ['label' => 'Виды', 'icon' => 'fa fa-circle-thin', 'url' => '#'];
+$items[] = ['label' => 'Редиректы', 'icon' => 'reply', 'url' => '#'];
+$items[] = ['label' => 'Шаблоны', 'icon' => 'circle-thin', 'url' => '#'];
+$items[] = ['label' => 'Виды', 'icon' => 'circle-thin', 'url' => '#'];
 
 ?>
 <aside class="main-sidebar">

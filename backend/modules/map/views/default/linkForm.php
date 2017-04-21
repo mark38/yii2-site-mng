@@ -111,7 +111,7 @@ if ($galleryImage->large) {
             ])?>
         </div>
 
-        <?= Html::a('Отмена', $link_close, ['class' => 'btn btn-default btn-sm btn-flat'])?>
+        <?= Html::a('Закрыть', $link_close, ['class' => 'btn btn-default btn-sm btn-flat'])?>
 
         <?= Html::submitButton(($link->id ? 'Изменить' : 'Добавить'), [
                 'class' => 'btn btn-primary btn-flat btn-sm',

@@ -87,9 +87,9 @@ class Links extends \yii\db\ActiveRecord
             'child_exist' => 'Child Exist',
             'level' => 'Level',
             'seq' => 'Seq',
-            'title' => 'Заголовок',
-            'keywords' => 'Заполнение meta-тека "Keywords"',
-            'description' => 'Заполнение meta-тека "Description"',
+            'title' => 'Заголовок Title',
+            'keywords' => 'Значение тега Keywords',
+            'description' => 'Значение тега Description',
             'gallery_images_id' => 'Изображение',
             'start' => 'Главная',
             'created_at' => 'Created At',
@@ -100,7 +100,7 @@ class Links extends \yii\db\ActiveRecord
             'css_class' => 'Класы стилей',
             'icon' => 'Иконка',
             'avg_rating' => 'Средний рейтинг',
-            'h1' => 'h1',
+            'h1' => 'Заголовок h1',
         ];
     }
 

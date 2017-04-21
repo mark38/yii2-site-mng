@@ -12,18 +12,19 @@ echo Html::tag('tr',
     Html::tag('th', '#') .
     Html::tag('th', 'Наименование') .
     Html::tag('th', 'Наименование на сайте') .
-    Html::tag('th', 'Имя латиницей')
+    Html::tag('th', 'Имя латиницей') .
+    Html::tag('th', 'Еденица измерения')
 );
 echo Html::endTag('thead');
 
 /** @var \common\models\shop\ShopProperties $property */
-
 foreach ($properties as $num => $property) {
     echo Html::tag('tr',
         Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($num+1))) .
         Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($property->name))) .
         Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($property->anchor))) .
         Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($property->url))) .
+        Html::tag('td', Html::tag(($property->state == 1 ? 'span' : 'del'), ($property->unit))) .
         Html::tag('td', ButtonDropdown::widget([
             'label' => '<i class="glyphicon glyphicon-option-vertical"></i>',
             'dropdown' => [
