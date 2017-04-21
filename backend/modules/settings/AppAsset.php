@@ -13,7 +13,7 @@ class AppAsset extends AssetBundle
      * @inheritdoc
      */
     public $css = [
-        'settings.css',
+
     ];
     /**
      * @inheritdoc

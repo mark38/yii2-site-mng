@@ -26,6 +26,8 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
 
+    public $role;
+
     /**
      * @inheritdoc
      */
@@ -52,6 +54,18 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['role', 'string']
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'username' => 'Логин',
+            'email' => 'Email',
+            'status' => 'Статус',
+            'created_at' => 'Дата создания',
+            'role' => 'Роль'
         ];
     }
 
