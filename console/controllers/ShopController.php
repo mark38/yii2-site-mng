@@ -1,5 +1,5 @@
 <?php
-namespace console\controllers;
+namespace app\controllers;
 
 use Yii;
 use yii\console\Controller;
