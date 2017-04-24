@@ -9,12 +9,15 @@ use common\models\main\Links;
  * This is the model class for table "shop_groups".
  *
  * @property integer $id
- * @property string $links_id
- * @property string $code
+ * @property integer $links_id
+ * @property string $verification_code
  * @property string $name
+ * @property integer $parent_id
  *
  * @property ShopGoods[] $shopGoods
  * @property ShopGroupProperties[] $shopGroupProperties
+ * @property ShopGroups $parent
+ * @property ShopGroups[] $shopGroups
  * @property Links $link
  */
 class ShopGroups extends \yii\db\ActiveRecord
@@ -35,8 +38,10 @@ class ShopGroups extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['links_id'], 'integer'],
+            [['links_id', 'parent_id'], 'integer'],
             [['verification_code', 'name'], 'string', 'max' => 255],
+            [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => ShopGroups::className(), 'targetAttribute' => ['parent_id' => 'id']],
+            [['links_id'], 'exist', 'skipOnError' => true, 'targetClass' => Links::className(), 'targetAttribute' => ['links_id' => 'id']],
             ['groupProperties', 'each', 'rule' => ['integer']],
         ];
     }
@@ -51,7 +56,7 @@ class ShopGroups extends \yii\db\ActiveRecord
             'links_id' => 'Links ID',
             'verification_code' => 'Verification Code',
             'name' => 'Name',
-            'groupProperties' => 'Свойства номенклатуры в группе',
+            'parent_id' => 'Parent ID',
         ];
     }
 
@@ -63,9 +68,28 @@ class ShopGroups extends \yii\db\ActiveRecord
         return $this->hasMany(ShopGoods::className(), ['shop_groups_id' => 'id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getShopGroupProperties()
     {
         return $this->hasMany(ShopGroupProperties::className(), ['shop_groups_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getParent()
+    {
+        return $this->hasOne(ShopGroups::className(), ['id' => 'parent_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getShopGroups()
+    {
+        return $this->hasMany(ShopGroups::className(), ['parent_id' => 'id']);
     }
 
     /**

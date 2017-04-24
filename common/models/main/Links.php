@@ -47,6 +47,8 @@ use common\models\gallery\GalleryImages;
  */
 class Links extends \yii\db\ActiveRecord
 {
+    public $state = true;
+
     /**
      * @inheritdoc
      */

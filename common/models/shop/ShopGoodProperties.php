@@ -15,8 +15,8 @@ use Yii;
  * @property integer $state
  *
  * @property ShopGoods $shopGoods
- * @property ShopProperties $shopProperties
- * @property ShopPropertyValues $shopPropertyValues
+ * @property ShopProperties $shopProperty
+ * @property ShopPropertyValues $shopPropertyValue
  */
 class ShopGoodProperties extends \yii\db\ActiveRecord
 {

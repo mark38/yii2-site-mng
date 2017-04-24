@@ -83,7 +83,7 @@ class ProductLinks extends Widget
                     'dropdown' => [
                         'items' => [
                             ['label' => 'Параметры', 'url' => ['links', 'action' => 'ch', 'id' => $link->id, 'type' => 'group']],
-                            ['label' => 'Добавить подгруппу', 'url' => ['links']],
+                            ['label' => 'Добавить подгруппу', 'url' => ['links', 'action' => 'add', 'parent' => $link->id, 'type' => 'group']],
                             ['label' => 'Добавить номенклатуру', 'url' => ['links', 'action' => 'add', 'parent' => $link->id, 'type' => 'good']],
                         ],
                     ],

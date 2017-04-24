@@ -46,13 +46,14 @@ class ProductsController extends Controller
                         $group = new GroupForm();
                         $group->groupProperties = ArrayHelper::getColumn($group->shopGroupProperties, 'shop_properties_id');
                     }
+                    $groupParent = ShopGroups::findOne(['links_id' => $parent]);
+                    if ($groupParent) $group->parent_id = $groupParent->id;
                     break;
                 case "good":
                     $group = ShopGroups::findOne(['links_id' => $parent]);
                     if ($id) {
                         $link = LinkGoodForm::findOne($id);
                         $good = GoodForm::findOne(['links_id' => $id]);
-                        $link->state = $good->state;
                     } else {
                         $link = new LinkGoodForm();
                         $good = new GoodForm();

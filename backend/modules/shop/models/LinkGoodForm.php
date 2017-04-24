@@ -8,7 +8,6 @@ use common\models\main\Links;
 
 class LinkGoodForm extends Links
 {
-    public $state = true;
     public $text;
 
     public function init()
