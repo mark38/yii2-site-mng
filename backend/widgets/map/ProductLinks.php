@@ -77,32 +77,32 @@ class ProductLinks extends Widget
             }
 
             $shopGroup = ShopGroups::findOne(['links_id' => $link->id]);
+            if ($shopGroup) {
+                $actions = ButtonDropdown::widget([
+                    'label' => '<i class="glyphicon glyphicon-option-vertical"></i>',
+                    'dropdown' => [
+                        'items' => [
+                            ['label' => 'Параметры', 'url' => ['links', 'action' => 'ch', 'id' => $link->id, 'type' => 'group']],
+                            ['label' => 'Добавить подгруппу', 'url' => ['links']],
+                            ['label' => 'Добавить номенклатуру', 'url' => ['links', 'action' => 'add', 'parent' => $link->id, 'type' => 'good']],
+                        ],
+                    ],
+                    'encodeLabel' => false,
+                    'options' => ['class' => 'btn btn-link btn-xs']
+                ]);
+            } else {
+                $actions = Html::a('<i class="fa fa-cog" aria-hidden="true"></i>', ['links', 'action' => 'ch', 'id' => $link->id, 'parent' => $link->parent, 'type' => 'good'], ['class' => 'btn btn-link btn-xs']);
+            }
 
             $html .= Html::tag('li',
                 Html::tag('div',
+
                     Html::beginTag('div', ['class' => 'row']) .
-                    Html::tag('div',
-                        $childLinkAction .
-                        Html::tag(($shopGroup ? 'strong' : 'span'), $link->anchor),
-                        ['class' => 'col-sm-9 col-md-10']) .
-                    Html::tag('div',
-                        ButtonDropdown::widget([
-                            'label' => '<i class="glyphicon glyphicon-option-vertical"></i>',
-                            'dropdown' => [
-                                'items' => [
-                                    ['label' => 'Параметры', 'url' => ['links', 'action' => 'ch', 'id' => $link->id, 'type' => 'group']],
-                                    ['label' => 'Добавить подгруппу', 'url' => ['links']],
-                                    ['label' => 'Добавить номенклатуру', 'url' => ['links', 'action' => 'add', 'parent' => $link->id, 'type' => 'good']],
-                                ],
-                            ],
-                            'encodeLabel' => false,
-                            'options' => [
-                                'class' => 'btn btn-link btn-xs',
-                            ]
-                        ]), ['class' => 'col-sm-3 col-md-2 action text-right']) .
-                    Html::endTag('div'), [
-                        'class' => 'inner' . ($link->id == $this->linksId ? ' active' : '')
-                    ]) .
+                    Html::tag('div', $childLinkAction . Html::tag(($shopGroup ? 'strong' : 'span'), $link->anchor), ['class' => 'col-sm-9 col-md-10']) .
+                    Html::tag('div', $actions, ['class' => 'col-sm-3 col-md-2 action text-right']) .
+                    Html::endTag('div'),
+
+                    ['class' => 'inner' . ($link->id == $this->linksId ? ' active' : '')]) .
                 $childrenBlock
             );
         }

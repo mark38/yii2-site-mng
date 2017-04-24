@@ -2,17 +2,21 @@
 
 namespace app\modules\shop\controllers;
 
+use common\models\gallery\GalleryGroups;
+use common\models\gallery\GalleryImagesForm;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use common\models\main\Links;
 use common\models\shop\ShopGroups;
+use yii\web\Link;
 use yii\web\Response;
 use backend\modules\shop\models\LinkGroupForm;
 use backend\modules\shop\models\GoodForm;
 use backend\modules\shop\models\GroupForm;
 use backend\modules\shop\models\LinkGoodForm;
 use backend\widgets\map\ProductLinks;
+use yii\web\UploadedFile;
 
 class ProductsController extends Controller
 {
@@ -28,6 +32,7 @@ class ProductsController extends Controller
         $link = false;
         $group = false;
         $good = false;
+        $galleryImage = false;
 
         if ($action) {
             switch ($type) {
@@ -51,10 +56,10 @@ class ProductsController extends Controller
                     } else {
                         $link = new LinkGoodForm();
                         $good = new GoodForm();
-
+                        $link->parent = $parent;
                     }
-                    $link->parent = $parent;
                     $good->shop_groups_id = $group->id;
+                    $galleryImage = $link->gallery_images_id ? GalleryImagesForm::findOne($link->gallery_images_id) : new GalleryImagesForm();
                     break;
             }
 
@@ -75,12 +80,38 @@ class ProductsController extends Controller
                         $good->name = !$good->id ? $link->anchor : $good->name;
                         $good->state = $link->state;
                         $good->save();
+
+                        $galleryImage->load(Yii::$app->request->post());
+                        if (!$galleryImage->gallery_groups_id) {
+                            $galleryGroup = new GalleryGroups();
+                            $galleryGroup->gallery_types_id = Yii::$app->params['shop']['gallery']['good'];
+                            $galleryGroup->name = $link->anchor;
+                            $galleryGroup->save();
+                            $galleryImage->gallery_groups_id = $galleryGroup->id;
+                        }
+                        $galleryImage->linksId = $link->id;
+                        $galleryImage->name = $link->anchor;
+                        $galleryImage->imageSmall = UploadedFile::getInstance($galleryImage, 'imageSmall');
+                        $galleryImage->imageLarge = UploadedFile::getInstance($galleryImage, 'imageLarge');
+                        $galleryImage->upload();
+                        $galleryImage->save();
                         break;
                 }
             }
         }
 
-        return $this->render('links', compact('action', 'type', 'catalogLink', 'link', 'group', 'good'));
+        return $this->render('links', compact('action', 'type', 'catalogLink', 'link', 'group', 'good', 'galleryImage'));
+    }
+
+    public function actionLinkDel($id)
+    {
+        $link = Links::findOne($id);
+        if ($link) {
+            Yii::$app->session->setFlash('success', 'Запись удалена');
+            $link->delete();
+        }
+
+        return $this->redirect(['links']);
     }
 
     public function actionGetChildren()

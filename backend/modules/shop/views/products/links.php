@@ -10,10 +10,10 @@ use yii\helpers\Url;
  * @var $catalogLink \common\models\main\Links
  * @var $link \backend\modules\shop\models\LinkGroupForm
  * @var $group \common\models\shop\ShopGroups
+ * @var $galleryImage \common\models\gallery\GalleryImagesForm
  */
 
 $this->title = 'Управление списком товара и их группами';
-
 ?>
 
 <div class="row">
@@ -28,8 +28,8 @@ $this->title = 'Управление списком товара и их гру�
                         'dropdown' => [
                             'items' => [
                                 ['label' => 'Добавить в корень каталога:'],
-                                ['label' => 'Новую группу', 'url' => Url::current(['action' => 'add', 'parent' => $catalogLink->id, 'type' => 'group'])],
-                                ['label' => 'Новую номенклатуру', 'url' => Url::current(['action' => 'add', 'parent' => $catalogLink->id, 'type' => 'good'])],
+                                ['label' => 'Новую группу', 'url' => Url::to(['action' => 'add', 'parent' => $catalogLink->id, 'type' => 'group'])],
+                                ['label' => 'Новую номенклатуру', 'url' => Url::to(['action' => 'add', 'parent' => $catalogLink->id, 'type' => 'good'])],
                             ],
                         ],
                         'encodeLabel' => false,
@@ -53,7 +53,7 @@ $this->title = 'Управление списком товара и их гру�
         <?php if ($action) {
             switch ($type) {
                 case "group": echo $this->render('groupForm', compact('action', 'link', 'group')); break;
-                case "good": echo $this->render('goodForm', compact('action', 'link', 'good')); break;
+                case "good": echo $this->render('goodForm', compact('action', 'link', 'good', 'galleryImage')); break;
             }
         }?>
     </div>

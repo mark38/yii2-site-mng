@@ -25,6 +25,7 @@ $linkClose = ['/shop/products/links'];
         <h3>
             <?php switch ($action) {
                 case "add": echo 'Новая группа'; break;
+                case "ch": echo 'Редактирование номенклатуры "'.$group->name.'"'; break;
             }?>
         </h3>
         <div class="box-tools pull-right"><?=Html::a('<i class="fa fa-times"></i>', $linkClose, ['class' => 'btn btn-box-tool'])?></div>
@@ -59,16 +60,6 @@ $linkClose = ['/shop/products/links'];
                         'active' => true
                     ],
                     [
-                        'label' => 'Контент',
-                        'content' => Html::beginTag('p') .
-                            Html::endTag('p'),
-                    ],
-                    [
-                        'label' => 'Медиа',
-                        'content' => Html::beginTag('p') .
-                            Html::endTag('p'),
-                    ],
-                    [
                         'label' => 'Свойства',
                         'content' => Html::beginTag('p') .
                             $form->field($group, 'groupProperties')->checkboxList(ArrayHelper::map(ShopProperties::find()->orderBy(['seq' => SORT_ASC])->all(), 'id', 'anchor')) .
@@ -92,9 +83,9 @@ $linkClose = ['/shop/products/links'];
                 'header' => $link->anchor.' '.Html::a('<i class="fa fa-external-link"></i>', $link->url, ['target' => '_blank']),
                 'toggleButton' => ['label' => 'Удалить', 'class' => 'btn btn-danger btn-flat btn-sm'],
                 'footer' => Html::a('Отмена', '#', ['data-dismiss' => 'modal', 'class' => 'btn btn-default btn-flat btn-sm']) .
-                    Html::a('Удалить', ['/map/link-del', 'categories_id' => Yii::$app->request->get('categories_id'), 'links_id' => $link->id], ['class' => 'btn btn-danger btn-flat btn-sm']),
+                    Html::a('Удалить', ['link-del', 'id' => $link->id], ['class' => 'btn btn-danger btn-flat btn-sm']),
             ]);
-            echo '<p>Ссылка будет удалена со всем содержимым, в том числе контент страницы, а также дочерние ссылки, если такие имеются.</p><p>Действительно удалить ссылку?</p>';
+            echo '<p>Группа будет удалена со всем содержимым, в том числе номенклатура, если такие имеются.</p><p>Действительно удалить группу?</p>';
             Modal::end();
         }?>
 

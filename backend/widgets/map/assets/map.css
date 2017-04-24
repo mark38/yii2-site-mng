@@ -1,3 +1,10 @@
+.get-children {
+    margin-right: 4px;
+}
+div.children-block {
+    display: none;
+}
+
 ul.links-list div.action .caret {
     display: none;
 }
