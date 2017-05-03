@@ -29,7 +29,7 @@ $this->title = 'Управление списком товара и их гру�
                             'items' => [
                                 ['label' => 'Добавить в корень каталога:'],
                                 ['label' => 'Новую группу', 'url' => Url::to(['', 'action' => 'add', 'parent' => $catalogLink->id, 'type' => 'group'])],
-                                ['label' => 'Новую номенклатуру', 'url' => Url::to(['', 'action' => 'add', 'parent' => $catalogLink->id, 'type' => 'good'])],
+                                ['label' => 'Новую номенклатуру', 'url' => Url::to(['',     'action' => 'add', 'parent' => $catalogLink->id, 'type' => 'good'])],
                             ],
                         ],
                         'encodeLabel' => false,
