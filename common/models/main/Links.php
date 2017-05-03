@@ -47,8 +47,6 @@ use common\models\gallery\GalleryImages;
  */
 class Links extends \yii\db\ActiveRecord
 {
-    public $state = true;
-
     /**
      * @inheritdoc
      */
@@ -264,7 +262,7 @@ class Links extends \yii\db\ActiveRecord
         return preg_replace('/\/$/', '', $prefixUrl);
     }
 
-    public function anchor2translit($anchor)
+    /*public function anchor2translit($anchor)
     {
         // ГОСТ 7.79B
         $transliteration = array(
@@ -313,7 +311,7 @@ class Links extends \yii\db\ActiveRecord
         $anchor = trim($anchor, '-');
 
         return $anchor;
-    }
+    }*/
 
     public static function findByUrl($name, $parent=null)
     {
