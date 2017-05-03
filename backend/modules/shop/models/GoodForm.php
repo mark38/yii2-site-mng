@@ -87,15 +87,17 @@ class GoodForm extends ShopGoods
 
     private function updatePrices()
     {
-        foreach ($this->priceValues as $shopPriceTypesId => $priceValue) {
-            $priceGood = ShopPriceGood::findOne(['shop_price_types_id' => $shopPriceTypesId, 'shop_goods_id' => $this->id]);
-            if (!$priceGood) {
-                $priceGood = new ShopPriceGood();
-                $priceGood->shop_price_types_id = $shopPriceTypesId;
-                $priceGood->shop_goods_id = $this->id;
+        if ($this->priceValues) {
+            foreach ($this->priceValues as $shopPriceTypesId => $priceValue) {
+                $priceGood = ShopPriceGood::findOne(['shop_price_types_id' => $shopPriceTypesId, 'shop_goods_id' => $this->id]);
+                if (!$priceGood) {
+                    $priceGood = new ShopPriceGood();
+                    $priceGood->shop_price_types_id = $shopPriceTypesId;
+                    $priceGood->shop_goods_id = $this->id;
+                }
+                $priceGood->price = $priceValue;
+                $priceGood->save();
             }
-            $priceGood->price = $priceValue;
-            $priceGood->save();
         }
     }
 }
