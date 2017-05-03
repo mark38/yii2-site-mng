@@ -61,6 +61,7 @@ if ($galleryImage->large) {
                                     $form->field($item, 'item_types_id')->dropDownList(ArrayHelper::map($itemTypes, 'id', 'name')) .
                                     $form->field($item, 'name') .
                                     $form->field($item, 'title') .
+                                    $form->field($item, 'url') .
                                     $form->field($item, 'price') .
                                     $form->field($item, 'old_price') .
                                     $form->field($item, 'seq') .
@@ -120,7 +121,7 @@ if ($galleryImage->large) {
                                         ' ('.$itemType->galleryType->large_width.'x'.$itemType->galleryType->large_height.'px)' .
                                         $imageLargeLabel) .
                                     Html::endTag('p'),
-                            ] : ''),
+                            ] : ['label' => false]),
                         ]
                     ])?>
                 </div>
