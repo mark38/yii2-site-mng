@@ -149,7 +149,7 @@ class Links extends \yii\db\ActiveRecord
      */
     public function getLinks()
     {
-        return $this->hasMany(Links::className(), ['parent' => 'id']);
+        return $this->hasMany(Links::className(), ['parent' => 'id'])->orderBy(['seq' => SORT_ASC]);
     }
 
     /**
