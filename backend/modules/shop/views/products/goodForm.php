@@ -163,7 +163,7 @@ if ($galleryImage->large) {
                 'header' => $link->anchor.' '.Html::a('<i class="fa fa-external-link"></i>', $link->url, ['target' => '_blank']),
                 'toggleButton' => ['label' => 'Удалить', 'class' => 'btn btn-danger btn-flat btn-sm'],
                 'footer' => Html::a('Отмена', '#', ['data-dismiss' => 'modal', 'class' => 'btn btn-default btn-flat btn-sm']) .
-                    Html::a('Удалить', ['/map/link-del', 'id' => $link->id], ['class' => 'btn btn-danger btn-flat btn-sm']),
+                    Html::a('Удалить', ['link-del', 'id' => $link->id], ['class' => 'btn btn-danger btn-flat btn-sm']),
             ]);
             echo '<p>Запись будет удалена со всем содержимым, в том числе контент страницы.</p><p>Действительно удалить номенклатуру?</p>';
             Modal::end();
