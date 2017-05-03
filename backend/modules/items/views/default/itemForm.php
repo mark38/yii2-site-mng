@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = ['label' => $itemType->name, 'url' => ['index',
 $linkClose = ['index', 'item_types_id' => $itemType->id];
 
 $imageSmallLabel = '';
-if ($galleryImage->small) {
+if ($galleryImage && $galleryImage->small) {
     $imageSmallLabel = Html::beginTag('div', ['id' => 'image-small-preview']) .
         Html::button('Удалить', [
             'class' => 'btn btn-default btn-sm btn-flat',
@@ -32,7 +32,7 @@ if ($galleryImage->small) {
 }
 
 $imageLargeLabel = '';
-if ($galleryImage->large) {
+if ($galleryImage && $galleryImage->large) {
     $imageLargeLabel = Html::beginTag('div', ['id' => 'image-large-preview']) .
         Html::button('Удалить', [
             'class' => 'btn btn-default btn-sm btn-flat',
