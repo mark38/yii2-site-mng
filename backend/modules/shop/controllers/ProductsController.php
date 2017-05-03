@@ -102,7 +102,7 @@ class ProductsController extends Controller
             }
         }
 
-        return $this->render('linksDef', compact('action', 'type', 'catalogLink', 'link', 'group', 'good', 'galleryImage'));
+        return $this->render('links', compact('action', 'type', 'catalogLink', 'link', 'group', 'good', 'galleryImage'));
     }
 
     public function actionLinkDel($id)
