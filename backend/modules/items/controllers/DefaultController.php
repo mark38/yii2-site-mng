@@ -78,7 +78,11 @@ class DefaultController extends Controller
         }
 
         $galleryImage = isset($item->gallery_images_id) ? GalleryImagesForm::findOne($item->gallery_images_id) : new GalleryImagesForm();
-        $galleryImage->gallery_groups_id = $itemType->gallery_groups_id;
+        if ($itemType->gallery_groups_id) {
+            $galleryImage->gallery_groups_id = $itemType->gallery_groups_id;
+        } else {
+            $galleryImage = false;
+        }
 
         if ($item->load(Yii::$app->request->post()) && $item->save()) {
             $updateContent = false;
@@ -100,15 +104,17 @@ class DefaultController extends Controller
                 }
             }
 
-            $galleryImage->load(Yii::$app->request->post());
-            $galleryImage->name = $item->name;
-            $galleryImage->imageSmall = UploadedFile::getInstance($galleryImage, 'imageSmall');
-            $galleryImage->imageLarge = UploadedFile::getInstance($galleryImage, 'imageLarge');
-            $galleryImage->upload();
-            $galleryImage->save();
+            if ($galleryImage) {
+                $galleryImage->load(Yii::$app->request->post());
+                $galleryImage->name = $item->name;
+                $galleryImage->imageSmall = UploadedFile::getInstance($galleryImage, 'imageSmall');
+                $galleryImage->imageLarge = UploadedFile::getInstance($galleryImage, 'imageLarge');
+                $galleryImage->upload();
+                $galleryImage->save();
 
-            $item->gallery_images_id = $galleryImage->id;
-            $item->update();
+                $item->gallery_images_id = $galleryImage->id;
+                $item->update();
+            }
 
             Yii::$app->getSession()->setFlash('success', 'Изменения приняты');
             return $this->redirect(['mng', 'item_types_id' => $item->item_types_id, 'id' => $item->id]);
