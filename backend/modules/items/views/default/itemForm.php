@@ -27,7 +27,7 @@ if ($galleryImage && $galleryImage->small) {
             'class' => 'btn btn-default btn-sm btn-flat',
             'onclick' => '$(".image-small").val(""); $("#image-small-preview").fadeOut();'
         ]) .
-        Html::img($galleryImage->small) .
+        Html::img($galleryImage->small, ['style' => 'max-width: 100%; max-height: 440px;']) .
         Html::endTag('div');
 }
 
@@ -76,6 +76,7 @@ if ($galleryImage && $galleryImage->large) {
                                         'preset' => 'full',
                                         'clientOptions' => [
                                             'height' => 300,
+                                            'allowedContent' => true,
                                             'toolbar' => [
                                                 [
                                                     'name' => 'row1',
