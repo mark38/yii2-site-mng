@@ -157,13 +157,13 @@ class m160728_180603_main_init extends Migration
         $this->insert('gallery_types', [
             'name' => 'links',
             'comment' => 'Link images',
-            'destination' => '/img/links',
+            'destination' => '/assets/static/image',
             'visible' => 0
         ]);
         $this->insert('gallery_types', [
             'name' => 'news',
             'comment' => 'News',
-            'destination' => '/img/news',
+            'destination' => '/assets/static/image',
             'small_width' => 350,
             'small_height' => 300,
             'visible' => 0,
@@ -171,11 +171,16 @@ class m160728_180603_main_init extends Migration
         $this->insert('gallery_types', [
             'name' => 'gallery',
             'comment' => 'Photo gallery',
-            'destination' => '/img/gallery',
+            'destination' => '/assets/static/image/gallery',
             'small_width' => 280,
             'small_height' => 280,
             'large_width' => 800
         ]);
+        $this->insert('gallery_groups', [
+            'gallery_types_id' => 1,
+            'name' => 'Links'
+        ]);
+
 
         $this->addColumn('links', 'gallery_images_id', $this->integer());
         $this->addForeignKey('fk-links-gallery_images_id', 'links', 'gallery_images_id', 'gallery_images', 'id', 'SET NULL', 'CASCADE');
@@ -217,14 +222,14 @@ class m160728_180603_main_init extends Migration
             'name' => 'Новости',
             'url' => '/news/index',
             'visible' => true,
-            'icon' => 'fa fa-newspaper-o'
+            'icon' => 'newspaper-o'
         ]);
 
         $this->insert('modules', [
             'name' => 'Фотогалерея',
             'url' => '/gallery/index',
             'visible' => true,
-            'icon' => 'fa fa-file-image-o'
+            'icon' => 'file-image-o'
         ]);
     }
 
