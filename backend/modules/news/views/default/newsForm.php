@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = ['label' => $newsType->name, 'url' => ['index',
 $linkClose = ['index', 'news_types_id' => $newsType->id];
 
 $imageSmallLabel = '';
-if ($galleryImage->small) {
+if ($galleryImage && $galleryImage->small) {
     $imageSmallLabel = Html::beginTag('div', ['id' => 'image-small-preview']) .
         Html::button('Удалить', [
             'class' => 'btn btn-default btn-sm btn-flat',
@@ -34,7 +34,7 @@ if ($galleryImage->small) {
 }
 
 $imageLargeLabel = '';
-if ($galleryImage->large) {
+if ($galleryImage && $galleryImage->large) {
     $imageLargeLabel = Html::beginTag('div', ['id' => 'image-large-preview']) .
         Html::button('Удалить', [
             'class' => 'btn btn-default btn-sm btn-flat',
@@ -143,7 +143,9 @@ if ($galleryImage->large) {
                                         ' ('.$newsType->galleryType->large_width.'x'.$newsType->galleryType->large_height.'px)' .
                                         $imageLargeLabel) .
                                     Html::endTag('p'),
-                            ] : ''),
+                            ] : [
+                                'label' => false,
+                            ]),
                             [
                                 'label' => 'Дополнительно (системные параметры)',
                                 'content' => Html::beginTag('p') .

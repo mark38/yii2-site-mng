@@ -11,6 +11,7 @@ $chLink = ['mng', 'news_types_id' => $new->news_types_id, 'id' => $new->id];
 $date = $new->date !== null ? date('d.m.Y', strtotime($new->date)) : null;
 $period = $new->date_from && $new->date_to ? date('d.m.Y', strtotime($new->date_from)) . ' &mdash; ' . date('d.m.Y', strtotime($new->date_to)) : Html::tag('small', '<em>Не указано</em>', ['class' => 'text-muted']);
 $state = $new->link->state ? Html::tag('small', 'Активна', ['class' => 'text-success']) : Html::tag('small', 'Заблокирована', ['class' => 'text-danger']);
+$url = $new->url ? $new->url : $new->link->url;
 ?>
 
 <tr>
@@ -24,7 +25,7 @@ $state = $new->link->state ? Html::tag('small', 'Активна', ['class' => 't
     <td class="text-right">
         <ul class="list-inline">
             <li><?=Html::a('<i class="fa fa-pencil-square-o"></i>', $chLink)?></li>
-            <li><?=Html::a('<i class="fa fa-external-link"></i>', $new->link->url, ['target' => '_blank'])?></li>
+            <li><?=Html::a('<i class="fa fa-external-link"></i>', $url, ['target' => '_blank'])?></li>
         </ul>
     </td>
 </tr>

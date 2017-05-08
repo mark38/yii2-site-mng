@@ -74,8 +74,12 @@ class DefaultController extends Controller
 
         $news->news_types_id = $news_types_id;
 
-        $galleryImage = isset($link->gallery_images_id) ? GalleryImagesForm::findOne($link->gallery_images_id) : new GalleryImagesForm();
-        $galleryImage->gallery_groups_id = $newsType->gallery_groups_id;
+        if ($newsType->gallery_groups_id) {
+            $galleryImage = isset($link->gallery_images_id) ? GalleryImagesForm::findOne($link->gallery_images_id) : new GalleryImagesForm();
+            $galleryImage->gallery_groups_id = $newsType->gallery_groups_id;
+        } else {
+            $galleryImage = false;
+        }
 
         if (Yii::$app->request->isPost) {
             $link->load(Yii::$app->request->post());
@@ -110,13 +114,15 @@ class DefaultController extends Controller
                 $content->text = $news->prev_text;
                 $content->save();
 
-                $galleryImage->load(Yii::$app->request->post());
-                $galleryImage->linksId = $link->id;
-                $galleryImage->name = $link->name;
-                $galleryImage->imageSmall = UploadedFile::getInstance($galleryImage, 'imageSmall');
-                $galleryImage->imageLarge = UploadedFile::getInstance($galleryImage, 'imageLarge');
-                $galleryImage->upload();
-                $galleryImage->save();
+                if ($galleryImage) {
+                    $galleryImage->load(Yii::$app->request->post());
+                    $galleryImage->linksId = $link->id;
+                    $galleryImage->name = $link->name;
+                    $galleryImage->imageSmall = UploadedFile::getInstance($galleryImage, 'imageSmall');
+                    $galleryImage->imageLarge = UploadedFile::getInstance($galleryImage, 'imageLarge');
+                    $galleryImage->upload();
+                    $galleryImage->save();
+                }
 
                 Yii::$app->getSession()->setFlash('success', 'Изменения приняты');
                 return $this->redirect(['mng', 'news_types_id' => $newsType->id, 'id' => $news->id]);

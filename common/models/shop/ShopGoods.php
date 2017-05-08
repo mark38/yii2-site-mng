@@ -11,7 +11,7 @@ use Yii;
  *
  * @property integer $id
  * @property integer $shop_groups_id
- * @property string $links_id
+ * @property integer $links_id
  * @property integer $shop_units_id
  * @property string $verification_code
  * @property string $name

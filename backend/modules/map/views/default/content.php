@@ -195,8 +195,8 @@ MapAsset::register($this);
 // kcfinder options
 // http://kcfinder.sunhater.com/install#dynamic
 $kcfOptions = array_merge(KCFinder::$kcfDefaultOptions, [
-    'uploadURL' => '/upload',
-    'uploadDir' => Yii::getAlias('@frontend/web/upload'),
+    'uploadURL' => Yii::$app->params['uploadURL'],
+    'uploadDir' => Yii::$app->params['uploadDir'],
     'access' => [
         'files' => [
             'upload' => true,
