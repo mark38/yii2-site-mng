@@ -68,7 +68,7 @@ class DefaultController extends Controller
         $formType = FormTypes::findOne($type_id);
         $formFields = FormFields::find()->where(['form_types_id' => $type_id])->all();
         $forms = new ActiveDataProvider([
-            'query' => Forms::find()->where(['form_types_id' => $type_id]),
+            'query' => Forms::find()->where(['form_types_id' => $type_id])->orderBy(['created_at' => SORT_DESC]),
             'pagination' => [
                 'pageSize' => 20,
             ],

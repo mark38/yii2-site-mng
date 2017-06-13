@@ -55,7 +55,8 @@
         "kartik-v/yii2-tabs-x": "@dev",
         "kartik-v/yii2-builder": "^1.6",
         "delocker/yii2-animate.css": "dev-master",
-        "rizalfaizu/yii2-wowjs": "dev-master"
+        "rizalfaizu/yii2-wowjs": "dev-master",
+        "kartik-v/yii2-label-inplace": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
