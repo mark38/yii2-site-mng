@@ -21,7 +21,7 @@ foreach ($formFields as $field) {
                 'attribute' => $field->name,
                 'label' => $field->label,
                 'value' => function($data) use ($fieldName) {
-                    return $data->$fieldName ? (new DateTime())->setTimestamp($data->$fieldName)->format('d.m.Y') : null;
+                    return $data->$fieldName ? (new DateTime())->setTimestamp($data->$fieldName)->format('d.m.Y H:i') : null;
                 }
             ];
             break;
