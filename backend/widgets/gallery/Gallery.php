@@ -75,8 +75,8 @@ class Gallery extends Model
 
         $size = $this->getSize($src_file, $type);
 
-        $image_small = $this->renderFilename($route.$destination, $imageFile->extension);
-        $image_large = $this->renderFilename($route.$destination, $imageFile->extension);
+        $image_small = $this->renderFilename($route.$destination, $imageFile->baseName.'-s', $imageFile->extension);
+        $image_large = $this->renderFilename($route.$destination, $imageFile->baseName.'-l', $imageFile->extension);
 
         Image::$driver = [Image::DRIVER_GD2];
 
@@ -168,12 +168,24 @@ class Gallery extends Model
         ];
     }
 
-    public function renderFilename($dir, $extension)
+    public function renderFilename($dir, $baseName, $extension)
     {
-        do {
+        /*do {
             $filename = '';
             for ( $j = 0; $j < 12; $j++ ) $filename .= chr( rand(97, 122) );
-        } while(file_exists($dir.'/'.$filename.'.'.$extension));
+        } while(file_exists($dir.'/'.$filename.'.'.$extension));*/
+
+        $filename = $baseName;
+        if (file_exists($dir.'/'.$filename.$extension)) {
+            do {
+                $filename = '';
+                for ( $j = 0; $j < 12; $j++ ) $filename .= chr( rand(97, 122) );
+            } while(file_exists($dir.'/'.$filename.'.'.$extension));
+        }
+        /*while (file_exists($dir.'/'.$filename.$extension)) {
+            $filename = '';
+            for ( $j = 0; $j < 12; $j++ ) $filename .= chr( rand(97, 122) );
+        }*/
 
         return $filename;
     }
