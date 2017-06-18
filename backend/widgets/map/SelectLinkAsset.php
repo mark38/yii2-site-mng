@@ -1,23 +1,29 @@
 <?php
-namespace app\modules\items;
+namespace backend\widgets\map;
 
 use yii\web\AssetBundle;
 
-class AppAsset extends AssetBundle
+class SelectLinkAsset extends AssetBundle
 {
     /**
      * @inheritdoc
      */
-    public $sourcePath = '@app/modules/news/assets';
+    public $sourcePath = '@backend/widgets/map/assets';
     /**
      * @inheritdoc
      */
     public $css = [
+        'map.css',
     ];
     /**
      * @inheritdoc
      */
-    public $js = [];
+    public $js = [
+        'select-link.js',
+    ];
+    public $php = [
+        'links.php',
+    ];
     /**
      * @inheritdoc
      */

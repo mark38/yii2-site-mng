@@ -27,7 +27,7 @@ if ($galleryImage && $galleryImage->small) {
             'class' => 'btn btn-default btn-sm btn-flat',
             'onclick' => '$(".image-small").val(""); $("#image-small-preview").fadeOut();'
         ]) .
-        Html::img($galleryImage->small) .
+        Html::img($galleryImage->small, ['style' => 'max-width: 100%;']) .
         Html::endTag('div');
 }
 
@@ -38,7 +38,7 @@ if ($galleryImage && $galleryImage->large) {
             'class' => 'btn btn-default btn-sm btn-flat',
             'onclick' => '$(".image-large").val(""); $("#image-large-preview").fadeOut();'
         ]) .
-        Html::img($galleryImage->large) .
+        Html::img($galleryImage->large, ['style' => 'max-width: 100%;']) .
         Html::endTag('div');
 }
 ?>

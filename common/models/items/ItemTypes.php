@@ -3,6 +3,7 @@
 namespace common\models\items;
 
 use Yii;
+use common\models\main\Links;
 use common\models\gallery\GalleryTypes;
 use common\models\gallery\GalleryGroups;
 
@@ -13,10 +14,12 @@ use common\models\gallery\GalleryGroups;
  * @property string $name
  * @property integer $gallery_types_id
  * @property integer $gallery_groups_id
+ * @property integer $links_id
  *
+ * @property Links $link
  * @property GalleryGroups $galleryGroup
  * @property GalleryTypes $galleryType
- * @property Items[] $item
+ * @property Items[] $items
  */
 class ItemTypes extends \yii\db\ActiveRecord
 {
@@ -34,8 +37,10 @@ class ItemTypes extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['gallery_types_id', 'gallery_groups_id'], 'integer'],
+            [['name'], 'required'],
+            [['gallery_types_id', 'gallery_groups_id', 'links_id'], 'integer'],
             [['name'], 'string', 'max' => 255],
+            [['links_id'], 'exist', 'skipOnError' => true, 'targetClass' => Links::className(), 'targetAttribute' => ['links_id' => 'id']],
             [['gallery_groups_id'], 'exist', 'skipOnError' => true, 'targetClass' => GalleryGroups::className(), 'targetAttribute' => ['gallery_groups_id' => 'id']],
             [['gallery_types_id'], 'exist', 'skipOnError' => true, 'targetClass' => GalleryTypes::className(), 'targetAttribute' => ['gallery_types_id' => 'id']],
         ];
@@ -48,10 +53,19 @@ class ItemTypes extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'Name',
-            'gallery_types_id' => 'Gallery Types ID',
-            'gallery_groups_id' => 'Gallery Groups ID',
+            'name' => 'Наименование',
+            'gallery_types_id' => 'Тип фото-галереи',
+            'gallery_groups_id' => 'Фото-галерея',
+            'links_id' => 'Ссылка',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLink()
+    {
+        return $this->hasOne(Links::className(), ['id' => 'links_id']);
     }
 
     /**
