@@ -7,6 +7,7 @@ if (!$request) return;
 
 try {
     $dbh = new PDO($config['components']['db']['dsn'], $config['components']['db']['username'], $config['components']['db']['password']);
+    $dbh->query("set names utf8;");
 
     if ($request['parent']) {
         $request = "select id, url, name, anchor, child_exist, level from links where parent = '{$request['parent']}' order by seq asc;";

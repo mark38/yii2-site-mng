@@ -7,6 +7,7 @@ if (!$request && $request['links_id']) return false;
 
 try {
     $dbh = new PDO($config['components']['db']['dsn'], $config['components']['db']['username'], $config['components']['db']['password']);
+    $dbh->query("set names utf8;");
 
     $sth = $dbh->query("select id, anchor, parent, start from links where id = {$request['links_id']};");
     $link = $sth->fetch();
