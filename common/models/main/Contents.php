@@ -13,6 +13,7 @@ use Yii;
  * @property string $css_class
  * @property string $text
  * @property integer $seq
+ * @property string $name
  *
  * @property Links $links
  */
@@ -34,7 +35,7 @@ class Contents extends \yii\db\ActiveRecord
         return [
             [['links_id', 'parent', 'seq'], 'integer'],
             [['text'], 'string'],
-            [['css_class'], 'string', 'max' => 255]
+            [['css_class', 'name'], 'string', 'max' => 255]
         ];
     }
 
@@ -50,6 +51,7 @@ class Contents extends \yii\db\ActiveRecord
             'css_class' => 'Классы стилей',
             'text' => 'Text',
             'seq' => 'Порядковый номер',
+            'name' => 'Наименование',
         ];
     }
 

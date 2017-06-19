@@ -18,7 +18,7 @@ class GalleryImagesForm extends GalleryImages
     {
         return array_merge(parent::rules(), [
             [['linksId'], 'integer'],
-            [['imageSmall', 'imageLarge'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg'],
+            [['imageSmall', 'imageLarge'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg, csv, svg'],
         ]);
     }
 
@@ -46,7 +46,8 @@ class GalleryImagesForm extends GalleryImages
         $urlPath = preg_replace('/\/$/', '', $galleryType->destination);
 
         if (!is_dir($path)) mkdir($path, 0775, true);
-        
+
+
         if ($this->validate()) {
             if ($this->imageSmall) {
                 if ($this->small && basename($this->small) == $this->imageSmall->name) {

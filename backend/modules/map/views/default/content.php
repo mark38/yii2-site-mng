@@ -159,6 +159,7 @@ MapAsset::register($this);
             );
 
             echo Html::beginTag('div', ['class' => 'col-sm-3']);
+            echo $form->field($contents[$index], 'name');
             echo $form->field($contents[$index], 'css_class');
             echo $form->field($contents[$index], 'seq');
             echo Html::submitButton('Сохранить', [

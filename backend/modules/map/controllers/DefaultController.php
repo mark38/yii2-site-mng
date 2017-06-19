@@ -177,7 +177,7 @@ class DefaultController extends Controller
             $contents = Contents::find()->where(['links_id' => $links_id])->orderBy(['seq' => SORT_ASC])->all();
             if (Yii::$app->request->post()) {
                 foreach ($contents as $index => $content) {
-                    if (Yii::$app->request->post('content-'.$index)) {
+                    if (Yii::$app->request->post('content-'.$index) !== null) {
                         $contents[$index]->load(Yii::$app->request->post());
                         $contents[$index]->text = Yii::$app->request->post('content-'.$index);
                         $contents[$index]->save();
