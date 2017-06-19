@@ -94,7 +94,7 @@ class SelectLink extends InputWidget
             do {
                 $link = Links::findOne($parent);
                 $parent = $link->parent;
-                $url = '/'.$link->parent.$url;
+                $url = '/'.$link->anchor.$url;
             } while($parent !== null);
         }
 
