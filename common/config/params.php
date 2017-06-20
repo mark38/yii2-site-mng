@@ -8,7 +8,7 @@ return [
     'monthsParentCase' => ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'],
     'rating' => ['max' => 5],
     'uploadURL' => '/assets/upload',
-    'uploadDir' => Yii::getAlias('@frontend/assets/upload'),
+    'uploadDir' => Yii::getAlias('@frontend/web/assets/upload'),
     'shop' => [
         'phpAuthUser' => 'admin',
         'phpAuthPw' => 'p7Nr5Bzu',
