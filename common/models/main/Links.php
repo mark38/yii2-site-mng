@@ -42,6 +42,7 @@ use common\models\gallery\GalleryImages;
  * @property Categories $category
  * @property Links $parentLink
  * @property Links[] $links
+ * @property Links[] $activeLinks
  * @property Redirects[] $redirects
  * @property GalleryImages $galleryImage
  */
@@ -150,6 +151,11 @@ class Links extends \yii\db\ActiveRecord
     public function getLinks()
     {
         return $this->hasMany(Links::className(), ['parent' => 'id'])->orderBy(['seq' => SORT_ASC]);
+    }
+
+    public function getActiveLinks()
+    {
+        return $this->hasMany(Links::className(), ['parent' => 'id'])->where(['state' => true])->orderBy(['seq' => SORT_ASC]);
     }
 
     /**

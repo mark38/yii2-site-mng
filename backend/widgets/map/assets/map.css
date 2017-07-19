@@ -28,3 +28,14 @@ ul.links-list > li > div.inner.active a.active {
 ul.links-list > li .children-block {
     display: none;
 }
+
+ul.select-links-list > li {
+    margin-bottom: 2px;
+}
+ul.select-links-list ul.select-links-list {
+    margin-left: 15px;
+}
+ul.select-links-list > li > a.active {
+    font-weight: bold;
+    font-size: 1.1em;
+}

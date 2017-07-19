@@ -1,8 +1,8 @@
 <?php
 namespace app\modules\items\models;
 
-use common\models\main\Contents;
 use Yii;
+use common\models\main\Contents;
 use common\models\items\Items;
 
 class ItemForm extends Items

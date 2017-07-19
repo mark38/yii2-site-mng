@@ -12,9 +12,9 @@ return [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'app\controllers',
     'controllerMap' => [
-        'migrate' => [
+        /*'migrate' => [
             'class' => 'app\controllers\MigrateController',
-        ],
+        ],*/
     ],
     'modules' => [
         'shop' => [

@@ -6,7 +6,8 @@ use Yii;
 use yii\web\Controller;
 use common\models\gallery\GalleryTypes;
 use common\models\gallery\GalleryGroups;
-use mark38\galleryManager\GalleryManagerAction;
+//use mark38\galleryManager\GalleryManagerAction;
+use backend\widgets\gallery\GalleryManagerAction;
 
 class DefaultController extends Controller
 {

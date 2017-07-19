@@ -53,7 +53,10 @@
         "romka-chev/yii2-swiper": "^2.0",
         "ivan-chkv/yii2-jquery-fullpage": "^2.0",
         "kartik-v/yii2-tabs-x": "@dev",
-        "kartik-v/yii2-builder": "^1.6"
+        "kartik-v/yii2-builder": "^1.6",
+        "delocker/yii2-animate.css": "dev-master",
+        "rizalfaizu/yii2-wowjs": "dev-master",
+        "kartik-v/yii2-label-inplace": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
@@ -68,12 +71,14 @@
         }
     ],
     "config": {
-        "process-timeout": 1800
+        "process-timeout": 1800,
+        "fxp-asset": {
+            "installer-paths": {
+                "npm-asset-library": "vendor/npm",
+                "bower-asset-library": "vendor/bower"
+            }
+        }
     },
     "extra": {
-        "asset-installer-paths": {
-            "npm-asset-library": "vendor/npm",
-            "bower-asset-library": "vendor/bower"
-        }
     }
 }

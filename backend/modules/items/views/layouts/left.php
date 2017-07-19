@@ -6,16 +6,20 @@ $items[] = [
     'label' => 'Все элементы',
     'icon' => 'fa fa-id-card-o',
     'url' => ['/items/index'],
-    'active' => $this->context->module->id == 'items' ? true : false,
+//    'active' => (stripos(Yii::$app->request->baseUrl.'/items', Yii::$app->request->url) !== null ? true : false),
 ];
-$items[] = ['label' => 'Типы элементов', 'icon' => 'fa fa-circle-thin', 'url' => '#'];
+$items[] = [
+    'label' => 'Типы элементов',
+    'icon' => 'circle-thin',
+    'url' => Yii::$app->request->baseUrl.'/items/types/index',
+//    'active' => (stripos(Yii::$app->request->baseUrl.'/items/types/', Yii::$app->request->url) !== null ? true : false),
+];
 
 $items[] = ['label' => 'Поддержка', 'options' => ['class' => 'header']];
 $items[] = [
     'label' => 'Важно',
     'icon' => 'fa fa-circle-thin',
     'url' => ['/items/support/readme'],
-    'active' => $this->context->module->id == 'readme' ? true : false,
 ];
 
 ?>
