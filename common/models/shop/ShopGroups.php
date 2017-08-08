@@ -18,7 +18,9 @@ use common\models\main\Links;
  * @property ShopGroupProperties[] $shopGroupProperties
  * @property ShopGroups $parent
  * @property ShopGroups[] $shopGroups
+ * @property ShopGroups[] $childGroups
  * @property Links $link
+ * @property Links[] $activeChildLinks
  */
 class ShopGroups extends \yii\db\ActiveRecord
 {
@@ -98,5 +100,15 @@ class ShopGroups extends \yii\db\ActiveRecord
     public function getLink()
     {
         return $this->hasOne(Links::className(), ['id' => 'links_id']);
+    }
+
+    public function getActiveChildLinks()
+    {
+        return $this->hasMany(Links::className(), ['parent' => 'id'])->via('link')->where(['state' => true])->orderBy(['seq' => SORT_ASC]);
+    }
+
+    public function getChildGroups()
+    {
+        return $this->hasMany($this::className(), ['links_id' => 'id'])->via('activeChildLinks');
     }
 }

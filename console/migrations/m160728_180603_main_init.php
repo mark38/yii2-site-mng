@@ -42,7 +42,7 @@ class m160728_180603_main_init extends Migration
         ], $tableOptions);
         $this->insert('layouts', [
             'name' => 'main',
-            'comment' => 'Main layouts',
+            'comment' => 'Main layout',
             'seq' => 1
         ]);
 

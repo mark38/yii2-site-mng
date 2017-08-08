@@ -13,8 +13,8 @@ use common\models\main\Links;
  * @property integer $shop_properties_id
  * @property integer $state
  *
- * @property ShopGroups $shopGroups
- * @property ShopProperties $shopProperties
+ * @property ShopGroups $shopGroup
+ * @property ShopProperties $shopProperty
  */
 class ShopGroupProperties extends \yii\db\ActiveRecord
 {

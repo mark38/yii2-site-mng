@@ -74,8 +74,8 @@ class Import extends Model
             $link->created_at = isset($link->id) ? $link->created_at : time();
             $link->updated_at = time();
             $link->state = $item->{'НеПубликуетсяНаСайте'} == 'истина' ? 0 : 1;
-            $link->layouts_id = Yii::$app->params['shop']['group_layouts_id'];
-            $link->views_id = Yii::$app->params['shop']['goods_views_id'];
+            $link->layouts_id = Yii::$app->params['shop']['groupLayoutsId'];
+            $link->views_id = Yii::$app->params['shop']['groupViewsId'];
             $link->save();
 
             if ($item->{'Картинки'} && $item->{'Картинки'}->{'Картинка'}) {
@@ -210,8 +210,8 @@ class Import extends Model
         $link->created_at = isset($link->id) ? $link->created_at : time();
         $link->updated_at = time();
         $link->state = $item->{'НеПубликуетсяНаСайте'} == 'истина' ? 0 : 1;
-        $link->layouts_id = Yii::$app->params['shop']['good_layouts_id'];
-        $link->views_id = Yii::$app->params['shop']['good_views_id'];
+        $link->layouts_id = Yii::$app->params['shop']['productLayoutsId'];
+        $link->views_id = Yii::$app->params['shop']['productViewsId'];
         $link->save();
 
         $content = Contents::findOne(['links_id' => $link->id]);

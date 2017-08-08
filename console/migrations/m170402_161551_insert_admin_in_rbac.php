@@ -7,6 +7,11 @@ class m170402_161551_insert_admin_in_rbac extends Migration
 {
     public function up()
     {
+        Yii::$app->runAction('migrate/up', [
+            'migrationPath' => '@yii/rbac/migrations',
+            'interactive' => false,
+        ]);
+
         $this->insert('{{%auth_item}}', [
             'name' => 'admin',
             'type' => 1,

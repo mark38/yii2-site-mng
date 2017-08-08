@@ -35,7 +35,10 @@ class PropertiesController extends Controller
         $content = null;
 
         switch ($action) {
-            case "property_add": $property = new ShopProperties(); break;
+            case "property_add":
+                $property = new ShopProperties();
+                $property->state = true;
+                break;
             case "property_ch": $property = ShopProperties::findOne($properties_id); break;
             case "get_values": $values = ShopPropertyValues::find()->where(['shop_properties_id' => $properties_id])->orderBy(['name' => SORT_ASC])->all(); break;
             case "value_add":
