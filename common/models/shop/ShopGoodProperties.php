@@ -14,7 +14,7 @@ use Yii;
  * @property integer $shop_property_values_id
  * @property integer $state
  *
- * @property ShopGoods $shopGoods
+ * @property ShopGoods $shopGood
  * @property ShopProperties $shopProperty
  * @property ShopPropertyValues $shopPropertyValue
  */

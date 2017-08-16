@@ -51,7 +51,7 @@ $link_close = [''];
                 ])?>
 
                 <?php if ($property->id) {
-                    echo Html::a('Ретакторовать описание', Url::to(['contentMng', 'properties_id' => $property->id]), [
+                    echo Html::a('Редакторовать описание', Url::to(['contentMng', 'properties_id' => $property->id]), [
                             'class' => 'btn btn-info btn-flat btn-sm'
                         ]).'&nbsp;';
                     Modal::begin([

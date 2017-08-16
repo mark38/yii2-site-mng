@@ -22,7 +22,7 @@ $this->title = 'Управление списком товара и их гру�
         <div class="box box-default">
             <div class="box-header with-border">
                 <h3>
-                    <?=$catalogLink->anchor?> <small>(<?=$catalogLink->url?>)</small>
+                    <?=$catalogLink ? $catalogLink->anchor : 'Корень'?> <small>(<?=$catalogLink ? $catalogLink->url : '/'?>)</small>
                     <?=ButtonDropdown::widget([
                         'label' => '<i class="glyphicon glyphicon-option-vertical"></i>',
                         'dropdown' => [
