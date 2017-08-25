@@ -29,7 +29,7 @@ if ($goods) {
 ?>
 
 <tr>
-    <td><?=$num?></td>
+    <td><?=$shopClientCart->shop_carts_id?></td>
     <td><?=date('d.m.Y H:i', $shopClientCart->shopCart->checkout_at)?></td>
     <td><?=$shopClientCart->shopClient->city ? $shopClientCart->shopClient->city : Html::tag('small', 'Не указан', ['class' => 'text-muted'])?></td>
     <td><?=$shopClientCart->shopClient->fio ? $shopClientCart->shopClient->fio . ($shopClientCart->shopClient->shop_users_id ? ' '.Html::tag('small', '<i class="fa fa-star-o" aria-hidden="true"></i>', ['class' => 'text-success']) : '') : Html::tag('small', 'Не указан', ['class' => 'text-muted'])?></td>

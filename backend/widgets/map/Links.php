@@ -140,12 +140,14 @@ class Links extends Widget
                 ]);
             }
 
+            $anchor = $link->state   ? $link->anchor : Html::tag('s', $link->anchor);
+
             $html .= Html::tag('li',
                 Html::tag('div',
                     Html::beginTag('div', ['class' => 'row']) .
                     Html::tag('div',
                         $childLinkAction .
-                        Html::a($link->anchor, ['/map/content', 'links_id' => $link->id], ['class' => ($link->id == $this->linksId ? 'active' : '')]),
+                        Html::a($anchor, ['/map/content', 'links_id' => $link->id], ['class' => ($link->id == $this->linksId ? 'active' : '')]),
                         ['class' => 'col-sm-9 col-md-10']) .
                     Html::tag('div',
                         ButtonDropdown::widget([
