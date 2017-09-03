@@ -79,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box box-default">
             <div class="box-body">
                 <table class="table table-hover table-condensed">
-                    <thead><tr><th>#</th><th>Изображение</th><th>Ссылка</th><th>Наименование</th><th>Заголовок</th><th>Описание</th><th>Цена</th><th>Старая цена</th><th>Статус</th><th class="text-right">Действие</th></tr></thead>
+                    <thead><tr><th><nobr>#/id</nobr></th><th>Изображение</th><th>Ссылка</th><th>Наименование</th><th>Заголовок</th><th>Описание</th><th>Цена</th><th><nobr>Старая цена</nobr></th><th>Статус</th><th class="text-right">Действие</th></tr></thead>
                     <tbody>
                     <?php if ($items) {
                         foreach ($items as $i => $item) {

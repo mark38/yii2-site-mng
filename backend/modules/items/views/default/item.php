@@ -12,7 +12,7 @@ $state = $item->state ? Html::tag('small', 'Активна', ['class' => 'text-s
 ?>
 
 <tr>
-    <td><?=$num?></td>
+    <td><?=$num?>/<?= $item->id ?></td>
     <td><?=Html::a(Html::img($image, ['class' => 'media-object media-object', 'style' => 'max-height: 100px;']), $chLink)?></td>
     <td><?=$item->url?></td>
     <td><?=$item->name?></td>
