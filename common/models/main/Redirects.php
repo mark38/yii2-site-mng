@@ -12,7 +12,7 @@ use Yii;
  * @property string $url
  * @property integer $code
  *
- * @property Links $links
+ * @property Links $link
  */
 class Redirects extends \yii\db\ActiveRecord
 {
@@ -51,7 +51,7 @@ class Redirects extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getLinks()
+    public function getLink()
     {
         return $this->hasOne(Links::className(), ['id' => 'links_id']);
     }

@@ -223,6 +223,7 @@ class Links extends \yii\db\ActiveRecord
                 $redirect = new Redirects();
                 $redirect->links_id = $link->id;
                 $redirect->url = $link->url;
+                $redirect->code = 301;
                 $redirect->save();
             }
             return true;
