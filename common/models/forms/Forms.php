@@ -138,6 +138,9 @@ class Forms extends \yii\db\ActiveRecord
                         $content .= '<li><span style="color:#999;">'.$field->label.':</span> '.$value.'</li>';
                     }
                     $content .= '</ul>';
+
+                    $content .= '<p></p>';
+                    $content .= '<p>Все записи &mdash; <a href="'.Yii::$app->params['hostname'].'/mng/forms/form?type_id='.$this->form_types_id.'">'.Yii::$app->params['hostname'].'/mng/shop/clients/orders</a></p>';
                 }
                 $mailer = Yii::$app->mailer->compose('layouts/html.php', [
                     'content' => $content,
