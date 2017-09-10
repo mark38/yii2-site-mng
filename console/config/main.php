@@ -35,6 +35,9 @@ return [
         'sms' => [
             'class' => 'app\modules\sms\Module',
         ],
+        'main' => [
+            'class' => 'app\modules\main\Module',
+        ],
     ],
     'components' => [
         'authManager' => [

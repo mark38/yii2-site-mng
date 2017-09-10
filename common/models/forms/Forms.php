@@ -144,7 +144,7 @@ class Forms extends \yii\db\ActiveRecord
                 ]);
                 $mailer->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name])
                     ->setTo($formEmail->email->name)
-                    ->setSubject('Заполенна форма '.FormTypes::findOne($this->form_types_id)->name.' - '.Yii::$app->params['domainName']);
+                    ->setSubject('Заполена форма - '.FormTypes::findOne($this->form_types_id)->name.' на сайте '.Yii::$app->params['domainName']);
                 try {
                     $mailer->send();
                 } catch (\Exception $e) {
