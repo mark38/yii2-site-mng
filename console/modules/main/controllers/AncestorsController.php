@@ -14,6 +14,7 @@ class AncestorsController extends Controller
     public function actionRefresh()
     {
         $links = Links::find()->all();
+        $links = Links::findOne(12);
 
         if (!$links) {
             return "Links is empty\n";
@@ -21,11 +22,16 @@ class AncestorsController extends Controller
 
         $model = new Ancestors();
 
+        if (count($links)) {
+            $model->updateAncestor($links);
+            return true;
+        }
+
         /** @var Links $link */
         foreach ($links as $link) {
-            if (!$link->parent) continue;
-
             $model->updateAncestor($link);
         }
+
+        return true;
     }
 }

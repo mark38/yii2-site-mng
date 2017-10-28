@@ -19,6 +19,7 @@ use common\models\gallery\GalleryImages;
  * @property integer $gallery_images_id
  *
  * @property GalleryImages $galleryImage
+ * @property ShopPropertyValues $shopProperty
  */
 class ShopPropertyValues extends \yii\db\ActiveRecord
 {
@@ -56,6 +57,11 @@ class ShopPropertyValues extends \yii\db\ActiveRecord
             'contents_id' => 'Contents ID',
             'gallery_images_id' => 'Gallery Images ID'
         ];
+    }
+
+    public function getShopProperty()
+    {
+        return $this->hasOne(ShopProperties::className(), ['id' => 'shop_properties_id']);
     }
 
     public function getContent()

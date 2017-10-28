@@ -3,6 +3,7 @@
 namespace common\models\shop;
 
 use common\models\gallery\GalleryImages;
+use common\models\main\Ancestors;
 use common\models\main\Links;
 use Yii;
 
@@ -88,6 +89,16 @@ class ShopGoods extends \yii\db\ActiveRecord
         return $this->hasOne(ShopGroups::className(), ['id' => 'shop_groups_id']);
     }
 
+    public function getGroupActiveLink()
+    {
+        return $this->hasOne(Links::className(), ['id' => 'links_id'])->where(['links.child_exist' => true, 'links.state' => true])->via('shopGroup');
+    }
+
+    public function getAncestorActiveGroup()
+    {
+        return $this->hasOne(Ancestors::className(), ['links_id' => 'id'])->via('groupActiveLink');
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -134,7 +145,8 @@ class ShopGoods extends \yii\db\ActiveRecord
 
     public function getShopGoodProperties()
     {
-        return $this->hasMany(ShopGoodProperties::className(), ['shop_goods_id' => 'id'])->innerJoin('shop_properties')->orderBy(['shop_properties.seq' => SORT_ASC]);
+//        return $this->hasMany(ShopGoodProperties::className(), ['shop_goods_id' => 'id'])->innerJoin('shop_properties')->orderBy(['shop_properties.seq' => SORT_ASC]);
+        return $this->hasMany(ShopGoodProperties::className(), ['shop_goods_id' => 'id']);
     }
 
     public function getShopPropertyValue()

@@ -2,6 +2,7 @@
 
 namespace common\models\shop;
 
+use common\models\main\Ancestors;
 use common\models\main\Links;
 use Yii;
 
@@ -61,9 +62,29 @@ class ShopGoodProperties extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getShopGood()
+    public function getShopGoods()
     {
-        return $this->hasOne(ShopGoods::className(), ['id' => 'shop_goods_id']);
+        return $this->hasMany(ShopGoods::className(), ['id' => 'shop_goods_id']);
+    }
+
+    public function getShopGoodsLink()
+    {
+        return $this->hasOne(Links::className(), ['id' => 'links_id'])->via('shopGoods');
+    }
+
+    public function getShopGroup()
+    {
+        return $this->hasOne(ShopGroups::className(), ['id' => 'shop_groups_id'])->via('shopGoods');
+    }
+
+    public function getGroupActiveLink()
+    {
+        return $this->hasOne(Links::className(), ['id' => 'links_id'])->where(['links.child_exist' => true, 'links.state' => true])->via('shopGroup');
+    }
+
+    public function getAncestorActiveGroup()
+    {
+        return $this->hasOne(Ancestors::className(), ['links_id' => 'id'])->via('groupActiveLink');
     }
 
     public function getLink()

@@ -2,8 +2,6 @@
 
 namespace app\modules\map\controllers;
 
-use common\models\gallery\GalleryImages;
-use common\models\gallery\GalleryImagesForm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -14,6 +12,7 @@ use common\models\main\Categories;
 use common\models\main\Links;
 use common\models\main\Contents;
 use mark38\galleryManager\GalleryManagerAction;
+use common\models\gallery\GalleryImagesForm;
 use yii\web\UploadedFile;
 
 class DefaultController extends Controller

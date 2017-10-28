@@ -1,6 +1,8 @@
 <?php
 
 use yii\db\Migration;
+use common\models\main\Links;
+use common\models\main\Ancestors;
 
 class m170906_183139_ancestors extends Migration
 {
@@ -20,10 +22,35 @@ class m170906_183139_ancestors extends Migration
 
         $this->addForeignKey('fk-ancestors-links_id', 'ancestors', 'links_id', 'links', 'id', 'CASCADE', 'CASCADE');
         $this->addForeignKey('fk-ancestors-ancestor_links_id', 'ancestors', 'ancestor_links_id', 'links', 'id', 'CASCADE', 'CASCADE');
+
+        $this->refresh();
     }
 
     public function safeDown()
     {
         $this->dropTable('ancestors');
+    }
+
+    public function refresh()
+    {
+        $links = Links::find()->all();
+
+        if (!$links) {
+            return "Links is empty\n";
+        }
+
+        $model = new Ancestors();
+
+        if (count($links)) {
+            $model->updateAncestor($links);
+            return true;
+        }
+
+        /** @var Links $link */
+        foreach ($links as $link) {
+            $model->updateAncestor($link);
+        }
+
+        return true;
     }
 }
