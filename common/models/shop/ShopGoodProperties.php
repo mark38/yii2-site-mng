@@ -62,19 +62,19 @@ class ShopGoodProperties extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getShopGoods()
+    public function getShopGood()
     {
-        return $this->hasMany(ShopGoods::className(), ['id' => 'shop_goods_id']);
+        return $this->hasOne(ShopGoods::className(), ['id' => 'shop_goods_id']);
     }
 
-    public function getShopGoodsLink()
+    public function getShopGoodLink()
     {
-        return $this->hasOne(Links::className(), ['id' => 'links_id'])->via('shopGoods');
+        return $this->hasOne(Links::className(), ['id' => 'links_id'])->via('shopGood');
     }
 
     public function getShopGroup()
     {
-        return $this->hasOne(ShopGroups::className(), ['id' => 'shop_groups_id'])->via('shopGoods');
+        return $this->hasOne(ShopGroups::className(), ['id' => 'shop_groups_id'])->via('shopGood');
     }
 
     public function getGroupActiveLink()
@@ -95,6 +95,11 @@ class ShopGoodProperties extends \yii\db\ActiveRecord
     public function getShopPriceGood()
     {
         return $this->hasOne(ShopPriceGood::className(), ['shop_goods_id' => 'id'])->via('shopGood')->groupBy(['shop_goods_id'])->orderBy(['price' => SORT_ASC]);
+    }
+
+    public function getShopPriceType()
+    {
+        return $this->hasOne(ShopPriceTypes::className(), ['id' => 'shop_price_types_id'])->via('shopPriceGood');
     }
 
     /**
