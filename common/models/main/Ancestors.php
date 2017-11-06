@@ -84,12 +84,14 @@ class Ancestors extends \yii\db\ActiveRecord
         $parentLink = null;
         $parentLinks = array();
         $i = 0;
-        do {
-            $parentLink = $parentLink === null ? $link->parentLink : $parentLink->parentLink;
-            $parentLinks[$i]['id'] = $parentLink->id;
-            $parentLinks[$i]['exist'] = false;
-            $i += 1;
-        } while ($parentLink->parent);
+        if ($link->parentLink) {
+            do {
+                $parentLink = $parentLink === null ? $link->parentLink : $parentLink->parentLink;
+                $parentLinks[$i]['id'] = $parentLink->id;
+                $parentLinks[$i]['exist'] = false;
+                $i += 1;
+            } while ($parentLink->parent);
+        }
 
         $ancestors = Ancestors::find()->where(['links_id' => $link->id])->all();
         $ancestorsExist = null;
