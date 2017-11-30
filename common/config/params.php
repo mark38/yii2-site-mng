@@ -4,6 +4,7 @@ return [
     'hostname' => 'http://site.ru',
     'adminEmail' => 'info@site.ru',
     'supportEmail' => 'info@site.ru',
+    'companyName' => 'ООО "Наименование"',
     'user.passwordResetTokenExpire' => 3600,
     'monthsParentCase' => ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'],
     'rating' => ['max' => 5],

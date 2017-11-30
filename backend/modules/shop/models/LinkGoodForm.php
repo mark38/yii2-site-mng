@@ -16,7 +16,7 @@ class LinkGoodForm extends Links
 
         $this->parent = Yii::$app->request->get('parent');
         $this->categories_id = Yii::$app->params['shop']['categoriesId'];
-        $this->views_id = Yii::$app->params['shop']['good_views_id'];
+        $this->views_id = Yii::$app->params['shop']['productViewsId'];
     }
 
     public function rules()
