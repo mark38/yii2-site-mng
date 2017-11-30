@@ -43,7 +43,6 @@ class m170906_183139_ancestors extends Migration
 
         /** @var Links $link */
         foreach ($links as $link) {
-            echo 'Insert ancestor: '.$link->id."\n";
             $model->updateAncestor($link);
         }
 

@@ -91,6 +91,9 @@ class Ancestors extends \yii\db\ActiveRecord
                 $parentLinks[$i]['exist'] = false;
                 $i += 1;
             } while ($parentLink->parent);
+        } else {
+            $parentLinks[0]['id'] = null;
+            $parentLinks[0]['exist'] = false;
         }
 
         $ancestors = Ancestors::find()->where(['links_id' => $link->id])->all();
