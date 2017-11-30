@@ -33,6 +33,13 @@ $items[] = [
     'url' => ['/shop/hand-import'],
 ];
 
+$items[] = ['label' => 'Экспорт данных', 'options' => ['class' => 'header']];
+$items[] = [
+    'label' => 'YML - Market.Yandex',
+    'icon' => 'circle-thin',
+    'url' => ['/shop/export/yml'],
+];
+
 $items[] = ['label' => 'Поддержка', 'options' => ['class' => 'header']];
 $items[] = [
     'label' => 'Важно',
