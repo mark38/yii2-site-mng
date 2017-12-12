@@ -53,10 +53,8 @@ return [
             467 => [17513, 17103],
         ],
     ],
-    'auctionmb' => [
-        'categoriesId' => 4,
-        'layoutsId' => 1,
-        'viewsId' => 3,
-        'galleryGroupsId' => 2,
-    ]
+    'broadcast' => [
+        'upload' => '/uploads/broadcast',
+        'clearMngUrl' => '/mng',
+    ],
 ];
