@@ -48,16 +48,15 @@ class FileManagerController extends Controller
 
         if (in_array(mime_content_type($file['tmp_name']), $mimeTypes)) {
             $tmp_name = $file['tmp_name'];
-            $name_arr = pathinfo($file['name']);
+            $pathParts = pathinfo($file['name']);
             $dir = Yii::getAlias('@backend').'/web'.Yii::$app->params['broadcast']['upload'];
-            do {
-                $filename = uniqid();
-            } while(file_exists($dir.'/'.$filename.'.'.$name_arr['extension']));
 
-            if (move_uploaded_file($tmp_name, $dir.'/'.$filename.'.'.$name_arr['extension'])) {
+            if (file_exists($dir.'/'.$pathParts['basename'])) unlink($dir.'/'.$pathParts['basename']);
+
+            if (move_uploaded_file($tmp_name, $dir.'/'.$pathParts['basename'])) {
                 $broadcastFile = new BroadcastFiles();
                 $broadcastFile->name = $file['name'];
-                $broadcastFile->file = Yii::getAlias('@web').Yii::$app->params['broadcast']['upload'].'/'.$filename.'.'.$name_arr['extension'];
+                $broadcastFile->file = Yii::getAlias('@web').Yii::$app->params['broadcast']['upload'].'/'.$pathParts['basename'];
                 $broadcastFile->broadcast_id = $request->post('broadcast_id');
                 $broadcastFile->save();
 
