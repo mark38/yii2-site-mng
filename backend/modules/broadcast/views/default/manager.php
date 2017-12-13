@@ -39,7 +39,7 @@ $kcfOptions = array_merge(KCFinder::$kcfDefaultOptions, [
 
 Yii::$app->session->set('KCFINDER', $kcfOptions);
 
-echo Yii::getAlias('@app/../');
+echo Yii::$app->params['hostname'];
 ?>
 
 <div class="row">
