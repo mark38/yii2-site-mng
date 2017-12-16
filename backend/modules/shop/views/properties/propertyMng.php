@@ -24,7 +24,7 @@ $link_close = [''];
                 'horizontalCssClasses' => [
                     'label' => 'col-sm-4',
                     'offset' => 'col-sm-offset-4',
-                    'wrapper' => 'col-sm-5',
+                    'wrapper' => 'col-sm-7',
                     'error' => '',
                     'hint' => '',
                 ]
@@ -37,11 +37,12 @@ $link_close = [''];
         <?=$form->field($property, 'url')?>
         <?=$form->field($property, 'unit')?>
         <?=$form->field($property, 'seq')?>
+        <?=$form->field($property, 'number')->checkbox()?>
         <?=$form->field($property, 'range')->checkbox()?>
         <?=$form->field($property, 'state')->checkbox()?>
 
         <div class="form-group">
-            <div class="col-sm-offset-4 col-sm-6">
+            <div class="col-sm-12">
                 <?= Html::a('Отмена', $link_close, ['class' => 'btn btn-default btn-sm btn-flat'])?>
 
                 <?= Html::submitButton(($property->id ? 'Изменить' : 'Добавить'), [

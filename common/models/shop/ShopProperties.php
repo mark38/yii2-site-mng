@@ -15,7 +15,7 @@ use Yii;
  * @property integer $seq
  * @property integer $state
  * @property string $unit
- * @property boolead $number
+ * @property integer $number
  */
 class ShopProperties extends \yii\db\ActiveRecord
 {
@@ -51,7 +51,8 @@ class ShopProperties extends \yii\db\ActiveRecord
             'anchor' => 'Наименование на сайте',
             'url' => 'Имя латиницей',
             'seq' => 'Порядковый номер',
-            'state' => 'State',
+            'range' => 'Диапазон',
+            'state' => 'Состояние',
             'unit' => 'Еденица измерения',
             'number' => 'Числовое значение',
         ];
