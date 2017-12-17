@@ -103,7 +103,7 @@ class m171216_114238_init_frontend extends Migration
 
         $this->insert('{{links}}', [
             'categories_id' => 1,
-            'layouts_id' => 2,
+            'layouts_id' => 1,
             'views_id' => 2,
             'parent' => null,
             'url' => '/test',
@@ -119,6 +119,8 @@ class m171216_114238_init_frontend extends Migration
             'h1' => 'Тестовая страница',
             'manually_state' => 1,
         ]);
+
+        exec('php init --env=Frontend --overwrite=All');
     }
 
     /**

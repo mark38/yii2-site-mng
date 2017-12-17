@@ -62,4 +62,17 @@ return [
             'frontend/config/main-local.php',
         ],
     ],
+    'Frontend' => [
+        'path' => 'frontend',
+        'setWritable' => [
+            'frontend/runtime',
+            'frontend/web/assets',
+        ],
+        'setExecutable' => [
+            'yii',
+        ],
+        'setCookieValidationKey' => [
+            'frontend/config/main-local.php',
+        ],
+    ],
 ];
