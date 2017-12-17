@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         echo Html::a($action, ['mng', 'item_types_id' => $itemTypes[0]->id], ['class' => 'btn btn-sm btn-default btn-flat']);
                     }
                 } else {
-                    echo 'Предварительно '.Html::a('создайте', '/items/types').' типы элементов';
+                    echo 'Предварительно '.Html::a('создайте', Yii::$app->request->baseUrl.'/items/types/index').' типы элементов';
                 }
                 ?>
             </div>
