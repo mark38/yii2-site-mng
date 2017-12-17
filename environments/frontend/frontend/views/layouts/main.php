@@ -51,6 +51,7 @@ $breadcrumbs = Yii::$app->view->params['links']['breadcrumbs'];
         <?= RenderView::widget(['name' => 'footer']); ?>
     </footer>
 
+    <?= RenderView::widget(['name' => 'analytics']); ?>
     <?= uran1980\yii\widgets\scrollToTop\ScrollToTop::widget(); ?>
 
     <?php $this->endBody() ?>
