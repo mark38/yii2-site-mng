@@ -38,6 +38,9 @@ return [
         'main' => [
             'class' => 'app\modules\main\Module',
         ],
+        'frontend-generator' => [
+            'class' => 'app\modules\frontendGenerator\Module',
+        ],
     ],
     'components' => [
         'authManager' => [
