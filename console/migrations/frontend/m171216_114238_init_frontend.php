@@ -121,7 +121,7 @@ class m171216_114238_init_frontend extends Migration
         ]);
 
        $this->insert('{{links}}', [
-           'categories_id' => 2,
+           'categories_id' => 3,
            'layouts_id' => 1,
            'views_id' => 2,
            'parent' => null,
