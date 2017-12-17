@@ -120,6 +120,25 @@ class m171216_114238_init_frontend extends Migration
             'manually_state' => 1,
         ]);
 
+       $this->insert('{{links}}', [
+           'categories_id' => 2,
+           'layouts_id' => 1,
+           'views_id' => 2,
+           'parent' => null,
+           'url' => '/politika-konfidencialnosti',
+           'name' => 'politika-konfidencialnosti',
+           'anchor' => 'Политика конфиденциальности',
+           'child_exist' => 0,
+           'level' => 1,
+           'seq' => 1,
+           'title' => 'Политика конфиденциальности',
+           'start' => 0,
+           'state' => 1,
+           'content_nums' => 1,
+           'h1' => 'Политика конфиденциальности',
+           'manually_state' => 1,
+       ]);
+
         exec('php init --env=Frontend --overwrite=All');
     }
 
@@ -162,6 +181,10 @@ class m171216_114238_init_frontend extends Migration
 
         $this->delete('{{links}}', [
             'url' => '/test'
+        ]);
+
+        $this->delete('{{links}}', [
+            'url' => '/politika-konfidencialnosti'
         ]);
     }
 

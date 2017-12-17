@@ -40,7 +40,6 @@ use frontend\widgets\forms\SearchForm;
                 <li class="search-trigger-item"><?=Html::a(null, null, ['class' => 'has-dropdown', 'data-content' => 'search', 'id' => 'search-trigger'])?></li>
             </ul>
         </nav>
-<!--        <div class="wrap-search-form hidden-xs">--><?//=SearchForm::widget()?><!--</div>-->
     </div>
 
     <div class="morph-dropdown-wrapper">

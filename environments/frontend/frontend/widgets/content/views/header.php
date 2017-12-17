@@ -14,7 +14,7 @@ use frontend\widgets\nav\Header;
         ]) ?>
         <div class="cnt-header row">
             <div class="col-xs-2 hidden-sm hidden-md hidden-lg"></div>
-            <div class="col-lg-3 col-xs-6"><a href="/" class="logo-link" title="Мир дверей - интернет-магазин"><img src="/assets/static/logo.svg" alt="МирДверей" class="logo" /></a></div>
+            <div class="col-lg-3 col-xs-6"><a href="/" class="logo-link" title="Название сайта"><img src="/assets/static/logo.svg" alt="Название сайта" class="logo" /></a></div>
             <div class="col-lg-6 hidden-xs">
 
             </div>
