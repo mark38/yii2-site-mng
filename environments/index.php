@@ -67,12 +67,9 @@ return [
         'setWritable' => [
             'frontend/runtime',
             'frontend/web/assets',
-        ],
-        'setExecutable' => [
-            'yii',
-        ],
-        'setCookieValidationKey' => [
-            'frontend/config/main-local.php',
-        ],
+        ]
     ],
+    'KCFinder' => [
+        'path' => 'kcfinder'
+    ]
 ];
