@@ -15,6 +15,10 @@ class NavAsset extends AssetBundle
     public $css = [
         'nav.css',
     ];
+    public $js = [
+        'nav.js'
+    ];
+
 
     /**
      * @inheritdoc
