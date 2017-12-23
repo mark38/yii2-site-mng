@@ -1,23 +1,4 @@
 jQuery(document).ready(function($){
-    $(window).scroll(function () {
-        fixedTopMainNav();
-    });
-    fixedTopMainNav();
-
-    function fixedTopMainNav() {
-        if ($(window).scrollTop() > 60) {
-            if (! $('header.cd-morph-dropdown').hasClass('fixed-nav-top')) {
-                $('header.cd-morph-dropdown').addClass('fixed-nav-top').removeClass('is-top').end();
-                $('section.content').addClass('top-indent').end();
-                $('.promo-top').addClass('pull-up')
-            }
-        } else {
-            $('header.cd-morph-dropdown').removeClass('fixed-nav-top').addClass('is-top').end();
-            $('section.content').removeClass('top-indent').end();
-            $('.promo-top').removeClass('pull-up');
-        }
-    }
-
     function morphDropdown( element ) {
         this.element = element;
         this.mainNavigation = this.element.find('.main-nav');
@@ -51,12 +32,10 @@ jQuery(document).ready(function($){
 
         //hover over the dropdown
         this.dropdownList.mouseleave(function(){
-            if (!viewSearchResult) {
-                setTimeout(function(){
-                    //if not hovering over a dropdown or a nav item -> hide dropdown
-                    (self.mainNavigation.find('.has-dropdown:hover').length == 0 && self.element.find('.dropdown-list:hover').length == 0 ) && self.hideDropdown();
-                }, 50);
-            }
+            setTimeout(function(){
+                //if not hovering over a dropdown or a nav item -> hide dropdown
+                (self.mainNavigation.find('.has-dropdown:hover').length == 0 && self.element.find('.dropdown-list:hover').length == 0 ) && self.hideDropdown();
+            }, 50);
         });
 
         //click on an item in the main navigation -> open a dropdown on a touch device
@@ -81,14 +60,11 @@ jQuery(document).ready(function($){
             var self = this;
             var selectedDropdown = this.dropdownList.find('#'+item.data('content')),
                 selectedDropdownHeight = selectedDropdown.innerHeight(),
-                // selectedDropdownWidth = selectedDropdown.children('.content').innerWidth(),
-                selectedDropdownWidth = $('.cd-morph-dropdown').innerWidth(),
-                containerDropdownWidth = $('.container').innerWidth(),
+                selectedDropdownWidth = selectedDropdown.children('.content').innerWidth(),
                 selectedDropdownLeft = item.offset().left + item.innerWidth()/2 - selectedDropdownWidth/2;
-                selectedDropdownLeft = 0;
 
             //update dropdown position and size
-            this.updateDropdown(selectedDropdown, parseInt(selectedDropdownHeight), selectedDropdownWidth, parseInt(selectedDropdownLeft), parseInt(containerDropdownWidth));
+            this.updateDropdown(selectedDropdown, parseInt(selectedDropdownHeight), selectedDropdownWidth, parseInt(selectedDropdownLeft));
             //add active class to the proper dropdown item
             this.element.find('.active').removeClass('active');
             selectedDropdown.addClass('active').removeClass('move-left move-right').prevAll().addClass('move-left').end().nextAll().addClass('move-right');
@@ -102,7 +78,7 @@ jQuery(document).ready(function($){
         }
     };
 
-    morphDropdown.prototype.updateDropdown = function(dropdownItem, height, width, left, containerWidth) {
+    morphDropdown.prototype.updateDropdown = function(dropdownItem, height, width, left) {
         this.dropdownList.css({
             '-moz-transform': 'translateX(' + left + 'px)',
             '-webkit-transform': 'translateX(' + left + 'px)',
@@ -114,11 +90,11 @@ jQuery(document).ready(function($){
         });
 
         this.dropdownBg.css({
-            '-moz-transform': 'scaleX(' + containerWidth + ') scaleY(' + height + ')',
-            '-webkit-transform': 'scaleX(' + containerWidth + ') scaleY(' + height + ')',
-            '-ms-transform': 'scaleX(' + containerWidth + ') scaleY(' + height + ')',
-            '-o-transform': 'scaleX(' + containerWidth + ') scaleY(' + height + ')',
-            'transform': 'scaleX(' + containerWidth + ') scaleY(' + height + ')'
+            '-moz-transform': 'scaleX(' + width + ') scaleY(' + height + ')',
+            '-webkit-transform': 'scaleX(' + width + ') scaleY(' + height + ')',
+            '-ms-transform': 'scaleX(' + width + ') scaleY(' + height + ')',
+            '-o-transform': 'scaleX(' + width + ') scaleY(' + height + ')',
+            'transform': 'scaleX(' + width + ') scaleY(' + height + ')'
         });
     };
 

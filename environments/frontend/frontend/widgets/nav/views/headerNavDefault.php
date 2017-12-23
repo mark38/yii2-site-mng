@@ -9,18 +9,15 @@ use kartik\helpers\Html;
 ?>
 
 <div class="content">
-    <div class="catalog-links row cnt-space">
+    <ul class="links-list">
         <?php
         /** @var \common\models\main\Links $link */
         foreach ($childLinks as $childLink) {
             $anchor = preg_replace('/\(/', '<small>(', $childLink->anchor);
             $anchor = preg_replace('/\)/', ')</small>', $anchor);
-            echo Html::tag('div', Html::a($anchor, $childLink->url, ['class' => 'group-link']), ['class' => 'col-lg-4 col-md-6 col-sm-12']);
+            echo Html::tag('li', Html::a($anchor, $childLink->url));
         }
         ?>
-    </div>
-
-    <div class="catalog-footer text-center cnt-space hidden-xs">
-        <?= Html::a('Весь каталог', $link->url, ['class' => 'btn btn-default']) ?>
-    </div>
+    </ul>
+    <?= Html::a('Весь каталог', $link->url, ['class' => 'btn', 'style' => 'padding:0']) ?>
 </div>

@@ -9,10 +9,9 @@ use frontend\widgets\forms\SearchForm;
 
 ?>
 
-<div class="cd-morph-dropdown is-top">
+<header class="cd-morph-dropdown">
     <a href="#0" class="nav-trigger">Каталог<span aria-hidden="true"></span></a>
-    <div class="container wrap-main-nav">
-        <nav class="main-nav pull-left">
+        <nav class="main-nav">
             <ul>
                 <?php
                 $dropDownExist = false;
@@ -37,48 +36,33 @@ use frontend\widgets\forms\SearchForm;
                     echo Html::endTag('li');
                 }
                 ?>
-                <li class="search-trigger-item"><?=Html::a(null, null, ['class' => 'has-dropdown', 'data-content' => 'search', 'id' => 'search-trigger'])?></li>
             </ul>
         </nav>
-    </div>
 
     <div class="morph-dropdown-wrapper">
         <div class="dropdown-list">
-            <div class="container">
-                <ul class="list-unstyled">
-                    <?php
-                    /** @var \common\models\main\Links $link */
-                    foreach ($links as $link) {
-                        $class = $link->css_class ? $link->css_class : 'links';
-                        echo Html::beginTag('li', ['id' => $link->name, 'class' => 'dropdown '.$class]);
-                        echo Html::a($link->anchor, $link->url, ['class' => 'label text-left']);
+            <ul>
+                <?php
+                /** @var \common\models\main\Links $link */
+                foreach ($links as $link) {
+                    $class = $link->css_class ? $link->css_class : 'links';
+                    echo Html::beginTag('li', ['id' => $link->name, 'class' => 'dropdown '.$class]);
+                    echo Html::a($link->anchor, $link->url, ['class' => 'label']);
 
-                        if ($link->child_exist) {
-                            switch ($link->css_class) {
-                                case "promo":
-                                    echo $this->render('headerNavPromo', [
-                                        'link' => $link,
-                                        'childLinks' => $link->activeLinks,
-                                    ]);
-                                    break;
-
-                                default:
-                                    echo $this->render('headerNavDefault', [
-                                        'link' => $link,
-                                        'childLinks' => $link->activeLinks,
-                                    ]);
-                            }
+                    if ($link->child_exist) {
+                        switch ($link->css_class) {
+                            default:
+                                echo $this->render('headerNavDefault', [
+                                    'link' => $link,
+                                    'childLinks' => $link->activeLinks,
+                                ]);
                         }
-
-                        echo Html::endTag('li');
                     }
-                    ?>
-                    <li id="search" class="dropdown">
-                        <div class="content"></div>
-                    </li>
-                </ul>
-                <div class="bg-layer" aria-hidden="true"></div>
-            </div>
+                    echo Html::endTag('li');
+                }
+                ?>
+            </ul>
+            <div class="bg-layer" aria-hidden="true"></div>
         </div>
     </div>
-</div>
+</header>
