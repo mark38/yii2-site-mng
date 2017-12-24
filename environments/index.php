@@ -67,6 +67,7 @@ return [
         'setWritable' => [
             'frontend/runtime',
             'frontend/web/assets',
+            'frontend/web/assets/static/image',
         ]
     ],
     'KCFinder' => [

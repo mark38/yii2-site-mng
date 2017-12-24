@@ -38,12 +38,6 @@ class m171216_114238_init_frontend extends Migration
             'seq' => 2
         ]);
 
-        $this->insert('{{layouts}}', [
-            'name' => 'shopGroup',
-            'comment' => 'Shop group layout',
-            'seq' => 3
-        ]);
-
         $this->insert('{{links}}', [
             'categories_id' => 1,
             'layouts_id' => 2,
@@ -161,10 +155,6 @@ class m171216_114238_init_frontend extends Migration
 
         $this->delete('{{layouts}}', [
             'name' => 'index'
-        ]);
-
-        $this->delete('{{layouts}}', [
-            'name' => 'shopGroup'
         ]);
 
         $this->delete('{{links}}', [
