@@ -62,4 +62,15 @@ return [
             'frontend/config/main-local.php',
         ],
     ],
+    'Frontend' => [
+        'path' => 'frontend',
+        'setWritable' => [
+            'frontend/runtime',
+            'frontend/web/assets',
+            'frontend/web/assets/static/image',
+        ]
+    ],
+    'KCFinder' => [
+        'path' => 'kcfinder'
+    ]
 ];

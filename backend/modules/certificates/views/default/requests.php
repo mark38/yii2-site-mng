@@ -104,7 +104,7 @@ $this->title = 'Список запросов для задачи от '.date('d
                     <?= Html::a('Закрыть задачу и сформировать файлы excel', ['/certificates/close-task', 'tasks_id' => $task->id], ['class' => 'btn btn-success btn-sm btn-flat']) ?>
                 </div>
             </div>
-        <? } ?>
+        <?php } ?>
 
         <?php if (!$task->state && $excels) { ?>
             <div class="box box-default">
@@ -180,7 +180,7 @@ $this->title = 'Список запросов для задачи от '.date('d
                     </div>
                 <?php } ?>
             </div>
-        <? } ?>
+        <?php } ?>
 
 
 

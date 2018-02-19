@@ -37,7 +37,7 @@ return [
         ],
         'main' => [
             'class' => 'app\modules\main\Module',
-        ],
+        ]
     ],
     'components' => [
         'authManager' => [
