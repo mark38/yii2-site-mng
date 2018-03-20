@@ -15,7 +15,7 @@ class LinkGroupForm extends Links
 
         $this->parent = Yii::$app->request->get('parent');
         $this->categories_id = Yii::$app->params['shop']['categoriesId'];
-        $this->views_id = Yii::$app->params['shop']['goods_views_id'];
+        $this->views_id = Yii::$app->params['shop']['groupViewsId'];
     }
 
     public function rules()

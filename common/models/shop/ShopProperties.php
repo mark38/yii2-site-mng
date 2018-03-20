@@ -67,7 +67,7 @@ class ShopProperties extends \yii\db\ActiveRecord
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-            if (!$this->seq) {
+            if (!isset($this->seq)) {
                 $property = self::find()->orderBy(['seq' => SORT_DESC])->one();
                 $this->seq = $property->seq + 1;
             }
