@@ -2,18 +2,15 @@
 use kartik\helpers\Html;
 use kartik\form\ActiveForm;
 use backend\widgets\ckeditor\CKEditor;
-use kartik\builder\Form;
 use yii\bootstrap\Tabs;
 use yii\bootstrap\Modal;
-use yii\helpers\ArrayHelper;
-use common\models\shop\ShopProperties;
-use yii\helpers\Url;
 
 /**
  * @var $this \yii\web\View
  * @var $action
  * @var $link \backend\modules\shop\models\LinkGroupForm
  * @var $good \backend\modules\shop\models\GoodForm
+ * @var $galleryGroup \common\models\gallery\GalleryGroups
  * @var $galleryImage \common\models\gallery\GalleryImagesForm
  */
 
@@ -128,6 +125,9 @@ if ($galleryImage->large) {
                     [
                         'label' => 'Медиа',
                         'content' => Html::beginTag('p') .
+                            $this->render('galleryForm', [
+                                'galleryGroup' => $galleryGroup,
+                            ]) .
                             '<div clas="hidden">' .
                             $form->field($galleryImage, 'id')->hiddenInput()->label(false) .
                             $form->field($galleryImage, 'small')->hiddenInput(['class' => 'form-control image-small'])->label(false) .
