@@ -10,6 +10,7 @@ use yii\helpers\Url;
  * @var $catalogLink \common\models\main\Links
  * @var $link \backend\modules\shop\models\LinkGroupForm
  * @var $group \common\models\shop\ShopGroups
+ * @var $galleryGroup \common\models\gallery\GalleryGroups
  * @var $galleryImage \common\models\gallery\GalleryImagesForm
  */
 
@@ -53,7 +54,7 @@ $this->title = 'Управление списком товара и их гру�
         <?php if ($action) {
             switch ($type) {
                 case "group": echo $this->render('groupForm', compact('action', 'link', 'group')); break;
-                case "good": echo $this->render('goodForm', compact('action', 'link', 'good', 'galleryImage')); break;
+                case "good": echo $this->render('goodForm', compact('action', 'link', 'good', 'galleryGroup', 'galleryImage')); break;
             }
         }?>
     </div>
