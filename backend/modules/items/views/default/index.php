@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="row">
 
-    <div class="col-sm-3">
+    <div class="col-lg-3">
         <div class="box box-primary">
             <div class="box-header with-border">
                 <?php
@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 
-    <div class="col-sm-9">
+    <div class="col-lg-9">
         <div class="box box-default">
             <div class="box-body">
                 <table class="table table-hover table-condensed">

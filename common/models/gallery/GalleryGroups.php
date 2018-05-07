@@ -12,9 +12,9 @@ use Yii;
  * @property integer $gallery_images_id
  * @property string $name
  *
- * @property GalleryImages $galleryImages
- * @property GalleryTypes $galleryTypes
- * @property GalleryImages[] $galleryImages0
+ * @property GalleryImages $galleryImage
+ * @property GalleryTypes $galleryType
+ * @property GalleryImages[] $galleryImages
  */
 class GalleryGroups extends \yii\db\ActiveRecord
 {

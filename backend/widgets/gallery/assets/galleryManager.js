@@ -58,17 +58,18 @@ var galleryManager = {
                 dataType: 'json',
                 success: function(jsonData) {
                     if (jsonData.success == false) {
-                        alert(jsonData.message);
+                        console.log(jsonData.message);
                     } else {
+                        console.log(galleryManager.options.group);
                         if (galleryManager.options.group == 0) {
                             galleryManager.options.gallery_images_id = jsonData.gallery_images_id;
                             $('#input-'+galleryManager.options.widget_id+' input[type="hidden"]').val(galleryManager.options.gallery_images_id);
                         }
                     }
 
-                    /*if (i == $(e).prop('files').length) {
+                    if (i == $(e).prop('files').length) {
                         galleryManager.getGallery();
-                    }*/
+                    }
                 },
                 error: function() {
                     alert('Failed to add image');
