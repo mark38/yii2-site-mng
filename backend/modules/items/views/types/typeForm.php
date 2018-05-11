@@ -10,7 +10,6 @@ use yii\bootstrap\Modal;
 use backend\widgets\map\SelectLink;
 
 $galleryTypes = ArrayHelper::map($type->galleryTypes, 'id', 'comment');
-
 $linkClose = ['index'];
 ?>
 
@@ -23,7 +22,7 @@ $linkClose = ['index'];
 
     <?=$form->field($type, 'gallery_types_id')->dropDownList($galleryTypes)?>
 
-    <?=$form->field($type, 'galleryGroupName')?>
+    <?=$form->field($type, 'galleryGroupName')->label('Наименование фото-галереи (если указана)')?>
 
 
     <?= Html::a('Отмена', $linkClose, ['class' => 'btn btn-default btn-sm btn-flat'])?>

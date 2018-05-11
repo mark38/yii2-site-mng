@@ -77,6 +77,7 @@ if ($galleryImage && $galleryImage->large) {
                                         'clientOptions' => [
                                             'height' => 300,
                                             'allowedContent' => true,
+                                            'autoParagraph' => false,
                                             'toolbar' => [
                                                 [
                                                     'name' => 'row1',
