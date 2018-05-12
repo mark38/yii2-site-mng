@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="row">
 
-    <div class="col-lg-3">
+    <div class="col-lg-4 col-sm-12">
         <div class="box box-primary">
             <div class="box-header with-border">
                 <?php
@@ -51,6 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 if ($itemTypes) {
                     $itemList = array();
                     $amount = 0;
+                    /** @var \common\models\items\ItemTypes $itemType */
                     foreach ($itemTypes as $itemType) {
                         $amount += count($itemType->items);
                         $itemList[] = [
@@ -75,11 +76,11 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 
-    <div class="col-lg-9">
+    <div class="col-lg-8 col-sm-12">
         <div class="box box-default">
             <div class="box-body">
                 <table class="table table-hover table-condensed">
-                    <thead><tr><th><nobr>#/id</nobr></th><th>Изображение</th><th>Ссылка</th><th>Наименование</th><th>Заголовок</th><th>Описание</th><th>Цена</th><th><nobr>Старая цена</nobr></th><th>Статус</th><th class="text-right">Действие</th></tr></thead>
+                    <thead><tr><th><nobr>#</nobr></th><th>Изображение</th><th>Наименование</th><th>Заголовок</th><th></th></tr></thead>
                     <tbody>
                     <?php if ($items) {
                         foreach ($items as $i => $item) {
