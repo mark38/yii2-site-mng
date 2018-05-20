@@ -2,6 +2,7 @@
 
 namespace app\modules\gallery\controllers;
 
+use backend\widgets\gallery\GalleryManager;
 use Yii;
 use yii\web\Controller;
 use common\models\gallery\GalleryTypes;
@@ -15,7 +16,7 @@ class DefaultController extends Controller
         return [
             'gallery-manager' => [
                 'class' => GalleryManagerAction::className(),
-            ],
+            ]
         ];
     }
 

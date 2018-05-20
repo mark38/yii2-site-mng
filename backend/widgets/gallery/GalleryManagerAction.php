@@ -1,6 +1,8 @@
 <?php
 namespace backend\widgets\gallery;
 
+use common\models\gallery\GalleryGroups;
+use common\models\gallery\GalleryImages;
 use Yii;
 use yii\base\Action;
 use yii\web\Response;
@@ -29,6 +31,7 @@ class GalleryManagerAction extends Action
             case 'get_gallery': return $this->actionGetGallery(); break;
             case 'get_gallery_test': return $this->actionGetGalleryTest(); break;
             case 'delete_image': return $this->actionDeleteImage(); break;
+            case 'sortable_images': return $this->actionSortableImages(); break;
         }
     }
 
@@ -87,6 +90,30 @@ class GalleryManagerAction extends Action
 
         return [
             'success' => 'true'
+        ];
+    }
+
+    public function actionSortableImages()
+    {
+        $images = json_decode(Yii::$app->request->post('images'), true);
+        foreach ($images as $seq => $galleryImagesId) {
+            if ($seq == 0) {
+                $galleryGroup = GalleryGroups::findOne(Yii::$app->request->post('gallery_groups_id'));
+                if ($galleryGroup && $galleryGroup->gallery_images_id != $galleryImagesId) {
+                    $galleryGroup->gallery_images_id = $galleryImagesId;
+                    $galleryGroup->save();
+                }
+            }
+
+            $image = GalleryImages::findOne($galleryImagesId);
+            if ($image) {
+                $image->seq = $seq + 1;
+                $image->save();
+            }
+        }
+
+        return [
+            'success' => true
         ];
     }
 }

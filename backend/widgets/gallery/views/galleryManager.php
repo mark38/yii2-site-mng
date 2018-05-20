@@ -47,6 +47,9 @@ $items[] = [
 <?= Sortable::widget([
     'type' => 'grid',
     'items' => $items,
+    'pluginEvents' => [
+        'sortupdate' => 'function(e, ui) { galleryManager.sortableImage("'.$this->context->id.'") }',
+    ],
     'options' => [
         'class' => 'list-gallery-manager',
     ],
