@@ -126,6 +126,7 @@ MapAsset::register($this);
                     'clientOptions' => [
                         'height' => 300,
                         'allowedContent' => true,
+                        'forcePasteAsPlainText' => true, // Вставляет из буфера без скопированных стилей
                         'toolbar' => [
                             [
                                 'name' => 'row1',
