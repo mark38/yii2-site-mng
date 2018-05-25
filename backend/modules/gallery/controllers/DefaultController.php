@@ -46,29 +46,16 @@ class DefaultController extends Controller
         return $this->render('mngGallery', compact('galleryType', 'galleryGroup'));
     }
 
-    public function actionIndexDef($action=null, $gallery_groups_id=null)
+    public function actionGroupDel($gallery_groups_id)
     {
-        $gallery_types = GalleryTypes::find()->where(['visible' => 1])->orderBy(['comment' => SORT_ASC])->all();
-        $gallery_groups = GalleryGroups::find()->innerJoinWith('galleryType')->where(['visible' => 1])->orderBy(['id' => SORT_DESC])->all();
-        $gallery_group = false;
-
-        if ($action) {
-            if ($action == 'add') {
-                $gallery_group = new GalleryGroups();
-                $gallery_group->gallery_types_id = Yii::$app->request->get('gallery_types_id');
-            } else if ($action == 'ch' && $gallery_groups_id) {
-                $gallery_group = GalleryGroups::find()->where(['id' => $gallery_groups_id])->one();
-            }
-
-            if ($gallery_group->load(Yii::$app->request->post()) && $gallery_group->save()) {
-                return $this->redirect(['', 'action' => 'ch', 'gallery_groups_id' => $gallery_group->id]);
-            }
+        $galleryGroup = GalleryGroups::findOne($gallery_groups_id);
+        $galleryTypesId = null;
+        if ($galleryGroup) {
+            $galleryTypesId = $galleryGroup->gallery_types_id;
+            $galleryGroup->delete();
         }
 
-        return $this->render('gallery', [
-            'gallery_types' => $gallery_types,
-            'gallery_groups' => $gallery_groups,
-            'gallery_group' => $gallery_group,
-        ]);
+        Yii::$app->getSession()->setFlash('success', 'Галерея удалена');
+        return $this->redirect(['index', 'gallery_types_id' => $galleryTypesId]);
     }
 }
