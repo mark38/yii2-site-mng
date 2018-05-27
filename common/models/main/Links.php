@@ -347,7 +347,6 @@ class Links extends \yii\db\ActiveRecord
 
             if ($link->state != $state) {
                 Links::updateAll(['state' => $state], ['id' => $link->id]);
-                echo "update state ".$link->id."\n";
             }
         }
     }
