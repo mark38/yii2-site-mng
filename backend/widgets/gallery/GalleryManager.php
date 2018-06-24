@@ -60,8 +60,8 @@ class GalleryManager extends InputWidget
         GalleryManagerAsset::register($view);
         $view->registerJs("$('#content-{$this->id}').galleryManager({$opts});");
 
-        $this->options['id'] = 'content-'.$this->id.(isset($this->options['id']) ? ' '.$this->options['id'] : '');
-        $this->options['class'] = 'gallery-manager'.(isset($this->options['class']) ? ' '.$this->options['class'] : '');
+        $this->options['id'] = 'content-' . $this->id . (isset($this->options['id']) ? ' '.$this->options['id'] : '');
+        $this->options['class'] = 'gallery-manager' . (isset($this->options['class']) ? ' '.$this->options['class'] : '');
 
         echo Html::beginTag('div', $this->options);
         echo $this->render('galleryManager', [

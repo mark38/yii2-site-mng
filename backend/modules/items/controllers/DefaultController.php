@@ -75,6 +75,7 @@ class DefaultController extends Controller
         } else {
             $item = new ItemForm();
             $item->item_types_id = $item_types_id;
+//            $item->state = true;
         }
 
         $galleryImage = isset($item->gallery_images_id) ? GalleryImagesForm::findOne($item->gallery_images_id) : new GalleryImagesForm();

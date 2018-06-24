@@ -114,10 +114,10 @@ class Tours extends \yii\db\ActiveRecord
         return $this->hasOne(Hotel::className(), ['id' => 'hotel_id']);
     }
 
-    public function getCity()
-    {
-        return $this->hasOne(City::className(), ['id' => 'city_id'])->via('hotel');
-    }
+        public function getCity()
+        {
+            return $this->hasOne(City::className(), ['id' => 'city_id'])->via('hotel');
+        }
 
     /**
      * @return \yii\db\ActiveQuery

@@ -176,10 +176,10 @@ class Gallery extends Model
         } while(file_exists($dir.'/'.$filename.'.'.$extension));*/
 
         $filename = $baseName;
-        if (file_exists($dir.'/'.$filename.$extension)) {
+        if (file_exists($dir.'/'.$filename.'.'.$extension)) {
             do {
-                $filename = '';
-                for ( $j = 0; $j < 12; $j++ ) $filename .= chr( rand(97, 122) );
+                $filename = $filename;
+                for ( $j = 0; $j < 2; $j++ ) $filename .= chr( rand(97, 122) );
             } while(file_exists($dir.'/'.$filename.'.'.$extension));
         }
         /*while (file_exists($dir.'/'.$filename.$extension)) {
