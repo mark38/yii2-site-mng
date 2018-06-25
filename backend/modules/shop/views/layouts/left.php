@@ -13,6 +13,11 @@ $items[] = [
     'encode' => false,
 ];
 $items[] = [
+    'label' => 'Категории товаров',
+    'icon' => 'list-alt',
+    'url' => ['/shop/categories/list'],
+];
+$items[] = [
     'label' => 'Свойства',
     'icon' => 'filter',
     'url' => ['/shop/properties/list'],
