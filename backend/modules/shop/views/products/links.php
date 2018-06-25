@@ -29,8 +29,8 @@ $this->title = 'Управление списком товара и их гру�
                         'dropdown' => [
                             'items' => [
                                 ['label' => 'Добавить в корень каталога:'],
-                                ['label' => 'Новую группу', 'url' => Url::to(['', 'action' => 'add', 'parent' => ($catalogLink ? $catalogLink->id : null), 'type' => 'group'])],
-                                ['label' => 'Новую номенклатуру', 'url' => Url::to(['', 'action' => 'add', 'parent' => ($catalogLink ? $catalogLink->id : null), 'type' => 'good'])],
+                                ['label' => 'Новую группу', 'url' => Url::to(['', 'action' => 'add', 'parent' => ($catalogLink->id ?? null), 'type' => 'group'])],
+                                ['label' => 'Новую номенклатуру', 'url' => Url::to(['',     'action' => 'add', 'parent' => ($catalogLink->id ?? null), 'type' => 'good'])],
                             ],
                         ],
                         'encodeLabel' => false,
@@ -43,7 +43,7 @@ $this->title = 'Управление списком товара и их гру�
             <div class="box-body">
                 <?=ProductLinks::widget([
                     'categoriesId' => Yii::$app->params['shop']['categoriesId'],
-                    'parent' => ($catalogLink ? $catalogLink->id : null),
+                    'parent' => ($catalogLink->id ?? null),
                     'linksId' => null
                 ])?>
             </div>
