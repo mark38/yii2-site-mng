@@ -7,7 +7,7 @@ use yii\helpers\Url;
  * @var $this \yii\web\View
  * @var $action
  * @var $type
- * @var $catalogLink \common\models\main\Links
+ * @var \common\models\main\Links $catalogLink
  * @var $link \backend\modules\shop\models\LinkGroupForm
  * @var $group \common\models\shop\ShopGroups
  * @var $galleryGroup \common\models\gallery\GalleryGroups
@@ -29,8 +29,8 @@ $this->title = 'Управление списком товара и их гру�
                         'dropdown' => [
                             'items' => [
                                 ['label' => 'Добавить в корень каталога:'],
-                                ['label' => 'Новую группу', 'url' => Url::to(['', 'action' => 'add', 'parent' => $catalogLink->id, 'type' => 'group'])],
-                                ['label' => 'Новую номенклатуру', 'url' => Url::to(['',     'action' => 'add', 'parent' => $catalogLink->id, 'type' => 'good'])],
+                                ['label' => 'Новую группу', 'url' => Url::to(['', 'action' => 'add', 'parent' => ($catalogLink ? $catalogLink->id : null), 'type' => 'group'])],
+                                ['label' => 'Новую номенклатуру', 'url' => Url::to(['', 'action' => 'add', 'parent' => ($catalogLink ? $catalogLink->id : null), 'type' => 'good'])],
                             ],
                         ],
                         'encodeLabel' => false,
@@ -43,7 +43,7 @@ $this->title = 'Управление списком товара и их гру�
             <div class="box-body">
                 <?=ProductLinks::widget([
                     'categoriesId' => Yii::$app->params['shop']['categoriesId'],
-                    'parent' => $catalogLink->id,
+                    'parent' => ($catalogLink ? $catalogLink->id : null),
                     'linksId' => null
                 ])?>
             </div>
