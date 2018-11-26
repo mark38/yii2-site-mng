@@ -51,7 +51,6 @@
         "vova07/yii2-console-runner-extension": "^0.1.0",
         "zelenin/smsru": "^4.1",
         "romka-chev/yii2-swiper": "^2.0",
-        "ivan-chkv/yii2-jquery-fullpage": "^2.0",
         "kartik-v/yii2-tabs-x": "@dev",
         "kartik-v/yii2-builder": "^1.6",
         "delocker/yii2-animate.css": "dev-master",
