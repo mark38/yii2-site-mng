@@ -135,5 +135,5 @@ if ($galleryImage->large) {
     </div>
 </div>
 
-<?php ActiveForm::end()?>
+<?php ActiveForm::end(); ?>
 

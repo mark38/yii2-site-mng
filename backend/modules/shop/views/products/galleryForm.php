@@ -1,10 +1,12 @@
 <?php
+/**
+ * @var \yii\web\View $this
+ * @var \common\models\gallery\GalleryGroups $galleryGroup
+ */
 use yii\bootstrap\ActiveForm;
-use mark38\galleryManager\GalleryManager;
-
-/** @var $this \yii\web\View */
-/** @var $galleryGroup \common\models\gallery\GalleryGroups */
-
+//use mark38\galleryManager\GalleryManager;
+use backend\widgets\gallery\GalleryManager;
+use kartik\helpers\Html;
 
 $form = ActiveForm::begin([
     'method' => 'post',
@@ -20,16 +22,18 @@ $form = ActiveForm::begin([
     ],
 ]);
 
-echo  $form->field($galleryGroup, 'id', [
-    'template' => '<div class="col-sm-12">{input}</div>'
-])->widget(GalleryManager::className(), [
-    'gallery_groups_id' => $galleryGroup->id,
-    'pluginOptions' => [
-        'type' => $galleryGroup->galleryType->name,
-        'apiUrl' => 'gallery-manager',
-        'webRoute' => Yii::getAlias('@frontend/web'),
-    ]
-])->label(false);
+if ($galleryGroup) {
+    echo Html::beginTag('div', ['class' => 'lext-left']);
+    echo $form->field($galleryGroup, 'id')->widget(GalleryManager::className(), [
+        'gallery_groups_id' => $galleryGroup->id,
+        'pluginOptions' => [
+            'type' => $galleryGroup->galleryType->name,
+            'apiUrl' => 'gallery-manager',
+            'webRoute' => Yii::getAlias('@frontend/web'),
+        ]
+    ])->label(false);
+    echo Html::endTag('div');
+}
 
 ActiveForm::end();
 

@@ -84,29 +84,36 @@ class GoodForm extends ShopGoods
                 $galleryGroup->name = $this->name;
                 $galleryGroup->update();
             }
+
+            if ($galleryGroup->gallery_images_id && $this->link->gallery_images_id != $galleryGroup->gallery_images_id) {
+                $this->link->gallery_images_id = $galleryGroup->gallery_images_id;
+                $this->link->update();
+            }
         }
 
         ShopGoodProperties::deleteAll(['shop_goods_id' => $this->id]);
 
-        foreach ($this->propertyValues as $shop_properties_id => $anchor) {
-            $shopPropertyValue = ShopPropertyValues::find()
-                ->where(['shop_properties_id' => $shop_properties_id])
-                ->andWhere(['anchor' => $anchor])
-                ->one();
-            if (!$shopPropertyValue) {
-                $shopPropertyValue = new ShopPropertyValues();
-                $shopPropertyValue->shop_properties_id = $shop_properties_id;
-                $shopPropertyValue->name = $anchor;
-                $shopPropertyValue->anchor = $anchor;
-                $shopPropertyValue->save();
-            }
+        if ($this->propertyValues) {
+            foreach ($this->propertyValues as $shop_properties_id => $anchor) {
+                $shopPropertyValue = ShopPropertyValues::find()
+                    ->where(['shop_properties_id' => $shop_properties_id])
+                    ->andWhere(['anchor' => $anchor])
+                    ->one();
+                if (!$shopPropertyValue) {
+                    $shopPropertyValue = new ShopPropertyValues();
+                    $shopPropertyValue->shop_properties_id = $shop_properties_id;
+                    $shopPropertyValue->name = $anchor;
+                    $shopPropertyValue->anchor = $anchor;
+                    $shopPropertyValue->save();
+                }
 
-            $shopGoodProperty = new ShopGoodProperties();
-            $shopGoodProperty->shop_goods_id = $this->id;
-            $shopGoodProperty->shop_properties_id = $shop_properties_id;
-            $shopGoodProperty->shop_property_values_id = $shopPropertyValue->id;
-            $shopGoodProperty->state = true;
-            $shopGoodProperty->save();
+                $shopGoodProperty = new ShopGoodProperties();
+                $shopGoodProperty->shop_goods_id = $this->id;
+                $shopGoodProperty->shop_properties_id = $shop_properties_id;
+                $shopGoodProperty->shop_property_values_id = $shopPropertyValue->id;
+                $shopGoodProperty->state = true;
+                $shopGoodProperty->save();
+            }
         }
 
         self::updatePrices();
