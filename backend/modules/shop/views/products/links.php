@@ -7,7 +7,7 @@ use yii\helpers\Url;
  * @var $this \yii\web\View
  * @var $action
  * @var $type
- * @var \common\models\main\Links $catalogLink
+ * @var \common\models\main\Links $catalogLinks
  * @var $link \backend\modules\shop\models\LinkGroupForm
  * @var $group \common\models\shop\ShopGroups
  * @var $galleryGroup \common\models\gallery\GalleryGroups
@@ -20,34 +20,36 @@ $this->title = 'Управление списком товара и их гру�
 <div class="row">
     <div class="col-md-5">
 
-        <div class="box box-default">
-            <div class="box-header with-border">
-                <h3>
-                    <?=$catalogLink ? $catalogLink->anchor : 'Корень'?> <small>(<?=$catalogLink ? $catalogLink->url : '/'?>)</small>
-                    <?=ButtonDropdown::widget([
-                        'label' => '<i class="glyphicon glyphicon-option-vertical"></i>',
-                        'dropdown' => [
-                            'items' => [
-                                ['label' => 'Добавить в корень каталога:'],
-                                ['label' => 'Новую группу', 'url' => Url::to(['', 'action' => 'add', 'parent' => ($catalogLink->id ?? null), 'type' => 'group'])],
-                                ['label' => 'Новую номенклатуру', 'url' => Url::to(['',     'action' => 'add', 'parent' => ($catalogLink->id ?? null), 'type' => 'good'])],
+        <?php foreach ($catalogLinks as $catalogLink) { ?>
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3>
+                        <?=$catalogLinks ? $catalogLink->anchor : 'Корень'?> <small>(<?=$catalogLink ? $catalogLink->url : '/'?>)</small>
+                        <?=ButtonDropdown::widget([
+                            'label' => '<i class="glyphicon glyphicon-option-vertical"></i>',
+                            'dropdown' => [
+                                'items' => [
+                                    ['label' => 'Добавить в корень каталога:'],
+                                    ['label' => 'Новую группу', 'url' => Url::to(['', 'action' => 'add', 'parent' => ($catalogLink->id ?? null), 'type' => 'group'])],
+                                    ['label' => 'Новую номенклатуру', 'url' => Url::to(['',     'action' => 'add', 'parent' => ($catalogLink->id ?? null), 'type' => 'good'])],
+                                ],
                             ],
-                        ],
-                        'encodeLabel' => false,
-                        'options' => [
-                            'class' => 'btn btn-link btn-flat btn-xs root-action',
-                        ]
+                            'encodeLabel' => false,
+                            'options' => [
+                                'class' => 'btn btn-link btn-flat btn-xs root-action',
+                            ]
+                        ])?>
+                    </h3>
+                </div>
+                <div class="box-body">
+                    <?=ProductLinks::widget([
+                        'categoriesId' => Yii::$app->params['shop']['categoriesId'],
+                        'parent' => ($catalogLink->id ?? null),
+                        'linksId' => null
                     ])?>
-                </h3>
+                </div>
             </div>
-            <div class="box-body">
-                <?=ProductLinks::widget([
-                    'categoriesId' => Yii::$app->params['shop']['categoriesId'],
-                    'parent' => ($catalogLink->id ?? null),
-                    'linksId' => null
-                ])?>
-            </div>
-        </div>
+        <?php } ?>
 
     </div>
     <div class="col-md-7">

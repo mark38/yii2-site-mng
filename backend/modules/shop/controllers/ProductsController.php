@@ -38,7 +38,7 @@ class ProductsController extends Controller
     public function actionLinks($action=null, $id=null, $parent=null, $type=null)
     {
 
-        $catalogLink = Links::findOne(['url' => Yii::$app->params['shop']['catalogUrl']]);
+        $catalogLinks = Links::find()->where(['url' => Yii::$app->params['shop']['catalogUrl']])->all();
 
         $link = false;
         $group = false;
@@ -124,7 +124,7 @@ class ProductsController extends Controller
             }
         }
 
-        return $this->render('links', compact('action', 'type', 'catalogLink', 'link', 'group', 'good', 'galleryGroup', 'galleryImage'));
+        return $this->render('links', compact('action', 'type', 'catalogLinks', 'link', 'group', 'good', 'galleryGroup', 'galleryImage'));
     }
 
     public function actionLinkDel($id)
