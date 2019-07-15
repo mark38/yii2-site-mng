@@ -37,6 +37,11 @@ $items[] = [
     'icon' => 'circle-thin',
     'url' => ['/shop/hand-import'],
 ];
+$items[] = [
+    'label' => 'Обмен данными с 1с - 3.1',
+    'icon' => 'circle-thin',
+    'url' => ['/shop/hand-import-3'],
+];
 
 $items[] = ['label' => 'Экспорт данных', 'options' => ['class' => 'header']];
 $items[] = [

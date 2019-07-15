@@ -26,83 +26,38 @@ use common\models\gallery\GalleryImages;
 use common\models\gallery\GalleryTypes;
 use common\models\shop\ShopUnits;
 
-class Import extends Model
+class Import3 extends Model
 {
     private $import_file;
+    private $uploadLog = false;
     private $shop_groups = array();
     private $shop_properties = array();
 
-    public function parser($import_file)
+    public function parser($import_file, $uploadLog=false)
     {
         ShopGoods::updateAll(['state' => 1], ['state' => 0]);
 
         $this->import_file = $import_file;
         $sxe = simplexml_load_file($this->import_file);
 
-        $groups_sxe = $sxe->xpath(Yii::$app->params['shop']['startGroupPath']);
+        $this->uploadLog = $uploadLog;
+
+        $groups_sxe = $sxe->xpath('/КоммерческаяИнформация');
+        print_r($sxe);
+        if ($this->uploadLog) fwrite($this->uploadLog, "COUNT ".count($groups_sxe)."\n");
+
         if (count($groups_sxe)) {
             $parentLink = Links::findOne(['url' => Yii::$app->params['shop']['catalogUrl']]);
             $parent = $parentLink ? $parentLink->id : null;
             $this->parserGroups($groups_sxe, $parent);
         }
-
-        $properties_sxe = $sxe->xpath('/КоммерческаяИнформация/Классификатор/Свойства/Свойство');
-        if (count($properties_sxe)) $this->parserProperties($properties_sxe);
-
-        $goods_sxe = $sxe->xpath('/КоммерческаяИнформация/Каталог/Товары/Товар');
-        if (count($goods_sxe)) $this->parserGoods($goods_sxe);
-
-        //Links::updateAll(['state' => 0], ['id' => ArrayHelper::getColumn(ShopGoods::find()->where(['state' => 0])->all(), 'links_id')]);
     }
 
     public function parserGroups($groups_sxe, $parent=null)
     {
         foreach ($groups_sxe as $item) {
+            if ($this->uploadLog) fwrite($this->uploadLog, 'Ид: '.$item->{'Ид'}."\n");
             $group = ShopGroups::findOne(['verification_code' => $item->{'Ид'}]);
-            $link = $group && $group->links_id ? Links::findOne($group->links_id) : new Links();
-            $translit = new Translit();
-
-            $link->categories_id = Yii::$app->params['shop']['categoriesId'];
-            $link->parent = $parent;
-            $link->anchor = strval(isset($item->{'НаименованиеНаСайте'}) && $item->{'НаименованиеНаСайте'} ? $item->{'НаименованиеНаСайте'} : $item->{'Наименование'});
-            $link->name = isset($link->id) ? $translit->slugify($link->anchor, $link->tableName(), 'name', '-', $link->id) : $translit->slugify($link->anchor, $link->tableName(), 'name', '-', null);
-            $link->level = $parent !== null ? Links::findOne($parent)->level + 1 : 1;
-            $link->url = (new Links())->getPrefixUrl(Yii::$app->params['shop']['groupUrlPrefix'], $link->level, $parent).'/'.$link->name;
-            $link->child_exist = 1;
-            $link->seq = isset($link->id) ? $link->seq : Links::findLastSequence(Yii::$app->params['shop']['categoriesId'], $parent) + 1;
-            $link->title = isset($link->id) ? $link->title : $link->anchor;
-            $link->created_at = isset($link->id) ? $link->created_at : time();
-            $link->updated_at = time();
-            $link->state = $item->{'НеПубликуетсяНаСайте'} == 'истина' ? 0 : 1;
-            $link->layouts_id = Yii::$app->params['shop']['groupLayoutsId'];
-            $link->views_id = Yii::$app->params['shop']['groupViewsId'];
-            $link->save();
-
-            if ($item->{'Картинки'} && $item->{'Картинки'}->{'Картинка'}) {
-                $this->addImage($item->{'Картинки'}->{'Картинка'}, Yii::$app->params['shop']['gallery']['group'], $link->id);
-            }
-
-            if (!Contents::findOne(['links_id' => $link->id])) {
-                $content = new Contents();
-                $content->links_id = $link->id;
-                $content->seq = 1;
-                $content->save();
-            }
-
-            if (!$group) {
-                $group = new ShopGroups();
-                $group->verification_code = strval($item->{'Ид'});
-            };
-            $group->links_id = $link->id;
-            $group->name = strval($item->{'Наименование'});
-            $group->save();
-            $this->shop_groups[] = $group;
-
-            ShopGoods::updateAll(['state' => 0], ['shop_groups_id' => $group->id]);
-
-            if ($item->{'Группы'}->{'Группа'}) {
-                $this->parserGroups($item->{'Группы'}->{'Группа'}, $link->id);
-            }
         }
 
         return true;
