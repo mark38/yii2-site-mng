@@ -43,7 +43,7 @@ class DefaultController extends Controller
         }
 
         if (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('mode') == 'checkauth') {
-            fwrite($upload_log, date("d.m.Y H:i:s")." Ответ: success - Hello1C - Hello\n");
+//            fwrite($upload_log, date("d.m.Y H:i:s")." Ответ: success - Hello1C - Hello\n");
 
             if (!isset(Yii::$app->request->cookies['Hello1C'])) {
                 Yii::$app->response->cookies->add(new Cookie([
@@ -55,7 +55,7 @@ class DefaultController extends Controller
         }
 
         if (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('mode') == 'init') {
-            fwrite($upload_log, date("d.m.Y H:i:s")." Загрузка архива. Ответ: zip=yes; file_limit=".Yii::$app->params['shop']['fileLimit']."\n");
+//            fwrite($upload_log, date("d.m.Y H:i:s")." Загрузка архива. Ответ: zip=yes; file_limit=".Yii::$app->params['shop']['fileLimit']."\n");
 
             @ unlink(Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/1cbitrix.zip');
             (new Helpers())->removeDirectory(Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/1cbitrix');
@@ -86,10 +86,30 @@ class DefaultController extends Controller
 
                 exec ("export LC_ALL=ru_RU.UTF-8 && find ".$unzip_dir."/. -type f -exec sh -c 'np=`echo {} | iconv -f cp1252 -t cp850| iconv -f cp866`; mv \"{}\" \"\$np\"' \;");
 
+                if($handle = opendir($unzip_dir)) {
+                    while (false !== ($file = readdir($handle))) {
+                        if ($file != "." && $file != "..") {
+                            fwrite($upload_log, 'upload file in dir '.$unzip_dir.': '.$file."\n");
+                            copy($unzip_dir.'/'.$file, $unzip_dir.'/../src/'.$file);
+                        }
+                    }
+                }
+//                if($handle = opendir($unzip_dir)){
+//                    while($entry = readdir($handle)){
+//
+////                        if (preg_match('/\.xml/', $entry)) {
+////                            fwrite($upload_log, 'Copy file to '.$unzip_dir.'/../src/'.$entry."\n");
+////                            copy($unzip_dir.'/'.$entry, $unzip_dir.'/../src/');
+////                        }
+//                    }
+//
+//                    closedir($handle);
+//                }
+
                 echo "success";
             } elseif ( !empty(Yii::$app->request->get('filename')) ) {
                 if (preg_match('/import___/', Yii::$app->request->get('filename'))) {
-                    fwrite($upload_log, date("d.m.Y H:i:s")." import filename: ".Yii::$app->request->get('filename')."\n");
+//                    fwrite($upload_log, date("d.m.Y H:i:s")." import filename: ".Yii::$app->request->get('filename')."\n");
 
                     $importXml = Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/1cbitrix/'.Yii::$app->request->get('filename');
 //                    if (!copy($importXml, Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/'.Yii::$app->request->get('filename'))) {
@@ -105,19 +125,19 @@ class DefaultController extends Controller
 
                     echo "success";
                 } elseif (preg_match('/offers___/', Yii::$app->request->get('filename'))) {
-                    fwrite($upload_log, date("d.m.Y H:i:s")." offers filename: ".Yii::$app->request->get('filename')."\n");
+//                    fwrite($upload_log, date("d.m.Y H:i:s")." offers filename: ".Yii::$app->request->get('filename')."\n");
 
                     echo "success";
                 } elseif (preg_match('/offers___/', Yii::$app->request->get('filename'))) {
-                    fwrite($upload_log, date("d.m.Y H:i:s")." offers filename: ".Yii::$app->request->get('filename')."\n");
+//                    fwrite($upload_log, date("d.m.Y H:i:s")." offers filename: ".Yii::$app->request->get('filename')."\n");
 
                     echo "success";
                 } elseif (preg_match('/prices___/', Yii::$app->request->get('filename'))) {
-                    fwrite($upload_log, date("d.m.Y H:i:s")." prices filename: ".Yii::$app->request->get('filename')."\n");
+//                    fwrite($upload_log, date("d.m.Y H:i:s")." prices filename: ".Yii::$app->request->get('filename')."\n");
 
                     echo "success";
                 } else {
-                    fwrite($upload_log, date("d.m.Y H:i:s")." unknown filename: ".Yii::$app->request->get('filename')."\n");
+//                    fwrite($upload_log, date("d.m.Y H:i:s")." unknown filename: ".Yii::$app->request->get('filename')."\n");
 
                     echo "success";
                 }
@@ -203,7 +223,7 @@ class DefaultController extends Controller
     public function actionHandImport3($xmlFile=false)
     {
         if ($xmlFile) {
-            $importXml = Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/'.$xmlFile;
+            $importXml = Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/src/'.$xmlFile;
 
             $import3 = new Import3();
             $import3->parser($importXml);

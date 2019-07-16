@@ -35,7 +35,7 @@ class Import3 extends Model
 
     public function parser($import_file, $uploadLog=false)
     {
-        ShopGoods::updateAll(['state' => 1], ['state' => 0]);
+//        ShopGoods::updateAll(['state' => 1], ['state' => 0]);
 
         $this->import_file = $import_file;
         $sxe = simplexml_load_file($this->import_file);
@@ -43,7 +43,8 @@ class Import3 extends Model
         $this->uploadLog = $uploadLog;
 
         $groups_sxe = $sxe->xpath('/КоммерческаяИнформация');
-        print_r($sxe);
+        print_r($groups_sxe);
+
         if ($this->uploadLog) fwrite($this->uploadLog, "COUNT ".count($groups_sxe)."\n");
 
         if (count($groups_sxe)) {
