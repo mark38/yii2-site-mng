@@ -39,6 +39,7 @@ class Import3 extends Model
 
         $this->import_file = $import_file;
         $sxe = simplexml_load_file($this->import_file);
+        print_r($sxe->КоммерческаяИнформация);
 
         $this->uploadLog = $uploadLog;
 
