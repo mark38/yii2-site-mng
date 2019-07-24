@@ -63,7 +63,7 @@ class Prices3 extends Model
                         ->andWhere(['shop_price_types_id' => $priceTypeId])
                         ->one();
 
-                    if (!$goodMinPrice[$goodVerificationCode] || !$goodMinPrice[$goodVerificationCode][$priceTypeId] || ($goodMinPrice[$goodVerificationCode][$priceTypeId] && $goodMinPrice[$goodVerificationCode][$priceTypeId] > $priceValue)) {
+                    if (!isset($goodMinPrice[$goodVerificationCode]) || !isset($goodMinPrice[$goodVerificationCode][$priceTypeId]) || ($goodMinPrice[$goodVerificationCode][$priceTypeId] && $goodMinPrice[$goodVerificationCode][$priceTypeId] > $priceValue)) {
                         $goodMinPrice[$goodVerificationCode][$priceTypeId] = $priceValue;
                     }
                     if ($priceItem && $priceValue != $priceItem->price) {
