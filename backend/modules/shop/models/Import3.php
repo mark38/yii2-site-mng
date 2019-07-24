@@ -35,31 +35,59 @@ class Import3 extends Model
 
     public function parser($import_file, $uploadLog=false)
     {
-//        ShopGoods::updateAll(['state' => 1], ['state' => 0]);
+        $sxe = new \SimpleXMLElement(file_get_contents($import_file));
 
-        $this->import_file = $import_file;
-        $sxe = simplexml_load_file($this->import_file);
-        print_r($sxe->КоммерческаяИнформация);
+        $namespaces = $sxe->getNamespaces(true);
+        $sxe->registerXPathNamespace('CML', $namespaces['']);
+        $path = preg_replace('/\//', '/CML:', Yii::$app->params['shop']['startGroupPath']);
+        $groupsSxe = $sxe->xpath('/'.$path);
 
-        $this->uploadLog = $uploadLog;
-
-        $groups_sxe = $sxe->xpath('/КоммерческаяИнформация');
-        print_r($groups_sxe);
-
-        if ($this->uploadLog) fwrite($this->uploadLog, "COUNT ".count($groups_sxe)."\n");
-
-        if (count($groups_sxe)) {
+        if (count($groupsSxe)) {
             $parentLink = Links::findOne(['url' => Yii::$app->params['shop']['catalogUrl']]);
             $parent = $parentLink ? $parentLink->id : null;
-            $this->parserGroups($groups_sxe, $parent);
+
+            // В функции обрабатывается parent из shop_groups
+            $parent = false;
+
+            $this->parserGroups($groupsSxe, $parent);
+        } else {
+
+            $goodsSxe = $sxe->xpath('//CML:КоммерческаяИнформация/CML:Каталог/CML:Товары/CML:Товар');
+            if (count($goodsSxe)) {
+                $this->parserGoods($goodsSxe);
+            }
+
         }
+
+        return true;
     }
 
-    public function parserGroups($groups_sxe, $parent=null)
+    public function parserGroups($groupsSxe, $group_parent_id=null)
     {
-        foreach ($groups_sxe as $item) {
+        foreach ($groupsSxe as $item) {
             if ($this->uploadLog) fwrite($this->uploadLog, 'Ид: '.$item->{'Ид'}."\n");
-            $group = ShopGroups::findOne(['verification_code' => $item->{'Ид'}]);
+            $group = ShopGroups::find()->where(['verification_code' => $item->{'Ид'}])->one();
+            if (!$group) {
+                $group = ShopGroups::find()->where(['name' => $item->{'Наименование'}])->one();
+                if ($group) {
+                    $group->verification_code = strval($item->{'Ид'});
+                    $group->save();
+                } else {
+                    // Создание нового раздела
+                }
+            }
+
+            if ($group) {
+                if ($group_parent_id) {
+                    ShopGroups::updateAll(['parent_id' => $group_parent_id], ['id' => $group->id]);
+                }
+                ShopGroups::updateAll(['export_state' => 1], ['id' => $group->id]);
+//                ShopGoods::updateAll(['export_state' => 1], ['shop_groups_id' => $group->id]);
+
+                if ($item->{'Группы'}->{'Группа'}) {
+                    $this->parserGroups($item->{'Группы'}->{'Группа'}, $group->id);
+                }
+            }
         }
 
         return true;
@@ -102,46 +130,24 @@ class Import3 extends Model
         return true;
     }
 
-    public function parserGoods($goods_sxe)
+    public function parserGoods($goodsSxe)
     {
         $goods = array();
-        foreach ($goods_sxe as $item) {
-            $itemVerificationCode = false;
-            $itemsExist = 0;
-            if (preg_match('/(.+)#(.+)/', $item->{'Ид'}, $matches)) {
-                $goodVerificationCode = strval($matches[1]);
-                $itemVerificationCode = strval($matches[2]);
-                $itemsExist = 1;
-            } else {
-                $goodVerificationCode = strval($item->{'Ид'});
-            }
+        foreach ($goodsSxe as $item) {
+            $groupVerificationCode = strval($item->{'Группы'}->{'Ид'});
+            $goodVerificationCode = strval($item->{'Ид'});
+            $goodName = strval($item->{'Наименование'});
 
-            if (!isset($goods[$goodVerificationCode])) {
-                $goods[$goodVerificationCode] = array();
-                $goods[$goodVerificationCode] = $this->addGood($item, $goodVerificationCode, $itemsExist);
-                if ($item->{'ЗначенияСвойств'}) $this->addPropertyValues($item->{'ЗначенияСвойств'}->{'ЗначенияСвойства'}, $goods[$goodVerificationCode]['id']);
-            }
+            $group = ShopGroups::findOne(['verification_code' => $groupVerificationCode]);
+            if (!$group) continue;
 
-            if ($itemVerificationCode) {
-                $goods[$goodVerificationCode]['items'][$itemVerificationCode] = $this->addItem($goods[$goodVerificationCode]['id'], $itemVerificationCode, $item);
-            }
-        }
-
-        if ($goods) {
-            foreach ($goods as $goodVerificationCode => $good) {
-                $items = ShopItems::findAll(['shop_goods_id' => $good['id']]);
-                if (isset($good['items'])) {
-                    foreach ($items as $item) {
-                        if (!isset($good['items'][$item->verification_code])) {
-                            $item->state = 0;
-                            $item->save();
-                        }
-                    }
-                } else {
-                    foreach ($items as $item) {
-                        $item->state = 0;
-                        $item->save();
-                    }
+            $good = ShopGoods::findOne(['verification_code' => $goodVerificationCode]);
+            if (!$good) {
+                $good = ShopGoods::findOne(['name' => $goodName, 'shop_groups_id' => $group->id]);
+                if ($good) {
+                    echo $good->id.'<br />';
+                    $good->verification_code = $goodVerificationCode;
+                    $good->save();
                 }
             }
         }

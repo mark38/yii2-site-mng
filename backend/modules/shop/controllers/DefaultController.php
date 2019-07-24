@@ -2,6 +2,8 @@
 
 namespace app\modules\shop\controllers;
 
+use app\modules\shop\models\Offers3;
+use app\modules\shop\models\Prices3;
 use backend\modules\shop\models\Import3;
 use Yii;
 use yii\web\Controller;
@@ -246,6 +248,25 @@ class DefaultController extends Controller
     public function actionHandImportConsole()
     {
         exec('php '.Yii::getAlias('@app').'/../yii shop/default/import '.Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/1cbitrix/import.xml');
+    }
+
+    public function actionHandOffers3($xmlFile=false)
+    {
+        if ($xmlFile) {
+            $offersXml = Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/src/'.$xmlFile;
+
+            $model = new Offers3();
+            $model->parser($offersXml);
+        }
+    }
+
+    public function actionHandPrices3($xmlFile=false)
+    {
+        if ($xmlFile) {
+            $priceXml = Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/src/'.$xmlFile;
+            $model = new Prices3();
+            $model->parser($priceXml);
+        }
     }
 
     public function actionHandOffers($offers='offers.xml')
