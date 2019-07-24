@@ -42,7 +42,7 @@ class Prices3 extends Model
                 $goodVerificationCode = strval($item->{'Ид'});
             }
 
-            if (!$goodPrices[$goodVerificationCode]) {
+            if (!isset($goodPrices[$goodVerificationCode])) {
                 $goodMinPrice[$goodVerificationCode] = false;
                 $prices = ShopPriceGood::find()
                     ->innerJoinWith('shopGood')

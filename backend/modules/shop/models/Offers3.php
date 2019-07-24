@@ -32,7 +32,7 @@ class Offers3 extends Model
     function parserOffers($offersSxe) {
         foreach ($offersSxe as $item) {
             $itemVerificationCode = false;
-            
+
             if (preg_match('/(.+)#(.+)/', $item->{'Ид'}, $matches)) {
                 $goodVerificationCode = strval($matches[1]);
                 $itemVerificationCode = strval($matches[2]);
