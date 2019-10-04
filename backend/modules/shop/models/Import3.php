@@ -48,9 +48,9 @@ class Import3 extends Model
 
             // В функции обрабатывается parent из shop_groups
             $parent = false;
-
             $this->parserGroups($groupsSxe, $parent);
-        } else {
+
+//            } else {
 
             $goodsSxe = $sxe->xpath('//CML:КоммерческаяИнформация/CML:Каталог/CML:Товары/CML:Товар');
             if (count($goodsSxe)) {
@@ -145,7 +145,6 @@ class Import3 extends Model
             if (!$good) {
                 $good = ShopGoods::findOne(['name' => $goodName, 'shop_groups_id' => $group->id]);
                 if ($good) {
-                    echo $good->id.'<br />';
                     $good->verification_code = $goodVerificationCode;
                     $good->save();
                 }

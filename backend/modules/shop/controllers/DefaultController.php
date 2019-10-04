@@ -14,6 +14,8 @@ use app\modules\shop\models\Offers;
 
 class DefaultController extends Controller
 {
+    public $layout = false;
+
     /**
      * @inheritdoc
      */
@@ -34,7 +36,7 @@ class DefaultController extends Controller
 
     public function action1cExchange3()
     {
-        $this->layout = false;
+//        $this->layout = false;
 
         $upload_log = fopen(Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/upload.log', 'a');
 
@@ -52,7 +54,7 @@ class DefaultController extends Controller
                     'name' => 'Hello1C',
                     'value' => 'Hello'
                 ]));
-                echo "success\nHello1C\nHello";
+                return "success\nHello1C\nHello";
             }
         }
 
@@ -63,12 +65,13 @@ class DefaultController extends Controller
             (new Helpers())->removeDirectory(Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/1cbitrix');
             $zip_file = fopen(Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/1cbitrix.zip', 'w');
             fclose($zip_file);
-            echo "zip=yes\nfile_limit=".Yii::$app->params['shop']['fileLimit'];
+            return "zip=yes\nfile_limit=".Yii::$app->params['shop']['fileLimit'];
         }
 
         if (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('filename')) {
+
             if ( $postdata = file_get_contents( "php://input" ) ) {
-                fwrite($upload_log, date("d.m.Y H:i:s")." Распаковка. Ответ: success\n");
+                fwrite($upload_log, date("d.m.Y H:i:s")." Распаковка архива ".Yii::$app->request->get('filename').". Ответ: success\n");
 
                 $zip_file = Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/1cbitrix.zip';
                 $unzip_dir = Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/1cbitrix';
@@ -91,8 +94,20 @@ class DefaultController extends Controller
                 if($handle = opendir($unzip_dir)) {
                     while (false !== ($file = readdir($handle))) {
                         if ($file != "." && $file != "..") {
-                            fwrite($upload_log, 'upload file in dir '.$unzip_dir.': '.$file."\n");
+                            fwrite($upload_log, 'Upload file in dir '.$unzip_dir.': '.$file."\n");
                             copy($unzip_dir.'/'.$file, $unzip_dir.'/../src/'.$file);
+
+                            if (preg_match('/^import(.+)\.xml$/', $file)) {
+                                fwrite($upload_log, 'Parse : '.$unzip_dir.'/'.$file."\n");
+                                $import3 = new Import3();
+                                $import3->parser($unzip_dir.'/'.$file);
+                            }
+
+                            if (preg_match('/^offers(.+)\.xml$/', $file)) {
+                                fwrite($upload_log, 'Parse : '.$unzip_dir.'/'.$file."\n");
+                                $model = new Offers3();
+                                $model->parser($unzip_dir.'/'.$file);
+                            }
                         }
                     }
                 }
@@ -108,7 +123,7 @@ class DefaultController extends Controller
 //                    closedir($handle);
 //                }
 
-                echo "success";
+                return "success";
             } elseif ( !empty(Yii::$app->request->get('filename')) ) {
                 if (preg_match('/import___/', Yii::$app->request->get('filename'))) {
 //                    fwrite($upload_log, date("d.m.Y H:i:s")." import filename: ".Yii::$app->request->get('filename')."\n");
@@ -125,31 +140,32 @@ class DefaultController extends Controller
                         $import3->parser($importXml, $upload_log);
                     }
 
-                    echo "success";
+                    return "success";
                 } elseif (preg_match('/offers___/', Yii::$app->request->get('filename'))) {
 //                    fwrite($upload_log, date("d.m.Y H:i:s")." offers filename: ".Yii::$app->request->get('filename')."\n");
 
-                    echo "success";
+                    return "success";
                 } elseif (preg_match('/offers___/', Yii::$app->request->get('filename'))) {
 //                    fwrite($upload_log, date("d.m.Y H:i:s")." offers filename: ".Yii::$app->request->get('filename')."\n");
 
-                    echo "success";
+                    return "success";
                 } elseif (preg_match('/prices___/', Yii::$app->request->get('filename'))) {
 //                    fwrite($upload_log, date("d.m.Y H:i:s")." prices filename: ".Yii::$app->request->get('filename')."\n");
 
-                    echo "success";
+                    return "success";
                 } else {
 //                    fwrite($upload_log, date("d.m.Y H:i:s")." unknown filename: ".Yii::$app->request->get('filename')."\n");
 
-                    echo "success";
+                    return "success";
                 }
             }
+
         }
     }
 
     public function action1cExchange()
     {
-        $this->layout = false;
+//        $this->layout = false;
 
         $upload_log = fopen(Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/upload.log', 'a');
 
@@ -234,7 +250,7 @@ class DefaultController extends Controller
 
     public function actionHandImport()
     {
-        $this->layout = false;
+//        $this->layout = false;
 
         $import_file = Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/1cbitrix/import.xml';
 
