@@ -95,7 +95,7 @@ class DefaultController extends Controller
                     while (false !== ($file = readdir($handle))) {
                         if ($file != "." && $file != "..") {
                             fwrite($upload_log, 'Upload file in dir '.$unzip_dir.': '.$file."\n");
-                            copy($unzip_dir.'/'.$file, $unzip_dir.'/../src/'.$file);
+                            if (!is_dir($unzip_dir.'/'.$file)) copy($unzip_dir.'/'.$file, $unzip_dir.'/../src/'.$file);
 
                             if (preg_match('/^import(.+)\.xml$/', $file)) {
                                 fwrite($upload_log, 'Parse : '.$unzip_dir.'/'.$file."\n");
