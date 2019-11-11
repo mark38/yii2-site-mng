@@ -68,7 +68,6 @@ class Import3 extends Model
     {
         foreach ($groupsSxe as $item) {
             $group = ShopGroups::find()->where(['verification_code' => $item->{'Ид'}])->one();
-            echo $item->{'Ид'}.' '.$item->{'Наименование'}.'<br>';
             if (!$group) {
                 $group = ShopGroups::find()->where(['name' => $item->{'Наименование'}])->one();
                 if ($group) {
@@ -469,7 +468,6 @@ class Import3 extends Model
             $srcImage = $this->fullPath . '/' . strval($imageItem);
 
             if (!is_file($srcImage)) {
-                echo $srcImage.'<br>';
                 continue;
             }
 
