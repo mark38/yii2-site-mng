@@ -465,7 +465,6 @@ class Import3 extends Model
 
 //            $srcImage = $this->fullPath . pathinfo($this->import_file)['dirname'] . '/' . strval($imageItem);
             $srcImage = $this->fullPath . '/' . strval($imageItem);
-            echo $srcImage.'<br>';
 
             if (!is_file($srcImage)) {
                 echo $srcImage.'<br>';
