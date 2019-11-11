@@ -87,22 +87,24 @@ class DefaultController extends Controller
             $fullPathXML = Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/1cbitrix/'.$fileName;
 
             if (preg_match('/^import_/', $fileName)) {
-                fwrite($uploadLog, date("d.m.Y H:i:s")." Load file finish: ".Yii::$app->request->get('filename')."\n");
+                fwrite($uploadLog, date("d.m.Y H:i:s")." Start: ".Yii::$app->request->get('filename')."\n");
                 $model = new Import3();
                 $model->parser($fullPathXML, $uploadLog);
-                fwrite($uploadLog, date("d.m.Y H:i:s")." Finish file finish: ".Yii::$app->request->get('filename')."\n");
+                fwrite($uploadLog, date("d.m.Y H:i:s")." Finish: ".Yii::$app->request->get('filename')."\n");
             }
 
             if (preg_match('/^offers_/', $fileName)) {
+                fwrite($uploadLog, date("d.m.Y H:i:s")." Start: ".Yii::$app->request->get('filename')."\n");
                 $model = new Offers3();
                 $model->parser($fullPathXML);
-                fwrite($uploadLog, date("d.m.Y H:i:s")." Load file finish: ".Yii::$app->request->get('filename')."\n");
+                fwrite($uploadLog, date("d.m.Y H:i:s")." Finish: ".Yii::$app->request->get('filename')."\n");
             }
 
             if (preg_match('/^prices_/', $fileName)) {
+                fwrite($uploadLog, date("d.m.Y H:i:s")." Start: ".Yii::$app->request->get('filename')."\n");
                 $model = new Prices3();
                 $model->parser($fullPathXML);
-                fwrite($uploadLog, date("d.m.Y H:i:s")." Load file finish: ".Yii::$app->request->get('filename')."\n");
+                fwrite($uploadLog, date("d.m.Y H:i:s")." Finish: ".Yii::$app->request->get('filename')."\n");
             }
         }
 
