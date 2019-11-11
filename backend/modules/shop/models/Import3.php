@@ -65,18 +65,15 @@ class Import3 extends Model
     public function parserGroups($groupsSxe, $parentLinksId=null, $parentGroupsId=null)
     {
         foreach ($groupsSxe as $item) {
-            echo $item->{'Наименование'}.' -> ';
             $group = ShopGroups::find()->where(['verification_code' => $item->{'Ид'}])->one();
+            echo $item->{'Ид'}.' '.$item->{'Наименование'}.'<br>';
             if (!$group) {
-                echo 'Group not found -> ';
                 $group = ShopGroups::find()->where(['name' => $item->{'Наименование'}])->one();
                 if ($group) {
-                    echo $group->name;
                     $group->verification_code = strval($item->{'Ид'});
                     $group->save();
                 }
             }
-            echo $group->id.'<br />';
 
             $link = $group && $group->links_id ? Links::findOne($group->links_id) : new Links();
             $translit = new Translit();
