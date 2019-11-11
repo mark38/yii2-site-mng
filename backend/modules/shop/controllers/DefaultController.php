@@ -63,8 +63,6 @@ class DefaultController extends Controller
 
         if (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('filename')) {
 
-            fwrite($uploadLog, date("d.m.Y H:i:s")." Load file: ".Yii::$app->request->get('filename')."\n");
-
             if ( $postData = file_get_contents( "php://input" ) ) {
                 $zipFile = Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/1cbitrix.zip';
                 $unzipDir = Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/1cbitrix';
@@ -91,16 +89,19 @@ class DefaultController extends Controller
             if (preg_match('/^import_/', $fileName)) {
                 $model = new Import3();
                 $model->parser($fullPathXML);
+                fwrite($uploadLog, date("d.m.Y H:i:s")." Load file finish: ".Yii::$app->request->get('filename')."\n");
             }
 
             if (preg_match('/^offers_/', $fileName)) {
                 $model = new Offers3();
                 $model->parser($fullPathXML);
+                fwrite($uploadLog, date("d.m.Y H:i:s")." Load file finish: ".Yii::$app->request->get('filename')."\n");
             }
 
             if (preg_match('/^prices_/', $fileName)) {
                 $model = new Prices3();
                 $model->parser($fullPathXML);
+                fwrite($uploadLog, date("d.m.Y H:i:s")." Load file finish: ".Yii::$app->request->get('filename')."\n");
             }
         }
 
