@@ -108,7 +108,7 @@ class DefaultController extends Controller
 
         fclose($uploadLog);
 
-        return "success";
+        return "success\n";
     }
 
     public function action1cExchange3Def()
