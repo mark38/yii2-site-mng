@@ -51,7 +51,9 @@ class Import3 extends Model
             $this->parserGroups($groupsSxe, $parentLinksId);
 
             $unitsSxe = $sxe->xpath('//CML:КоммерческаяИнформация/CML:Классификатор/CML:ЕдиницыИзмерения/CML:ЕдиницаИзмерения');
+            fwrite($uploadLog, date("d.m.Y H:i:s")." Начало загрузки группы ".$import_file."\n");
             $this->parserUnits($unitsSxe);
+            fwrite($uploadLog, date("d.m.Y H:i:s")." Группа загружена "."\n");
         } else {
             $goodsSxe = $sxe->xpath('//CML:КоммерческаяИнформация/CML:Каталог/CML:Товары/CML:Товар');
             if ($goodsSxe) {
