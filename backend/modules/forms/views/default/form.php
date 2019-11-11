@@ -37,7 +37,8 @@ foreach ($formFields as $field) {
         default:
             $columns[] = [
                 'attribute' => $field->name,
-                'label' => $field->label
+                'label' => $field->label,
+                'format' => 'raw'
             ];
             break;
     }

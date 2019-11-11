@@ -72,7 +72,7 @@ if ($galleryType) $this->params['breadcrumbs'][] = ['url' => ['index', 'gallery_
             <div class="box box-default">
                 <div class="box-body">
                     <p>Для вставки галереи необходимо в форму редактирования контента вставить следующий код:</p>
-                    <code>[[gallery/photo(galleryGroupsId:<?= $galleryGroup->id ?>)]]</code>
+                    <code>[[gallery/Photo(galleryGroupsId:<?= $galleryGroup->id ?>)]]</code>
                 </div>
             </div>
         </div>
