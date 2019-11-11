@@ -36,14 +36,88 @@ class DefaultController extends Controller
 
     public function action1cExchange3()
     {
+        $uploadLog = fopen(Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/upload.log', 'a');
+
+        if ( $_SERVER['PHP_AUTH_USER'] != Yii::$app->params['shop']['phpAuthUser'] || $_SERVER['PHP_AUTH_PW'] != Yii::$app->params['shop']['phpAuthPw'] ) {
+            fwrite($uploadLog, date('d.m.Y H:i:s', time())." - Auth failure\n");
+            return "failure";
+        }
+
+        if (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('mode') == 'checkauth') {
+            if (!isset(Yii::$app->request->cookies['Hello1C'])) {
+                Yii::$app->response->cookies->add(new Cookie([
+                    'name' => 'Hello1C',
+                    'value' => 'Hello'
+                ]));
+                return "success\nHello1C\nHello";
+            }
+        }
+
+        if (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('mode') == 'init') {
+            @ unlink(Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/1cbitrix.zip');
+//            (new Helpers())->removeDirectory(Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/1cbitrix');
+            $zipFile = fopen(Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/1cbitrix.zip', 'w');
+            fclose($zipFile);
+            return "zip=yes\nfile_limit=".Yii::$app->params['shop']['fileLimit'];
+        }
+
+        if (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('filename')) {
+
+            fwrite($uploadLog, date("d.m.Y H:i:s")." Load file: ".Yii::$app->request->get('filename')."\n");
+
+            if ( $postData = file_get_contents( "php://input" ) ) {
+                $zipFile = Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/1cbitrix.zip';
+                $unzipDir = Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/1cbitrix';
+
+//                (new Helpers())->removeDirectory($unzipDir);
+//                mkdir($unzipDir);
+
+                $uploadZip = fopen($zipFile, 'a+');
+                fwrite($uploadZip, $postData);
+
+                $zip = new \ZipArchive();
+                $res = $zip->open($zipFile);
+                if ($res === true) {
+                    $zip->extractTo($unzipDir);
+                    $zip->close();
+                }
+
+                exec ("export LC_ALL=ru_RU.UTF-8 && find ".$unzipDir."/. -type f -exec sh -c 'np=`echo {} | iconv -f cp1252 -t cp850| iconv -f cp866`; mv \"{}\" \"\$np\"' \;");
+            }
+
+            $fileName = Yii::$app->request->get('filename');
+            $fullPathXML = Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/1cbitrix/'.$fileName;
+
+            if (preg_match('/^import_/', $fileName)) {
+                $model = new Import3();
+                $model->parser($fullPathXML);
+            }
+
+            if (preg_match('/^offers_/', $fileName)) {
+                $model = new Offers3();
+                $model->parser($fullPathXML);
+            }
+
+            if (preg_match('/^prices_/', $fileName)) {
+                $model = new Prices3();
+                $model->parser($fullPathXML);
+            }
+        }
+
+        fclose($uploadLog);
+
+        return "success";
+    }
+
+    public function action1cExchange3Def()
+    {
 //        $this->layout = false;
 
         $upload_log = fopen(Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/upload.log', 'a');
 
         if ( $_SERVER['PHP_AUTH_USER'] != Yii::$app->params['shop']['phpAuthUser'] || $_SERVER['PHP_AUTH_PW'] != Yii::$app->params['shop']['phpAuthPw'] ) {
             fwrite($upload_log, "Failure\n");
-            echo "failure";
-            return false;
+            return "failure";
         }
 
         if (Yii::$app->request->get('type') == 'catalog' && Yii::$app->request->get('mode') == 'checkauth') {
@@ -241,7 +315,7 @@ class DefaultController extends Controller
     public function actionHandImport3($xmlFile=false)
     {
         if ($xmlFile) {
-            $importXml = Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/src/'.$xmlFile;
+            $importXml = Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/1cbitrix/'.$xmlFile;
 
             $import3 = new Import3();
             $import3->parser($importXml);
@@ -269,7 +343,7 @@ class DefaultController extends Controller
     public function actionHandOffers3($xmlFile=false)
     {
         if ($xmlFile) {
-            $offersXml = Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/src/'.$xmlFile;
+            $offersXml = Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/1cbitrix/'.$xmlFile;
 
             $model = new Offers3();
             $model->parser($offersXml);
@@ -279,7 +353,7 @@ class DefaultController extends Controller
     public function actionHandPrices3($xmlFile=false)
     {
         if ($xmlFile) {
-            $priceXml = Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/src/'.$xmlFile;
+            $priceXml = Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/1cbitrix/'.$xmlFile;
             $model = new Prices3();
             $model->parser($priceXml);
         }
