@@ -43,6 +43,7 @@ class Import3 extends Model
         $namespaces = $sxe->getNamespaces(true);
         $sxe->registerXPathNamespace('CML', $namespaces['']);
         $path = preg_replace('/\//', '/CML:', Yii::$app->params['shop']['startGroupPath']);
+
         $groupsSxe = $sxe->xpath('/'.$path);
 
         if (count($groupsSxe)) {
@@ -281,9 +282,14 @@ class Import3 extends Model
         $good->name = strval($item->{'Наименование'});
 
         $good->code = '';
+
         foreach ($item->{'ЗначенияРеквизитов'}->{'ЗначениеРеквизита'} as $prop) {
-            if ($prop->{'Наименование'} == 'Код') {
-                $good->code = preg_replace('/^\D+0*/', '', $prop->{'Значение'});
+//            if ($prop->{'Наименование'} == 'Код') {
+//                $good->code = preg_replace('/^\D+0*/', '', $prop->{'Значение'});
+//            }
+            switch ($prop->{'Наименование'}) {
+                case "Код": $good->code = preg_replace('/^\D+0*/', '', $prop->{'Значение'}); break;
+                case "Файл": $this->addImage($prop->{'Значение'}, Yii::$app->params['shop']['gallery']['good'], $link->id, $good->id); break;
             }
         }
 
@@ -458,38 +464,72 @@ class Import3 extends Model
     {
         $galleryGroups = array();
         $i = 0;
-        foreach ($item->{'Картинка'} as $imageItem) {
-            $basenameSrc = basename(strval($imageItem));
-            if (!$basenameSrc) continue;
+        if (!$item->{'Картинка'}) {
+
+            $basenameSrc = basename(strval($item));
+//            $srcImage = $this->fullPath . pathinfo($this->import_file)['dirname'] . '/' . strval($imageItem);
+            $srcImage = $this->fullPath . '/' . strval($item);
+
+            if (is_file($srcImage)) {
+                $galleryTypesId = false;
+                $alt = '';
+                foreach (Yii::$app->params['shop']['gallery'] as $name => $id) {
+                    if (!$galleryTypesId && strripos($basenameSrc, '_' . $name) !== false) {
+                        $galleryTypesId = $id;
+                        preg_match('/\[(.+)\]/', $basenameSrc, $matches);
+                        $alt = isset($matches[1]) ? $matches[1] : '';
+                    }
+                }
+                if (!$galleryTypesId) $galleryTypesId = $srcGalleryTypesId;
+
+                if (GalleryTypes::findOne($galleryTypesId)) {
+                    $galleryGroups[$galleryTypesId][] = [
+                        'name' => $basenameSrc,
+                        'src_image' => $srcImage,
+                        'alt' => $alt,
+                        'default' => $i == 0 ? 1 : 0
+                    ];
+                }
+
+                $i += 1;
+            }
+
+        } else {
+
+            foreach ($item->{'Картинка'} as $imageItem) {
+                $basenameSrc = basename(strval($imageItem));
+                if (!$basenameSrc) continue;
 
 //            $srcImage = $this->fullPath . pathinfo($this->import_file)['dirname'] . '/' . strval($imageItem);
-            $srcImage = $this->fullPath . '/' . strval($imageItem);
+                $srcImage = $this->fullPath . '/' . strval($imageItem);
 
-            if (!is_file($srcImage)) {
-                continue;
-            }
-
-            $galleryTypesId = false;
-            $alt = '';
-            foreach (Yii::$app->params['shop']['gallery'] as $name => $id) {
-                if (!$galleryTypesId && strripos($basenameSrc, '_' . $name) !== false) {
-                    $galleryTypesId = $id;
-                    preg_match('/\[(.+)\]/', $basenameSrc, $matches);
-                    $alt = isset($matches[1]) ? $matches[1] : '';
+                if (!is_file($srcImage)) {
+                    continue;
                 }
-            }
-            if (!$galleryTypesId) $galleryTypesId = $srcGalleryTypesId;
 
-            if (GalleryTypes::findOne($galleryTypesId)) {
-                $galleryGroups[$galleryTypesId][] = [
-                    'name' => $basenameSrc,
-                    'src_image' => $srcImage,
-                    'alt' => $alt,
-                    'default' => $i == 0 ? 1 : 0
-                ];
+                $galleryTypesId = false;
+                $alt = '';
+                foreach (Yii::$app->params['shop']['gallery'] as $name => $id) {
+                    if (!$galleryTypesId && strripos($basenameSrc, '_' . $name) !== false) {
+                        $galleryTypesId = $id;
+                        preg_match('/\[(.+)\]/', $basenameSrc, $matches);
+                        $alt = isset($matches[1]) ? $matches[1] : '';
+                    }
+                }
+                if (!$galleryTypesId) $galleryTypesId = $srcGalleryTypesId;
+
+                if (GalleryTypes::findOne($galleryTypesId)) {
+                    $galleryGroups[$galleryTypesId][] = [
+                        'name' => $basenameSrc,
+                        'src_image' => $srcImage,
+                        'alt' => $alt,
+                        'default' => $i == 0 ? 1 : 0
+                    ];
+                }
+
+                $i += 1;
             }
 
-            $i += 1;
         }
 
         if (!$galleryGroups) return false;
@@ -594,11 +634,18 @@ class Import3 extends Model
         }
         $file_info = new \SplFileInfo($src_image);
 
+        if ($file_info->getExtension() == 'bmp') {
+            $newSrcFile = dirname($src_image).'/'.basename($src_image,'.bmp').'.jpg';
+            rename($src_image, $newSrcFile);
+            $src_image = $newSrcFile;
+            $file_info = new \SplFileInfo($src_image);
+        }
+
         $image_small = $gallery->renderFilename($path, $file_info->getExtension());
         $image_large = $gallery->renderFilename($path, $file_info->getExtension());
 
-        Image::thumbnail($src_image, $size['small_width'], $size['small_height'])->save($path.'/'.$image_small.'.'.$file_info->getExtension(), ['quality' => $type['quality']]);
-        Image::thumbnail($src_image, $size['large_width'], $size['large_height'])->save($path.'/'.$image_large.'.'.$file_info->getExtension(), ['quality' => $type['quality']]);
+        Image::thumbnail($newSrcFile, $size['small_width'], $size['small_height'])->save($path.'/'.$image_small.'.'.$file_info->getExtension(), ['quality' => $type['quality']]);
+        Image::thumbnail($newSrcFile, $size['large_width'], $size['large_height'])->save($path.'/'.$image_large.'.'.$file_info->getExtension(), ['quality' => $type['quality']]);
 
         return [
             'small' => $type['destination'].'/'.$image_small.'.'.$file_info->getExtension(),
