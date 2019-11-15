@@ -10,7 +10,7 @@ class m191108_165553_add_column_code_to_shop_units extends Migration
     /**
      * {@inheritdoc}
      */
-    public function Up()
+    public function up()
     {
         $this->addColumn('shop_units', 'code', $this->string(32));
     }

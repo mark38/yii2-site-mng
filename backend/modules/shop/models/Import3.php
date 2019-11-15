@@ -45,6 +45,8 @@ class Import3 extends Model
         $path = preg_replace('/\//', '/CML:', Yii::$app->params['shop']['startGroupPath']);
 
         $groupsSxe = $sxe->xpath('/'.$path);
+        $goodsSxe = $sxe->xpath('//CML:КоммерческаяИнформация/CML:Каталог/CML:Товары/CML:Товар');
+        $propertiesSxe = $sxe->xpath('//CML:КоммерческаяИнформация/CML:Классификатор/CML:Свойства/CML:Свойство');
 
         if (count($groupsSxe)) {
             $parentLink = Links::findOne(['url' => Yii::$app->params['shop']['catalogUrl']]);
@@ -53,11 +55,15 @@ class Import3 extends Model
 
             $unitsSxe = $sxe->xpath('//CML:КоммерческаяИнформация/CML:Классификатор/CML:ЕдиницыИзмерения/CML:ЕдиницаИзмерения');
             $this->parserUnits($unitsSxe);
-        } else {
-            $goodsSxe = $sxe->xpath('//CML:КоммерческаяИнформация/CML:Каталог/CML:Товары/CML:Товар');
-            if ($goodsSxe) {
-                $this->parserGoods($goodsSxe);
-            }
+        }
+
+        if (count($propertiesSxe)) {
+            $this->parserProperties($propertiesSxe);
+        }
+
+        if (count($goodsSxe)) {
+            $this->shop_properties = ShopProperties::find()->where(['is not', 'verification_code', null])->all();
+            $this->parserGoods($goodsSxe);
         }
 
         return true;
@@ -146,7 +152,80 @@ class Import3 extends Model
         }
     }
 
-    public function parserProperties($properties_sxe)
+    public function parserProperties($propertiesSxe)
+    {
+        foreach ($propertiesSxe as $item) {
+            $nameProperty = trim(strval($item->{'Наименование'}));
+
+            $shopProperty = ShopProperties::findOne(['verification_code' => $item->{'Ид'}]);
+            $actionUpdate = false;
+            if (!$shopProperty) {
+                $shopProperty = new ShopProperties();
+                $actionUpdate = true;
+                $shopProperty->verification_code = strval($item->{'Ид'});
+                $shopProperty->seq = $shopProperty->findLastSequence() + 1;
+            } else {
+                if ($shopProperty->name != $nameProperty) {
+                    $actionUpdate = true;
+                }
+            }
+
+            if ($actionUpdate) {
+                $currentId = $shopProperty ? $shopProperty->id : null;
+                $shopProperty->state = $item->{'ПометкаУдаления'} == 'false' ? 1 : 0;
+                $shopProperty->name = $nameProperty;
+                $shopProperty->anchor = strval($item->{'Наименование'});
+                $shopProperty->url = (new Translit())->slugify($item->{'Наименование'}, $shopProperty->tableName(), 'url', '_', $currentId);
+                $shopProperty->save();
+            }
+
+
+            $this->shop_properties[] = $shopProperty;
+
+            if ($item->{'ВариантыЗначений'}->{'Справочник'}) {
+                foreach ($item->{'ВариантыЗначений'}->{'Справочник'} as $itemPropertyGood) {
+                    $nameValue = trim(strval($itemPropertyGood->{'Значение'}));
+
+                    $shopPropertyValue = ShopPropertyValues::findOne(['verification_code' => $itemPropertyGood->{'ИдЗначения'}]);
+                    $actionUpdate = false;
+                    if (!$shopPropertyValue) {
+                        $actionUpdate = true;
+                        $shopPropertyValue = new ShopPropertyValues();
+                        $shopPropertyValue->shop_properties_id = $shopProperty->id;
+                        $shopPropertyValue->verification_code = strval($itemPropertyGood->{'ИдЗначения'});
+                    } else {
+                        if ($shopPropertyValue->name != $nameValue) {
+                            $actionUpdate = true;
+                        }
+                    }
+
+                    if ($actionUpdate) {
+                        $shopPropertyValue->name = $nameValue;
+                        $shopPropertyValue->anchor = $nameValue;
+                        $shopPropertyValue->url = (new Translit())->slugify($nameValue, $shopPropertyValue->tableName(), 'url', '_', null, 'shop_properties_id', $shopProperty->id);
+                        $shopPropertyValue->save();
+                    }
+                }
+            }
+        }
+
+        /** @var ShopGroups $shopGroup */
+        foreach ($this->shop_groups as $shopGroup) {
+            /** @var ShopProperties $shopProperty */
+            foreach ($this->shop_properties as $shopProperty) {
+                if (!ShopGroupProperties::findOne(['shop_groups_id' => $shopGroup->id, 'shop_properties_id' => $shopProperty->id])) {
+                    $shopGroupProperty = new ShopGroupProperties();
+                    $shopGroupProperty->shop_groups_id = $shopGroup->id;
+                    $shopGroupProperty->shop_properties_id = $shopProperty->id;
+                    $shopGroupProperty->save();
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public function parserPropertiesDef($properties_sxe)
     {
         foreach ($properties_sxe as $item) {
             $shop_property = ShopProperties::findOne(['verification_code' => $item->{'Ид'}]);
@@ -207,6 +286,7 @@ class Import3 extends Model
             }
 
             $goods[$goodVerificationCode] = $this->modifyGood($item, $goodVerificationCode, $group, $itemsExist);
+            $this->modifyGoodProperty($item, $goods[$goodVerificationCode]['good']);
         }
     }
 
@@ -284,9 +364,6 @@ class Import3 extends Model
         $good->code = '';
 
         foreach ($item->{'ЗначенияРеквизитов'}->{'ЗначениеРеквизита'} as $prop) {
-//            if ($prop->{'Наименование'} == 'Код') {
-//                $good->code = preg_replace('/^\D+0*/', '', $prop->{'Значение'});
-//            }
             switch ($prop->{'Наименование'}) {
                 case "Код": $good->code = preg_replace('/^\D+0*/', '', $prop->{'Значение'}); break;
                 case "Файл": $this->addImage($prop->{'Значение'}, Yii::$app->params['shop']['gallery']['good'], $link->id, $good->id); break;
@@ -304,7 +381,54 @@ class Import3 extends Model
         return [
             'id' => $good->id,
             'links_id' => $link->id,
+            'good' => $good,
         ];
+    }
+
+    /**
+     * @param \SimpleXMLElement $item
+     * @param ShopGoods $good
+     */
+    private function modifyGoodProperty($item, $good)
+    {
+        $shopProperties = ArrayHelper::index($this->shop_properties, 'verification_code');
+        $goodProperties = ArrayHelper::index(ShopGoodProperties::find()->where(['shop_goods_id' => $good->id])->all(), 'shop_properties_id');
+
+        foreach ($goodProperties as $shopPropertiesId => $goodProperty) {
+            $goodPropertiesArr[$shopPropertiesId]['exist'] = false;
+            $goodPropertiesArr[$shopPropertiesId]['id'] = $goodProperty['id'];
+        }
+
+        foreach ($item->{'ЗначенияСвойств'}->{'ЗначенияСвойства'} as $itemProperty) {
+            $verificationCode = trim(strval($itemProperty->{'Ид'}));
+            $verificationCodeValue = trim(strval($itemProperty->{'Значение'}));
+            if ($shopProperties[$verificationCode]) {
+                $shopProperty = $shopProperties[$verificationCode];
+                $shopPropertyValue = ShopPropertyValues::findOne([
+                    'shop_properties_id' => $shopProperty['id'],
+                    'verification_code' => $verificationCodeValue
+                ]);
+
+                if ($shopPropertyValue) {
+                    if ($goodProperties[$shopProperty['id']]) {
+                        $goodPropertiesArr[$shopProperty['id']]['exist'] = true;
+                        ShopGoodProperties::updateAll(['shop_property_values_id' => $shopPropertyValue->id], ['shop_goods_id' => $goodProperties[$shopProperty['id']]['shop_goods_id'], 'shop_properties_id' => $shopProperty['id']]);
+                    } else {
+                        $shopGoodProperty = new ShopGoodProperties();
+                        $shopGoodProperty->shop_goods_id = $good->id;
+                        $shopGoodProperty->shop_properties_id = $shopProperty['id'];
+                        $shopGoodProperty->shop_property_values_id = $shopPropertyValue->id;
+                        $shopGoodProperty->save();
+                    }
+                }
+            }
+        }
+
+        foreach ($goodPropertiesArr as $shopPropertiesId => $goodProperty) {
+            if ($goodProperty['exist'] != true) {
+                ShopGoodProperties::deleteAll(['id' => $goodProperty['id']]);
+            }
+        }
     }
 
     private function addGoodDef($item, $verificationCode, $itemsExist=0)
@@ -537,6 +661,7 @@ class Import3 extends Model
         $link = Links::findOne($linksId);
 
         foreach ($galleryGroups as $gallery_types_id => $images) {
+
             $gallery_group = false;
             if ($shop_goods_id) {
                 $good_gallery = ShopGoodGallery::findOne(['shop_goods_id' => $shop_goods_id, 'gallery_types_id' => $gallery_types_id]);
@@ -639,6 +764,8 @@ class Import3 extends Model
             rename($src_image, $newSrcFile);
             $src_image = $newSrcFile;
             $file_info = new \SplFileInfo($src_image);
+        } else {
+            $newSrcFile = $src_image;
         }
 
         $image_small = $gallery->renderFilename($path, $file_info->getExtension());

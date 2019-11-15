@@ -4,10 +4,10 @@
  */
 use kartik\helpers\Html;
 
-$this->title = 'Управление выгрузкой прайс-листов в Яндекс-Маркет';
+$this->title = 'Выгрузка на Яндекс-Маркет';
 ?>
 
 <div>
-    Ссылка для экспорта товаров: <?= Yii::$app->request->hostInfo.'/mng/shop/export/yml-price-list'; ?> <?= Html::a('<i class="fa fa-external-link" aria-hidden="true"></i>', Yii::$app->request->hostInfo.'/mng/shop/export/yml-price-list', ['target' => '_blank'])?>
+    Ссылка для экспорта товаров: <?= Yii::$app->request->hostInfo.'/yml_catalog.xml'; ?> <?= Html::a('<i class="fa fa-external-link" aria-hidden="true"></i>', Yii::$app->request->hostInfo.'/yml_catalog.xml', ['target' => '_blank'])?>
 </div>
 

@@ -17,6 +17,7 @@ use common\models\gallery\GalleryImages;
  * @property string $url
  * @property integer $contents_id
  * @property integer $gallery_images_id
+ * @property string $verification_code
  *
  * @property GalleryImages $galleryImage
  * @property ShopPropertyValues $shopProperty
@@ -38,7 +39,7 @@ class ShopPropertyValues extends \yii\db\ActiveRecord
     {
         return [
             [['shop_properties_id', 'contents_id', 'gallery_images_id'], 'integer'],
-            [['name', 'anchor', 'url'], 'string', 'max' => 255],
+            [['name', 'anchor', 'url', 'verification_code'], 'string', 'max' => 255],
             [['shop_properties_id'], 'exist', 'skipOnError' => true, 'targetClass' => ShopProperties::className(), 'targetAttribute' => ['shop_properties_id' => 'id']],
         ];
     }
@@ -55,7 +56,8 @@ class ShopPropertyValues extends \yii\db\ActiveRecord
             'anchor' => 'Anchor',
             'url' => 'Url',
             'contents_id' => 'Contents ID',
-            'gallery_images_id' => 'Gallery Images ID'
+            'gallery_images_id' => 'Gallery Images ID',
+            'verification_code' => 'Код',
         ];
     }
 
