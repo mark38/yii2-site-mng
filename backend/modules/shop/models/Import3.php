@@ -402,7 +402,7 @@ class Import3 extends Model
         foreach ($item->{'ЗначенияСвойств'}->{'ЗначенияСвойства'} as $itemProperty) {
             $verificationCode = trim(strval($itemProperty->{'Ид'}));
             $verificationCodeValue = trim(strval($itemProperty->{'Значение'}));
-            if ($shopProperties[$verificationCode]) {
+            if (isset($shopProperties[$verificationCode])) {
                 $shopProperty = $shopProperties[$verificationCode];
                 $shopPropertyValue = ShopPropertyValues::findOne([
                     'shop_properties_id' => $shopProperty['id'],
