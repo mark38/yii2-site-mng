@@ -393,6 +393,7 @@ class Import3 extends Model
     {
         $shopProperties = ArrayHelper::index($this->shop_properties, 'verification_code');
         $goodProperties = ArrayHelper::index(ShopGoodProperties::find()->where(['shop_goods_id' => $good->id])->all(), 'shop_properties_id');
+        $goodPropertiesArr = array();
 
         foreach ($goodProperties as $shopPropertiesId => $goodProperty) {
             $goodPropertiesArr[$shopPropertiesId]['exist'] = false;
@@ -424,9 +425,11 @@ class Import3 extends Model
             }
         }
 
-        foreach ($goodPropertiesArr as $shopPropertiesId => $goodProperty) {
-            if (isset($goodProperty['exist']) && $goodProperty['exist'] != true) {
-                ShopGoodProperties::deleteAll(['id' => $goodProperty['id']]);
+        if ($goodPropertiesArr) {
+            foreach ($goodPropertiesArr as $shopPropertiesId => $goodProperty) {
+                if (isset($goodProperty['exist']) && $goodProperty['exist'] != true) {
+                    ShopGoodProperties::deleteAll(['id' => $goodProperty['id']]);
+                }
             }
         }
     }
