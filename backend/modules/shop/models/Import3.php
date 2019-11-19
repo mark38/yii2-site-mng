@@ -425,7 +425,7 @@ class Import3 extends Model
             }
         }
 
-        if ($goodPropertiesArr) {
+        if (isset($goodPropertiesArr)) {
             foreach ($goodPropertiesArr as $shopPropertiesId => $goodProperty) {
                 if (isset($goodProperty['exist']) && $goodProperty['exist'] != true) {
                     ShopGoodProperties::deleteAll(['id' => $goodProperty['id']]);
