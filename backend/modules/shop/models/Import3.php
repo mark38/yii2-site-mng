@@ -411,7 +411,7 @@ class Import3 extends Model
                 ]);
 
                 if ($shopPropertyValue) {
-                    if ($goodProperties[$shopProperty['id']]) {
+                    if (isset($goodProperties[$shopProperty['id']])) {
                         $goodPropertiesArr[$shopProperty['id']]['exist'] = true;
                         ShopGoodProperties::updateAll(['shop_property_values_id' => $shopPropertyValue->id], ['shop_goods_id' => $goodProperties[$shopProperty['id']]['shop_goods_id'], 'shop_properties_id' => $shopProperty['id']]);
                     } else {
