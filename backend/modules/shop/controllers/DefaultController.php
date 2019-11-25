@@ -38,6 +38,7 @@ class DefaultController extends Controller
     public function action1cExchange3()
     {
         $uploadLog = fopen(Yii::getAlias('@app').Yii::$app->params['shop']['uploadDir'].'/upload.log', 'a');
+        fwrite($uploadLog, date('d.m.Y H:i:s', time())." - Start\n");
 
         if ( $_SERVER['PHP_AUTH_USER'] != Yii::$app->params['shop']['phpAuthUser'] || $_SERVER['PHP_AUTH_PW'] != Yii::$app->params['shop']['phpAuthPw'] ) {
             fwrite($uploadLog, date('d.m.Y H:i:s', time())." - Auth failure\n");
@@ -108,6 +109,8 @@ class DefaultController extends Controller
                 fwrite($uploadLog, date("d.m.Y H:i:s")." Finish: ".Yii::$app->request->get('filename')."\n");
             }
         }
+
+        fwrite($uploadLog, date('d.m.Y H:i:s', time())." - Finish\n");
 
         fclose($uploadLog);
 
