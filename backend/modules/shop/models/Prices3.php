@@ -29,6 +29,21 @@ class Prices3 extends Model
 
     function parserPrices($pricesSxe)
     {
+        /* Поиск и удаление цен для товара и его характеристик */
+        foreach ($pricesSxe as $item) {
+            if (preg_match('/(.+)#(.+)/', $item->{'Ид'}, $matches)) {
+                $goodVerificationCode = strval($matches[1]);
+                $itemVerificationCode = strval($matches[2]);
+                $pricesItem = ShopPriceItem::find()->innerJoinWith('shopItem')->where(['shop_items.verification_code' => $itemVerificationCode])->all();
+                if ($pricesItem) ShopPriceItem::deleteAll(['id' => ArrayHelper::getColumn($pricesItem, 'id')]);
+            } else {
+                $goodVerificationCode = strval($item->{'Ид'});
+            }
+
+            $priceGood = ShopPriceGood::find()->innerJoinWith('shopGood')->where(['shop_goods.verification_code' => $goodVerificationCode])->all();
+            if ($priceGood) ShopPriceGood::deleteAll(['id' => ArrayHelper::getColumn($priceGood, 'id')]);
+        }
+
         $goodPrices = array();
         $goodMinPrice = array();
 
