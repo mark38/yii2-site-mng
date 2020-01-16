@@ -36,6 +36,7 @@ use common\models\gallery\GalleryImages;
  * @property integer $avg_rating
  * @property string $h1
  * @property integer $manually_state
+ * @property strinf $virtual_url
  *
  * @property Contents[] $contents
  * @property Layouts $layouts
@@ -68,7 +69,8 @@ class Links extends \yii\db\ActiveRecord
             [['priority', 'avg_rating'], 'number'],
             [['url', 'name', 'anchor', 'css_class', 'icon', 'h1'], 'string', 'max' => 255],
             [['title', 'keywords', 'description'], 'string', 'max' => 1024],
-            [['url'], 'unique']
+            [['url'], 'unique'],
+            [['virtual_url'], 'string', 'max' => 254],
         ];
     }
 
@@ -103,7 +105,8 @@ class Links extends \yii\db\ActiveRecord
             'icon' => 'Иконка',
             'avg_rating' => 'Средний рейтинг',
             'h1' => 'Заголовок h1',
-            'manually_state' => 'Смена состояния вручную'
+            'manually_state' => 'Смена состояния вручную',
+            'virtual_url' => 'Виртуальный адрес страницы (Virtual URL)'
         ];
     }
 
