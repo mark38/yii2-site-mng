@@ -2,6 +2,7 @@
 
 namespace common\models\gallery;
 
+use Imagine\Imagick\Image;
 use Yii;
 
 /**
@@ -15,6 +16,7 @@ use Yii;
  * @property string $alt
  * @property string $url
  * @property integer $seq
+ * @property string picture
  *
  * @property GalleryGroups[] $galleryGroups
  * @property GalleryGroups $galleryGroup
@@ -36,7 +38,8 @@ class GalleryImages extends \yii\db\ActiveRecord
     {
         return [
             [['gallery_groups_id', 'seq'], 'integer'],
-            [['small', 'large', 'name', 'alt', 'url'], 'string', 'max' => 255]
+            [['small', 'large', 'name', 'alt', 'url'], 'string', 'max' => 255],
+            [['picture'], 'string']
         ];
     }
 
@@ -54,6 +57,7 @@ class GalleryImages extends \yii\db\ActiveRecord
             'alt' => 'Alt',
             'url' => 'Url',
             'seq' => 'Seq',
+            'picture' => 'Json формат списка изображений',
         ];
     }
 
@@ -71,5 +75,13 @@ class GalleryImages extends \yii\db\ActiveRecord
     public function getGalleryGroup()
     {
         return $this->hasOne(GalleryGroups::className(), ['id' => 'gallery_groups_id']);
+    }
+
+    function resizeAndConvertImageWebP($width, $height, $density, $originalFilepath, $resizedFilepath)
+    {
+        $image = new Image();
+        $image->ge
+        $image = new \Imagick($originalFilepath);
+        $origImageDimens = $image->getImageGeometry();
     }
 }

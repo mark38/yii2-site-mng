@@ -6,6 +6,7 @@ use app\modules\shop\models\Contragents3;
 use app\modules\shop\models\Offers3;
 use app\modules\shop\models\Prices3;
 use backend\modules\shop\models\Import3;
+use common\models\gallery\GalleryImages;
 use Yii;
 use yii\web\Controller;
 use yii\web\Cookie;
@@ -393,5 +394,27 @@ class DefaultController extends Controller
             $model = new Contragents3();
             $model->parser($contragentsXml);
         }
+    }
+
+    public function actionConvertImage()
+    {
+        $model = new GalleryImages();
+        $helper = new Helpers();
+        $images = GalleryImages::find()->where(['gallery_groups_id' => 579])->all();
+
+        if ($images) {
+            /** @var GalleryImages $image */
+            foreach ($images as $image) {
+                $smallFilePath = Yii::getAlias('@frontend/web').$image->small;
+                $largeFilePath = Yii::getAlias('@frontend/web').$image->large;
+
+                $path278x278 = Yii::getAlias('@frontend/web').'/product/278x278';
+                $helper->makeDirectory($path278x278);
+                $model->resizeAndConvertImageWebP(278, 278, 100, $smallFilePath, $path278x278.'/example.webp');
+            }
+        }
+
+        $model = new GalleryImages();
+
     }
 }

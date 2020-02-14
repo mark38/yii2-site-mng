@@ -56,7 +56,8 @@
         "rizalfaizu/yii2-wowjs": "dev-master",
         "kartik-v/yii2-label-inplace": "*",
         "metalguardian/yii2-fotorama-widget": "^1.0",
-        "iserv4u/yii2-pii": "^0.2.6"
+        "iserv4u/yii2-pii": "^0.2.6",
+        "tpmanc/yii2-imagick": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
