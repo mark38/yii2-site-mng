@@ -97,6 +97,8 @@ class DefaultController extends Controller
                 $largeFilePath = Yii::getAlias('@frontend/web').$image->large;
                 $extension = pathinfo($largeFilePath, PATHINFO_EXTENSION);
 
+                if ($extension == 'gif') continue;
+
                 $pictureParams = json_decode($image->galleryGroup->galleryType->picture_params);
                 $picture = json_decode($image->picture);
 
