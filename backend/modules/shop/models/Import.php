@@ -6,7 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use yii\imagine\Image;
-use app\models\Helpers;
+use backend\models\Helpers;
 use mark38\galleryManager\Gallery;
 use common\models\helpers\Translit;
 use common\models\main\Contents;

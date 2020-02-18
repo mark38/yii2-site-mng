@@ -1,6 +1,7 @@
 <?php
 namespace app\controllers;
 
+use common\models\gallery\GalleryImages;
 use Yii;
 use yii\console\Controller;
 use backend\models\shop\Import;

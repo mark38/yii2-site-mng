@@ -17,6 +17,7 @@ use Yii;
  * @property integer $large_height
  * @property integer $quality
  * @property integer $visible
+ * @property string $picture_params
  *
  * @property GalleryGroups[] $galleryGroups
  */
@@ -37,7 +38,8 @@ class GalleryTypes extends \yii\db\ActiveRecord
     {
         return [
             [['small_width', 'small_height', 'large_width', 'large_height', 'quality', 'visible'], 'integer'],
-            [['name', 'comment', 'destination'], 'string', 'max' => 255]
+            [['name', 'comment', 'destination'], 'string', 'max' => 255],
+            [['picture_params'], 'string'],
         ];
     }
 
@@ -57,6 +59,7 @@ class GalleryTypes extends \yii\db\ActiveRecord
             'large_height' => 'Large Height',
             'quality' => 'Quality',
             'visible' => 'Visible',
+            'picture_params' => 'Параметры изображения в формате JSON'
         ];
     }
 

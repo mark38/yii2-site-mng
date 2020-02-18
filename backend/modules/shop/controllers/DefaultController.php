@@ -10,7 +10,7 @@ use common\models\gallery\GalleryImages;
 use Yii;
 use yii\web\Controller;
 use yii\web\Cookie;
-use app\models\Helpers;
+use backend\models\Helpers;
 use backend\modules\shop\models\Import;
 use app\modules\shop\models\Offers;
 
@@ -407,14 +407,43 @@ class DefaultController extends Controller
             foreach ($images as $image) {
                 $smallFilePath = Yii::getAlias('@frontend/web').$image->small;
                 $largeFilePath = Yii::getAlias('@frontend/web').$image->large;
+                $extension = pathinfo($largeFilePath, PATHINFO_EXTENSION);
 
-                $path278x278 = Yii::getAlias('@frontend/web').'/product/278x278';
-                $helper->makeDirectory($path278x278);
-                $model->resizeAndConvertImageWebP(278, 278, 100, $smallFilePath, $path278x278.'/example.webp');
+                $pictureParams = json_decode($image->galleryGroup->galleryType->picture_params);
+                $picture = json_decode($image->picture);
+                foreach ($pictureParams as $key => $media) {
+                    $fullPath = preg_replace('/\/$/', '', Yii::getAlias('@frontend/web').$media->path);
+                    $mediaPath = preg_replace('/\/$/', '', $media->path);
+                    $helper->makeDirectory($fullPath);
+
+                    if (!isset($picture->$key)) {
+                        echo $key.'<br>';
+
+                        do {
+                            $fileName = '';
+                            for ($j = 0; $j < 8; $j++ ) {
+                                if (rand(0,1) == 0) {
+                                    $fileName .= chr(rand(97, 122));
+                                } else {
+                                    $fileName .= chr(rand(65, 90));
+                                }
+                            }
+                        } while(file_exists($fullPath.'/'.$fileName.'.'.$extension));
+
+                        $picture[$key] = array(
+                            'img' => $mediaPath.'/'.$fileName.'.'.$extension,
+                            'webp' => $mediaPath.'/'.$fileName.'.webp',
+                        );
+
+                        $model->resizeAndConvertImageWebP($media->width, $media->height, $largeFilePath, $fullPath, $fileName, $extension);
+                    }
+                }
+
+                $image->picture = json_encode($picture);
+                $image->save();
+                unset($picture);
             }
         }
-
-        $model = new GalleryImages();
 
     }
 }

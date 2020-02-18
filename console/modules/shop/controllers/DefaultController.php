@@ -2,6 +2,9 @@
 
 namespace app\modules\shop\controllers;
 
+use backend\models\Helpers;
+use common\models\gallery\GalleryImages;
+use common\models\gallery\GalleryTypes;
 use Yii;
 use yii\console\Controller;
 use backend\modules\shop\models\Import;
@@ -71,5 +74,55 @@ class DefaultController extends Controller
         echo "\n\n\n===============\n\n\n\n".count($links)."\n";
 
         return true;
+    }
+
+    public function actionConvertImage()
+    {
+        $model = new GalleryImages();
+        $helper = new Helpers();
+        $images = GalleryImages::find()->joinWith('galleryGroup')->joinWith('galleryType')->where(['gallery_types_id' => 4])->all();
+        $images = GalleryImages::find()->where(['gallery_groups_id' => 579])->all();
+
+        if ($images) {
+            /** @var GalleryImages $image */
+            foreach ($images as $image) {
+                $smallFilePath = Yii::getAlias('@frontend/web').$image->small;
+                $largeFilePath = Yii::getAlias('@frontend/web').$image->large;
+                $extension = pathinfo($largeFilePath, PATHINFO_EXTENSION);
+
+                $pictureParams = json_decode($image->galleryGroup->galleryType->picture_params);
+                $picture = json_decode($image->picture);
+
+                foreach ($pictureParams as $key => $media) {
+                    $fullPath = preg_replace('/\/$/', '', Yii::getAlias('@frontend/web').$media->path);
+                    $mediaPath = preg_replace('/\/$/', '', $media->path);
+                    $helper->makeDirectory($fullPath);
+
+                    if (!isset($picture->$key)) {
+                        do {
+                            $fileName = '';
+                            for ($j = 0; $j < 8; $j++ ) {
+                                if (rand(0,1) == 0) {
+                                    $fileName .= chr(rand(97, 122));
+                                } else {
+                                    $fileName .= chr(rand(65, 90));
+                                }
+                            }
+                        } while(file_exists($fullPath.'/'.$fileName.'.'.$extension));
+
+                        $picture[$key] = array(
+                            'img' => $mediaPath.'/'.$fileName.'.'.$extension,
+                            'webp' => $mediaPath.'/'.$fileName.'.webp',
+                        );
+
+                        $model->resizeAndConvertImageWebP($media->width, $media->height, $largeFilePath, $fullPath, $fileName, $extension);
+                    }
+                }
+
+                $image->picture = json_encode($picture);
+                $image->save();
+                unset($picture);
+            }
+        }
     }
 }
