@@ -83,7 +83,7 @@ class DefaultController extends Controller
         $model = new GalleryImages();
         $helper = new Helpers();
         $images = GalleryImages::find()->joinWith('galleryGroup')->joinWith('galleryType')->where(['gallery_types_id' => 4])->all();
-        $images = GalleryImages::find()->where(['gallery_groups_id' => 579])->all();
+//        $images = GalleryImages::find()->where(['gallery_groups_id' => 579])->all();
 
         if ($images) {
             $totalAmount = count($images);
