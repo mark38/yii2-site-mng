@@ -78,14 +78,21 @@ class DefaultController extends Controller
 
     public function actionConvertImage()
     {
+        $start = microtime(true);
+
         $model = new GalleryImages();
         $helper = new Helpers();
         $images = GalleryImages::find()->joinWith('galleryGroup')->joinWith('galleryType')->where(['gallery_types_id' => 4])->all();
         $images = GalleryImages::find()->where(['gallery_groups_id' => 579])->all();
 
         if ($images) {
+            $totalAmount = count($images);
+            $num = 0;
             /** @var GalleryImages $image */
             foreach ($images as $image) {
+                $num += 1;
+                echo "Обработка изображения: $num/$totalAmount\n";
+
                 $smallFilePath = Yii::getAlias('@frontend/web').$image->small;
                 $largeFilePath = Yii::getAlias('@frontend/web').$image->large;
                 $extension = pathinfo($largeFilePath, PATHINFO_EXTENSION);
@@ -124,5 +131,8 @@ class DefaultController extends Controller
                 unset($picture);
             }
         }
+
+        $time = microtime(true) - $start;
+        printf("Скрипт выполнялся %.4F сек.\n", $time);
     }
 }
