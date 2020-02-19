@@ -39,10 +39,17 @@ class DefaultController extends Controller
 
     public function action1cExchange3()
     {
+        if(isset($_SERVER['HTTP_AUTHORIZATION'])) {
+            $auth_params = explode(":" , base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'], 6)));
+            $_SERVER['PHP_AUTH_USER'] = $auth_params[0];
+            unset($auth_params[0]);
+            $_SERVER['PHP_AUTH_PW'] = implode('',$auth_params);
+        }
+        
         $uploadLog = fopen(Yii::getAlias('@app') . Yii::$app->params['shop']['uploadDir'] . '/upload.log', 'a');
         fwrite($uploadLog, date('d.m.Y H:i:s', time()) . " - Start\n");
 
-        if ((isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_USER'] != Yii::$app->params['shop']['phpAuthUser']) || (isset($_SERVER['PHP_AUTH_PW']) && $_SERVER['PHP_AUTH_PW'] != Yii::$app->params['shop']['phpAuthPw'])) {
+        if ($_SERVER['PHP_AUTH_USER'] != Yii::$app->params['shop']['phpAuthUser'] || $_SERVER['PHP_AUTH_PW'] != Yii::$app->params['shop']['phpAuthPw']) {
             fwrite($uploadLog, date('d.m.Y H:i:s', time()) . " - Auth failure\n");
             return "failure";
         }
