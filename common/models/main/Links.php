@@ -36,7 +36,8 @@ use common\models\gallery\GalleryImages;
  * @property integer $avg_rating
  * @property string $h1
  * @property integer $manually_state
- * @property strinf $virtual_url
+ * @property string $virtual_url
+ * @property string $title_prefix
  *
  * @property Contents[] $contents
  * @property Layouts $layouts
@@ -67,7 +68,7 @@ class Links extends \yii\db\ActiveRecord
             [['anchor'], 'required'],
             [['categories_id', 'layouts_id', 'views_id', 'parent', 'child_exist', 'level', 'seq', 'gallery_images_id', 'start', 'created_at', 'updated_at', 'state', 'content_nums', 'manually_state'], 'integer'],
             [['priority', 'avg_rating'], 'number'],
-            [['url', 'name', 'anchor', 'css_class', 'icon', 'h1'], 'string', 'max' => 255],
+            [['url', 'name', 'anchor', 'css_class', 'icon', 'h1', 'title_prefix'], 'string', 'max' => 255],
             [['title', 'keywords', 'description'], 'string', 'max' => 1024],
             [['url'], 'unique'],
             [['virtual_url'], 'string', 'max' => 254],
@@ -92,6 +93,7 @@ class Links extends \yii\db\ActiveRecord
             'level' => 'Level',
             'seq' => 'Seq',
             'title' => 'Заголовок Title',
+            'title_prefix' => 'Префикс в заголовках',
             'keywords' => 'Значение тега Keywords',
             'description' => 'Значение тега Description',
             'gallery_images_id' => 'Изображение',
