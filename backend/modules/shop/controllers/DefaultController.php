@@ -49,6 +49,8 @@ class DefaultController extends Controller
         $uploadLog = fopen(Yii::getAlias('@app') . Yii::$app->params['shop']['uploadDir'] . '/upload.log', 'a');
         fwrite($uploadLog, date('d.m.Y H:i:s', time()) . " - Start\n");
 
+        list($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']) = explode(':', base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'], 6)));
+
         if ($_SERVER['PHP_AUTH_USER'] != Yii::$app->params['shop']['phpAuthUser'] || $_SERVER['PHP_AUTH_PW'] != Yii::$app->params['shop']['phpAuthPw']) {
             fwrite($uploadLog, date('d.m.Y H:i:s', time()) . " - Auth failure\n");
             return "failure";
