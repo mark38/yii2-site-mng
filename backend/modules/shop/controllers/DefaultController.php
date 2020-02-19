@@ -45,7 +45,7 @@ class DefaultController extends Controller
             unset($auth_params[0]);
             $_SERVER['PHP_AUTH_PW'] = implode('',$auth_params);
         }
-        
+
         $uploadLog = fopen(Yii::getAlias('@app') . Yii::$app->params['shop']['uploadDir'] . '/upload.log', 'a');
         fwrite($uploadLog, date('d.m.Y H:i:s', time()) . " - Start\n");
 
