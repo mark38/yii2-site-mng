@@ -212,21 +212,11 @@ class DefaultController extends Controller
 
     public function actionHandImport()
     {
-        $zipFile = Yii::getAlias('@app') . Yii::$app->params['shop']['uploadDir'] . '/1cbitrix.zip';
-        $unzipDir = Yii::getAlias('@app') . Yii::$app->params['shop']['uploadDir'] . '/1cbitrix';
+        $import_file = Yii::getAlias('@app') . Yii::$app->params['shop']['uploadDir'] . '/1cbitrix/import.xml';
 
-        $zip = new \ZipArchive();
-        $res = $zip->open($zipFile);
-        if ($res === true) {
-            $zip->extractTo($unzipDir);
-            $zip->close();
-        }
-
-//        $import_file = Yii::getAlias('@app') . Yii::$app->params['shop']['uploadDir'] . '/1cbitrix/import.xml';
-//
-//        $model = new Import();
-//        $model->decodeImageName(Yii::getAlias('@app') . Yii::$app->params['shop']['uploadDir'] . '/1cbitrix');
-//        $model->parser($import_file);
+        $model = new Import();
+        $model->decodeImageName(Yii::getAlias('@app') . Yii::$app->params['shop']['uploadDir'] . '/1cbitrix');
+        $model->parser($import_file);
 
         return false;
     }
