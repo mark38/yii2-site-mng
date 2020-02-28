@@ -57,7 +57,8 @@
         "kartik-v/yii2-label-inplace": "*",
         "metalguardian/yii2-fotorama-widget": "^1.0",
         "tpmanc/yii2-imagick": "*",
-        "rosell-dk/webp-convert": "^2.3"
+        "rosell-dk/webp-convert": "^2.3",
+        "skeeks/yii2-assets-auto-compress": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",
