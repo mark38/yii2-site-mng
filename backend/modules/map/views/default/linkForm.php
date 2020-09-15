@@ -102,6 +102,7 @@ if ($galleryImage->large) {
                         'label' => 'SEO',
                         'content' => '<p>' .
                             $form->field($link, 'h1') .
+                            $form->field($link, 'content_description')->textarea() .
                             $form->field($link, 'keywords')->textarea() .
                             $form->field($link, 'description')->textarea() .
                             $form->field($link, 'priority') .
