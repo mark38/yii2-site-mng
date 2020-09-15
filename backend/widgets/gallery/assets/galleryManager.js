@@ -29,7 +29,7 @@ var galleryManager = {
                     galleryManager.uploadGallery(e);
                 },
                 error: function() {
-                    alert('Failed to add group');
+                    console.log('Error in function prepareUpload');
                 }
             });
         } else {
@@ -58,20 +58,21 @@ var galleryManager = {
                 dataType: 'json',
                 success: function(jsonData) {
                     if (jsonData.success == false) {
-                        alert(jsonData.message);
+                        console.log(jsonData.message);
                     } else {
+                        console.log(galleryManager.options.group);
                         if (galleryManager.options.group == 0) {
                             galleryManager.options.gallery_images_id = jsonData.gallery_images_id;
                             $('#input-'+galleryManager.options.widget_id+' input[type="hidden"]').val(galleryManager.options.gallery_images_id);
                         }
                     }
 
-                    /*if (i == $(e).prop('files').length) {
+                    if (i == $(e).prop('files').length) {
                         galleryManager.getGallery();
-                    }*/
+                    }
                 },
                 error: function() {
-                    alert('Failed to add image');
+                    console.log('Error in function uploadGallery');
                 }
             });
         }
@@ -95,11 +96,10 @@ var galleryManager = {
             data: data,
             dataType: 'json',
             success: function(jsonData) {
-                alert('OK');
                 $('.gallery-manager').html(jsonData.gallery);
             },
             error: function() {
-                alert('Server error');
+                console.log('Error in function getGallery');
             }
         });
     },
@@ -127,9 +127,41 @@ var galleryManager = {
                 }
             },
             error: function() {
-                alert('Server error');
+                console.log('Error in function deleteImage');
             }
         })
+    },
+
+    sortableImage : function (wId) {
+        var data = new FormData();
+
+        var images = new Object();
+        $('#content-'+wId+' > ul > li').each(function (seq, val) {
+            if (imagesId = $(this).children('div').attr('data-image-id')) {
+                images[seq] = imagesId;
+            }
+        });
+
+        if (images) {
+            data.append('action', 'sortable_images');
+            data.append('images', JSON.stringify(images));
+            data.append('gallery_types_id', this.options.gallery_types_id);
+            data.append('gallery_groups_id', this.options.gallery_groups_id);
+
+            $.ajax({
+                type: 'POST',
+                url: galleryManager.options.url,
+                processData: false,
+                contentType: false,
+                data: data,
+                dataType: 'json',
+                success: function(jsonData) {
+                },
+                error: function() {
+                    console.log('Error in function sortableImage');
+                }
+            });
+        }
     }
 };
 

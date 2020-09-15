@@ -15,7 +15,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require": {
-        "php": ">=5.4.0",
+        "php": ">=5.6.0",
         "yiisoft/yii2": ">=2.0.6",
         "yiisoft/yii2-bootstrap": "*",
         "yiisoft/yii2-swiftmailer": "*",
@@ -30,7 +30,6 @@
         "kartik-v/yii2-nav-x": "^1.2",
         "uran1980/yii2-scroll-to-top": "^0.0.2",
         "kartik-v/yii2-widget-typeahead": "^1.0",
-        "mark38/yii2-gallery-manager": "dev-master",
         "newerton/yii2-fancybox": "dev-master",
         "evgeniyrru/yii2-slick": "^1.0",
         "kartik-v/yii2-widget-sidenav": "^1.0",
@@ -51,12 +50,15 @@
         "vova07/yii2-console-runner-extension": "^0.1.0",
         "zelenin/smsru": "^4.1",
         "romka-chev/yii2-swiper": "^2.0",
-        "ivan-chkv/yii2-jquery-fullpage": "^2.0",
         "kartik-v/yii2-tabs-x": "@dev",
         "kartik-v/yii2-builder": "^1.6",
         "delocker/yii2-animate.css": "dev-master",
         "rizalfaizu/yii2-wowjs": "dev-master",
-        "kartik-v/yii2-label-inplace": "*"
+        "kartik-v/yii2-label-inplace": "*",
+        "metalguardian/yii2-fotorama-widget": "^1.0",
+        "tpmanc/yii2-imagick": "*",
+        "rosell-dk/webp-convert": "^2.3",
+        "skeeks/yii2-assets-auto-compress": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

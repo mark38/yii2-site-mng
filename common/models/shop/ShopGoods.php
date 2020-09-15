@@ -153,4 +153,12 @@ class ShopGoods extends \yii\db\ActiveRecord
     {
         return $this->hasOne(ShopPropertyValues::className(), ['id' => 'shop_property_values_id'])->via('shopGoodProperties');
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getShopGoodsCategories()
+    {
+        return $this->hasMany(ShopGoodsCategories::className(), ['shop_categories_id' => 'id']);
+    }
 }

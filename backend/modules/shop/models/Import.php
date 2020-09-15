@@ -6,7 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use yii\imagine\Image;
-use app\models\Helpers;
+use backend\models\Helpers;
 use mark38\galleryManager\Gallery;
 use common\models\helpers\Translit;
 use common\models\main\Contents;
@@ -31,6 +31,13 @@ class Import extends Model
     private $import_file;
     private $shop_groups = array();
     private $shop_properties = array();
+    private $staticProperties = [
+        [
+            'id' => 2,
+            'name' => 'Производитель',
+            '1cName' => 'Изготовитель'
+        ]
+    ];
 
     public function parser($import_file)
     {
@@ -238,7 +245,7 @@ class Import extends Model
         $good->shop_units_id = $shopUnit->id;
         $good->name = strval($item->{'Наименование'});
         $good->code = preg_replace('/^\D+0*/', '', $item->{'КодНоменклатуры'});
-        $good->state = 1;
+        $good->state = $item->{'НеПубликуетсяНаСайте'} == 'истина' ? 0 : 1;
         $good->items_exist = $itemsExist;
         $good->save();
 

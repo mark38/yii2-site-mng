@@ -93,6 +93,7 @@ if ($galleryImage->large) {
                             $form->field($link, 'views_id')->dropDownList($views, ['encode' => false]) .
 //                            $form->field($link, 'url')->staticControl() .
                             $form->field($link, 'url') .
+                            $form->field($link, 'virtual_url') .
                             $form->field($link, 'css_class') .
                             $form->field($link, 'icon') .
                             $form->field($link, 'seq') .
@@ -103,6 +104,7 @@ if ($galleryImage->large) {
                         'content' => '<p>' .
                             $form->field($link, 'h1') .
                             $form->field($link, 'content_description')->textarea() .
+                            $form->field($link, 'title_prefix') .
                             $form->field($link, 'keywords')->textarea() .
                             $form->field($link, 'description')->textarea() .
                             $form->field($link, 'priority') .
@@ -136,5 +138,5 @@ if ($galleryImage->large) {
     </div>
 </div>
 
-<?php ActiveForm::end()?>
+<?php ActiveForm::end(); ?>
 

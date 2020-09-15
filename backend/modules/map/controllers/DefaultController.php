@@ -11,7 +11,7 @@ use yii\web\Response;
 use common\models\main\Categories;
 use common\models\main\Links;
 use common\models\main\Contents;
-use mark38\galleryManager\GalleryManagerAction;
+use backend\widgets\gallery\GalleryManagerAction;
 use common\models\gallery\GalleryImagesForm;
 use yii\web\UploadedFile;
 

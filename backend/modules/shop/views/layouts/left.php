@@ -13,6 +13,11 @@ $items[] = [
     'encode' => false,
 ];
 $items[] = [
+    'label' => 'Категории товаров',
+    'icon' => 'list-alt',
+    'url' => ['/shop/categories/list'],
+];
+$items[] = [
     'label' => 'Свойства',
     'icon' => 'filter',
     'url' => ['/shop/properties/list'],
@@ -31,6 +36,11 @@ $items[] = [
     'label' => 'Обмен данными с 1с',
     'icon' => 'circle-thin',
     'url' => ['/shop/hand-import'],
+];
+$items[] = [
+    'label' => 'Обмен данными с 1с - 3.1',
+    'icon' => 'circle-thin',
+    'url' => ['/shop/hand-import-3'],
 ];
 
 $items[] = ['label' => 'Экспорт данных', 'options' => ['class' => 'header']];

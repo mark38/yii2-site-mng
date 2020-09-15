@@ -9,6 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $name
+ * @property string $code
  *
  * @property ShopGoods[] $shopGoods
  */
@@ -29,6 +30,7 @@ class ShopUnits extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'string', 'max' => 255],
+            [['code'], 'string', 'max' => 35],
         ];
     }
 
@@ -40,6 +42,7 @@ class ShopUnits extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => 'Name',
+            'code' => 'Code',
         ];
     }
 

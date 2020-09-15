@@ -1,11 +1,14 @@
 <?php
-use yii\bootstrap\Html;
-use yii\bootstrap\ButtonDropdown;
-use common\models\gallery\GalleryTypes;
-
+/**
+ * @var \yii\web\View $this
+ */
 /** @var $gallery_types \common\models\gallery\GalleryTypes */
 /** @var $gallery_group \common\models\gallery\GalleryGroups */
 /** @var $gallery_groups \common\models\gallery\GalleryGroups */
+
+use yii\bootstrap\Html;
+use yii\bootstrap\ButtonDropdown;
+use common\models\gallery\GalleryTypes;
 
 $this->title = 'Галереи изображений на сайте';
 ?>

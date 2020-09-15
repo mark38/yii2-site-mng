@@ -3,6 +3,8 @@
 namespace common\models\gallery;
 
 use Yii;
+use tpmanc\imagick\Imagick;
+use WebPConvert\WebPConvert;
 
 /**
  * This is the model class for table "{{%gallery_images}}".
@@ -15,6 +17,7 @@ use Yii;
  * @property string $alt
  * @property string $url
  * @property integer $seq
+ * @property string picture
  *
  * @property GalleryGroups[] $galleryGroups
  * @property GalleryGroups $galleryGroup
@@ -36,7 +39,8 @@ class GalleryImages extends \yii\db\ActiveRecord
     {
         return [
             [['gallery_groups_id', 'seq'], 'integer'],
-            [['small', 'large', 'name', 'alt', 'url'], 'string', 'max' => 255]
+            [['small', 'large', 'name', 'alt', 'url'], 'string', 'max' => 255],
+            [['picture'], 'string']
         ];
     }
 
@@ -54,6 +58,7 @@ class GalleryImages extends \yii\db\ActiveRecord
             'alt' => 'Alt',
             'url' => 'Url',
             'seq' => 'Seq',
+            'picture' => 'Json формат списка изображений',
         ];
     }
 
@@ -71,5 +76,28 @@ class GalleryImages extends \yii\db\ActiveRecord
     public function getGalleryGroup()
     {
         return $this->hasOne(GalleryGroups::className(), ['id' => 'gallery_groups_id']);
+    }
+
+    public function getGalleryType()
+    {
+        return $this->hasOne(GalleryTypes::className(), ['id' => 'gallery_types_id'])->via('galleryGroup');
+    }
+
+    /**
+     * @param $width
+     * @param $height
+     * @param $originalFilePath
+     * @param $resizedPath
+     * @param $fileName
+     * @param $extension
+     * Для работы необохима установка ImageMagick и WebP
+     */
+    function resizeAndConvertImageWebP($width, $height, $originalFilePath, $resizedPath, $fileName, $extension)
+    {
+        $resizedPath = preg_replace('/\/$/', '', $resizedPath);
+
+        $image = Imagick::open($originalFilePath);
+        $image->resize($width, $height)->saveTo($resizedPath.'/'.$fileName.'.'.$extension);
+        WebPConvert::convert($resizedPath.'/'.$fileName.'.'.$extension, $resizedPath.'/'.$fileName.'.webp');
     }
 }

@@ -2,18 +2,15 @@
 use kartik\helpers\Html;
 use kartik\form\ActiveForm;
 use backend\widgets\ckeditor\CKEditor;
-use kartik\builder\Form;
 use yii\bootstrap\Tabs;
 use yii\bootstrap\Modal;
-use yii\helpers\ArrayHelper;
-use common\models\shop\ShopProperties;
-use yii\helpers\Url;
 
 /**
  * @var $this \yii\web\View
  * @var $action
  * @var $link \backend\modules\shop\models\LinkGroupForm
  * @var $good \backend\modules\shop\models\GoodForm
+ * @var $galleryGroup \common\models\gallery\GalleryGroups
  * @var $galleryImage \common\models\gallery\GalleryImagesForm
  */
 
@@ -44,6 +41,17 @@ if ($galleryImage->large) {
 }
 ?>
 
+<?php
+
+/*$form = ActiveForm::begin([
+    'type' => ActiveForm::TYPE_HORIZONTAL,
+    'formConfig' => ['labelSpan' => 4]
+]);*/
+
+$form = ActiveForm::begin();
+
+?>
+
 <div class="box box-default">
     <div class="box-header with-border">
         <h3>
@@ -56,10 +64,6 @@ if ($galleryImage->large) {
     </div>
 
     <div class="box-body">
-        <?php $form = ActiveForm::begin([
-            'type' => ActiveForm::TYPE_HORIZONTAL,
-            'formConfig' => ['labelSpan' => 4]
-        ]); ?>
 
         <div class="nav-tabs-custom">
             <?php
@@ -128,6 +132,9 @@ if ($galleryImage->large) {
                     [
                         'label' => 'Медиа',
                         'content' => Html::beginTag('p') .
+                            $this->render('galleryForm', [
+                                'galleryGroup' => $galleryGroup,
+                            ]) .
                             '<div clas="hidden">' .
                             $form->field($galleryImage, 'id')->hiddenInput()->label(false) .
                             $form->field($galleryImage, 'small')->hiddenInput(['class' => 'form-control image-small'])->label(false) .
@@ -159,6 +166,8 @@ if ($galleryImage->large) {
         ])?>
 
         <?php if ($link->id) {
+            echo Html::a('Редактор контента', ['/map/content', 'links_id' => $link->id], ['class' => 'btn btn-info btn-flat btn-sm']);
+            echo '&nbsp;';
             Modal::begin([
                 'header' => $link->anchor.' '.Html::a('<i class="fa fa-external-link"></i>', $link->url, ['target' => '_blank']),
                 'toggleButton' => ['label' => 'Удалить', 'class' => 'btn btn-danger btn-flat btn-sm'],
@@ -169,6 +178,7 @@ if ($galleryImage->large) {
             Modal::end();
         }?>
 
-        <?php ActiveForm::end()?>
     </div>
 </div>
+
+<?php ActiveForm::end(); ?>

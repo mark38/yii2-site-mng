@@ -748,3 +748,247 @@ $_SERVER = [
     ]
     'argc' => 1
 ]
+2020-09-15 10:18:36 [127.0.0.1][1][0mmvs1vude13cmfegngdeglum6utjpk7][error][yii\base\ErrorException:256] yii\base\ErrorException: Unknown Property: Getting unknown property: common\models\main\Links::virtual_url in E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\ErrorHandler.php:317
+Stack trace:
+#0 [internal function]: yii\base\ErrorHandler->handleError(256, 'Unknown Propert...', 'E:\\OSPanel\\doma...', 317, Array)
+#1 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\ErrorHandler.php(317): trigger_error('Unknown Propert...', 256)
+#2 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\widgets\ActiveField.php(178): yii\base\ErrorHandler::convertExceptionToError(Object(yii\base\UnknownPropertyException))
+#3 E:\OSPanel\domains\remonttrade\backend\modules\map\views\default\linkForm.php(96): yii\widgets\ActiveField->__toString()
+#4 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\View.php(332): require('E:\\OSPanel\\doma...')
+#5 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\View.php(250): yii\base\View->renderPhpFile('E:\\OSPanel\\doma...', Array)
+#6 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\View.php(152): yii\base\View->renderFile('E:\\OSPanel\\doma...', Array, NULL)
+#7 E:\OSPanel\domains\remonttrade\backend\modules\map\views\default\links.php(57): yii\base\View->render('linkForm', Array)
+#8 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\View.php(332): require('E:\\OSPanel\\doma...')
+#9 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\View.php(250): yii\base\View->renderPhpFile('E:\\OSPanel\\doma...', Array)
+#10 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\View.php(152): yii\base\View->renderFile('E:\\OSPanel\\doma...', Array, Object(app\modules\map\controllers\DefaultController))
+#11 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\Controller.php(384): yii\base\View->render('links', Array, Object(app\modules\map\controllers\DefaultController))
+#12 E:\OSPanel\domains\remonttrade\backend\modules\map\controllers\DefaultController.php(99): yii\base\Controller->render('links', Array)
+#13 [internal function]: app\modules\map\controllers\DefaultController->actionLinks('2', '37', NULL, 'ch')
+#14 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\InlineAction.php(57): call_user_func_array(Array, Array)
+#15 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams(Array)
+#16 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('links', Array)
+#17 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('map/default/lin...', Array)
+#18 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#19 E:\OSPanel\domains\remonttrade\backend\web\index.php(18): yii\base\Application->run()
+#20 {main}
+2020-09-15 10:18:35 [127.0.0.1][1][0mmvs1vude13cmfegngdeglum6utjpk7][info][application] $_GET = [
+    'categories_id' => '2'
+    'id' => '37'
+    'action' => 'ch'
+]
+
+$_COOKIE = [
+    'wordpress_test_cookie' => 'WP Cookie check'
+    'wordpress_logged_in_358faa6636809b2b12b2d8ff4b9590de' => 'admin|1598788235|mthNlHuzc9RjmMoiesECE2hhxpVQ2JpL8Mk303BQwdX|924f69e0ce5aec6f6a0d119ae9f4c4ac439ec30ba50c116e86ea64b685fd69be'
+    'wp-settings-time-1' => '1598622147'
+    '_csrf' => '8b8cd8d7fa7ea206107e3cd94215972c3543c2a0c0db9f93ecfc699ccbf7dc76a:2:{i:0;s:5:\"_csrf\";i:1;s:32:\"bUEaiFI4YRMbq9z3TfvqDS3FJL5IsdXA\";}'
+    'PHPSESSID' => '0mmvs1vude13cmfegngdeglum6utjpk7'
+    '_identity' => '308b7b396f1830f4c30d42bd671a0b88369ec14a6ef6a5b18856b8ca862244d7a:2:{i:0;s:9:\"_identity\";i:1;s:46:\"[1,\"e_sX3n8Yiz0gdZSQa--5NAOeZgkT37tv\",2592000]\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/mng'
+    '__id' => 1
+    'KCFINDER' => [
+        'disabled' => false
+        'denyZipDownload' => true
+        'denyUpdateCheck' => true
+        'denyExtensionRename' => true
+        'theme' => 'default'
+        'access' => [
+            'files' => [
+                'upload' => true
+                'delete' => true
+                'copy' => true
+                'move' => true
+                'rename' => true
+            ]
+            'dirs' => [
+                'create' => true
+                'delete' => true
+                'rename' => true
+            ]
+        ]
+        'types' => [
+            'files' => [
+                'type' => ''
+            ]
+        ]
+        'thumbsDir' => '.thumbs'
+        'thumbWidth' => 100
+        'thumbHeight' => 100
+        'uploadURL' => '/assets/upload'
+        'uploadDir' => 'E:\\OSPanel\\domains\\remonttrade/frontend/web/assets/upload'
+    ]
+]
+
+$_SERVER = [
+    'REDIRECT_REDIRECT_STATUS' => '200'
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'remonttrade'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
+    'HTTP_REFERER' => 'http://remonttrade/mng/map/links?categories_id=2&action=ch&id=37'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'HTTP_COOKIE' => 'wordpress_test_cookie=WP+Cookie+check; wordpress_logged_in_358faa6636809b2b12b2d8ff4b9590de=admin%7C1598788235%7CmthNlHuzc9RjmMoiesECE2hhxpVQ2JpL8Mk303BQwdX%7C924f69e0ce5aec6f6a0d119ae9f4c4ac439ec30ba50c116e86ea64b685fd69be; wp-settings-time-1=1598622147; _csrf=8b8cd8d7fa7ea206107e3cd94215972c3543c2a0c0db9f93ecfc699ccbf7dc76a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22bUEaiFI4YRMbq9z3TfvqDS3FJL5IsdXA%22%3B%7D; PHPSESSID=0mmvs1vude13cmfegngdeglum6utjpk7; _identity=308b7b396f1830f4c30d42bd671a0b88369ec14a6ef6a5b18856b8ca862244d7a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_identity%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22e_sX3n8Yiz0gdZSQa--5NAOeZgkT37tv%22%2C2592000%5D%22%3B%7D'
+    'PATH' => 'e:\\ospanel\\modules\\php\\PHP-7.1\\ext;e:\\ospanel\\modules\\php\\PHP-7.1\\pear;e:\\ospanel\\modules\\php\\PHP-7.1\\pear\\bin;e:\\ospanel\\modules\\php\\PHP-7.1;e:\\ospanel\\modules\\imagemagick;e:\\ospanel\\modules\\wget\\bin;e:\\ospanel\\modules\\git;e:\\ospanel\\modules\\git\\bin;e:\\ospanel\\modules\\git\\mingw\\bin;e:\\ospanel\\modules\\git\\cmd;e:\\ospanel\\modules\\database\\MariaDB-10.3-x64\\bin;e:\\ospanel\\modules\\http\\Apache-PHP-7\\bin;e:\\ospanel\\modules\\http\\Apache-PHP-7;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\system32\\Wbem;C:\\Windows\\SysWOW64'
+    'SystemRoot' => 'C:\\Windows'
+    'COMSPEC' => 'C:\\Windows\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\Windows'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache'
+    'SERVER_NAME' => 'remonttrade'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'E:/OSPanel/domains/remonttrade'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'E:/OSPanel/domains/remonttrade'
+    'SERVER_ADMIN' => '[no address given]'
+    'SCRIPT_FILENAME' => 'E:/OSPanel/domains/remonttrade/backend/web/index.php'
+    'REMOTE_PORT' => '7372'
+    'REDIRECT_URL' => '/backend/web//map/links'
+    'REDIRECT_QUERY_STRING' => 'categories_id=2&id=37&action=ch'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'categories_id=2&id=37&action=ch'
+    'REQUEST_URI' => '/mng/map/links?categories_id=2&id=37&action=ch'
+    'SCRIPT_NAME' => '/backend/web/index.php'
+    'PHP_SELF' => '/backend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1600154315.892
+    'REQUEST_TIME' => 1600154315
+    'argv' => [
+        0 => 'categories_id=2&id=37&action=ch'
+    ]
+    'argc' => 1
+]
+2020-09-15 10:18:52 [127.0.0.1][1][0mmvs1vude13cmfegngdeglum6utjpk7][error][yii\base\ErrorException:256] yii\base\ErrorException: Unknown Property: Getting unknown property: common\models\main\Links::virtual_url in E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\ErrorHandler.php:317
+Stack trace:
+#0 [internal function]: yii\base\ErrorHandler->handleError(256, 'Unknown Propert...', 'E:\\OSPanel\\doma...', 317, Array)
+#1 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\ErrorHandler.php(317): trigger_error('Unknown Propert...', 256)
+#2 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\widgets\ActiveField.php(178): yii\base\ErrorHandler::convertExceptionToError(Object(yii\base\UnknownPropertyException))
+#3 E:\OSPanel\domains\remonttrade\backend\modules\map\views\default\linkForm.php(96): yii\widgets\ActiveField->__toString()
+#4 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\View.php(332): require('E:\\OSPanel\\doma...')
+#5 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\View.php(250): yii\base\View->renderPhpFile('E:\\OSPanel\\doma...', Array)
+#6 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\View.php(152): yii\base\View->renderFile('E:\\OSPanel\\doma...', Array, NULL)
+#7 E:\OSPanel\domains\remonttrade\backend\modules\map\views\default\links.php(57): yii\base\View->render('linkForm', Array)
+#8 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\View.php(332): require('E:\\OSPanel\\doma...')
+#9 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\View.php(250): yii\base\View->renderPhpFile('E:\\OSPanel\\doma...', Array)
+#10 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\View.php(152): yii\base\View->renderFile('E:\\OSPanel\\doma...', Array, Object(app\modules\map\controllers\DefaultController))
+#11 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\Controller.php(384): yii\base\View->render('links', Array, Object(app\modules\map\controllers\DefaultController))
+#12 E:\OSPanel\domains\remonttrade\backend\modules\map\controllers\DefaultController.php(99): yii\base\Controller->render('links', Array)
+#13 [internal function]: app\modules\map\controllers\DefaultController->actionLinks('2', '37', NULL, 'ch')
+#14 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\InlineAction.php(57): call_user_func_array(Array, Array)
+#15 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\Controller.php(157): yii\base\InlineAction->runWithParams(Array)
+#16 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\Module.php(528): yii\base\Controller->runAction('links', Array)
+#17 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\web\Application.php(103): yii\base\Module->runAction('map/default/lin...', Array)
+#18 E:\OSPanel\domains\remonttrade\vendor\yiisoft\yii2\base\Application.php(386): yii\web\Application->handleRequest(Object(yii\web\Request))
+#19 E:\OSPanel\domains\remonttrade\backend\web\index.php(18): yii\base\Application->run()
+#20 {main}
+2020-09-15 10:18:51 [127.0.0.1][1][0mmvs1vude13cmfegngdeglum6utjpk7][info][application] $_GET = [
+    'categories_id' => '2'
+    'id' => '37'
+    'action' => 'ch'
+]
+
+$_COOKIE = [
+    'wordpress_test_cookie' => 'WP Cookie check'
+    'wordpress_logged_in_358faa6636809b2b12b2d8ff4b9590de' => 'admin|1598788235|mthNlHuzc9RjmMoiesECE2hhxpVQ2JpL8Mk303BQwdX|924f69e0ce5aec6f6a0d119ae9f4c4ac439ec30ba50c116e86ea64b685fd69be'
+    'wp-settings-time-1' => '1598622147'
+    '_csrf' => '8b8cd8d7fa7ea206107e3cd94215972c3543c2a0c0db9f93ecfc699ccbf7dc76a:2:{i:0;s:5:\"_csrf\";i:1;s:32:\"bUEaiFI4YRMbq9z3TfvqDS3FJL5IsdXA\";}'
+    'PHPSESSID' => '0mmvs1vude13cmfegngdeglum6utjpk7'
+    '_identity' => '308b7b396f1830f4c30d42bd671a0b88369ec14a6ef6a5b18856b8ca862244d7a:2:{i:0;s:9:\"_identity\";i:1;s:46:\"[1,\"e_sX3n8Yiz0gdZSQa--5NAOeZgkT37tv\",2592000]\";}'
+]
+
+$_SESSION = [
+    '__flash' => []
+    '__returnUrl' => '/mng'
+    '__id' => 1
+    'KCFINDER' => [
+        'disabled' => false
+        'denyZipDownload' => true
+        'denyUpdateCheck' => true
+        'denyExtensionRename' => true
+        'theme' => 'default'
+        'access' => [
+            'files' => [
+                'upload' => true
+                'delete' => true
+                'copy' => true
+                'move' => true
+                'rename' => true
+            ]
+            'dirs' => [
+                'create' => true
+                'delete' => true
+                'rename' => true
+            ]
+        ]
+        'types' => [
+            'files' => [
+                'type' => ''
+            ]
+        ]
+        'thumbsDir' => '.thumbs'
+        'thumbWidth' => 100
+        'thumbHeight' => 100
+        'uploadURL' => '/assets/upload'
+        'uploadDir' => 'E:\\OSPanel\\domains\\remonttrade/frontend/web/assets/upload'
+    ]
+]
+
+$_SERVER = [
+    'REDIRECT_REDIRECT_STATUS' => '200'
+    'REDIRECT_STATUS' => '200'
+    'HTTP_HOST' => 'remonttrade'
+    'HTTP_CONNECTION' => 'keep-alive'
+    'HTTP_CACHE_CONTROL' => 'max-age=0'
+    'HTTP_UPGRADE_INSECURE_REQUESTS' => '1'
+    'HTTP_USER_AGENT' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36'
+    'HTTP_ACCEPT' => 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9'
+    'HTTP_REFERER' => 'http://remonttrade/mng/map/links?categories_id=2&action=ch&id=37'
+    'HTTP_ACCEPT_ENCODING' => 'gzip, deflate'
+    'HTTP_ACCEPT_LANGUAGE' => 'ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7'
+    'HTTP_COOKIE' => 'wordpress_test_cookie=WP+Cookie+check; wordpress_logged_in_358faa6636809b2b12b2d8ff4b9590de=admin%7C1598788235%7CmthNlHuzc9RjmMoiesECE2hhxpVQ2JpL8Mk303BQwdX%7C924f69e0ce5aec6f6a0d119ae9f4c4ac439ec30ba50c116e86ea64b685fd69be; wp-settings-time-1=1598622147; _csrf=8b8cd8d7fa7ea206107e3cd94215972c3543c2a0c0db9f93ecfc699ccbf7dc76a%3A2%3A%7Bi%3A0%3Bs%3A5%3A%22_csrf%22%3Bi%3A1%3Bs%3A32%3A%22bUEaiFI4YRMbq9z3TfvqDS3FJL5IsdXA%22%3B%7D; PHPSESSID=0mmvs1vude13cmfegngdeglum6utjpk7; _identity=308b7b396f1830f4c30d42bd671a0b88369ec14a6ef6a5b18856b8ca862244d7a%3A2%3A%7Bi%3A0%3Bs%3A9%3A%22_identity%22%3Bi%3A1%3Bs%3A46%3A%22%5B1%2C%22e_sX3n8Yiz0gdZSQa--5NAOeZgkT37tv%22%2C2592000%5D%22%3B%7D'
+    'PATH' => 'e:\\ospanel\\modules\\php\\PHP-7.1\\ext;e:\\ospanel\\modules\\php\\PHP-7.1\\pear;e:\\ospanel\\modules\\php\\PHP-7.1\\pear\\bin;e:\\ospanel\\modules\\php\\PHP-7.1;e:\\ospanel\\modules\\imagemagick;e:\\ospanel\\modules\\wget\\bin;e:\\ospanel\\modules\\git;e:\\ospanel\\modules\\git\\bin;e:\\ospanel\\modules\\git\\mingw\\bin;e:\\ospanel\\modules\\git\\cmd;e:\\ospanel\\modules\\database\\MariaDB-10.3-x64\\bin;e:\\ospanel\\modules\\http\\Apache-PHP-7\\bin;e:\\ospanel\\modules\\http\\Apache-PHP-7;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\system32\\Wbem;C:\\Windows\\SysWOW64'
+    'SystemRoot' => 'C:\\Windows'
+    'COMSPEC' => 'C:\\Windows\\system32\\cmd.exe'
+    'PATHEXT' => '.COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC'
+    'WINDIR' => 'C:\\Windows'
+    'SERVER_SIGNATURE' => ''
+    'SERVER_SOFTWARE' => 'Apache'
+    'SERVER_NAME' => 'remonttrade'
+    'SERVER_ADDR' => '127.0.0.1'
+    'SERVER_PORT' => '80'
+    'REMOTE_ADDR' => '127.0.0.1'
+    'DOCUMENT_ROOT' => 'E:/OSPanel/domains/remonttrade'
+    'REQUEST_SCHEME' => 'http'
+    'CONTEXT_PREFIX' => ''
+    'CONTEXT_DOCUMENT_ROOT' => 'E:/OSPanel/domains/remonttrade'
+    'SERVER_ADMIN' => '[no address given]'
+    'SCRIPT_FILENAME' => 'E:/OSPanel/domains/remonttrade/backend/web/index.php'
+    'REMOTE_PORT' => '7395'
+    'REDIRECT_URL' => '/backend/web//map/links'
+    'REDIRECT_QUERY_STRING' => 'categories_id=2&id=37&action=ch'
+    'GATEWAY_INTERFACE' => 'CGI/1.1'
+    'SERVER_PROTOCOL' => 'HTTP/1.1'
+    'REQUEST_METHOD' => 'GET'
+    'QUERY_STRING' => 'categories_id=2&id=37&action=ch'
+    'REQUEST_URI' => '/mng/map/links?categories_id=2&id=37&action=ch'
+    'SCRIPT_NAME' => '/backend/web/index.php'
+    'PHP_SELF' => '/backend/web/index.php'
+    'REQUEST_TIME_FLOAT' => 1600154331.925
+    'REQUEST_TIME' => 1600154331
+    'argv' => [
+        0 => 'categories_id=2&id=37&action=ch'
+    ]
+    'argc' => 1
+]

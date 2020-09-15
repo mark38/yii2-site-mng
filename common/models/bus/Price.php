@@ -14,9 +14,11 @@ use Yii;
  * @property integer $price
  * @property integer $sb_price
  *
- * @property Tours $tours
+ * @property Tours $tour
  * @property Rooms $rooms
  * @property ClientType $clientType
+ * @property Hotel $hotel
+ * @property City $city
  */
 class Price extends \yii\db\ActiveRecord
 {
@@ -67,9 +69,22 @@ class Price extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getTours()
+    public function getTour()
     {
         return $this->hasOne(Tours::className(), ['id' => 'tours_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getHotel()
+    {
+        return $this->hasOne(Hotel::className(), ['id' => 'hotel_id'])->via('tour');
+    }
+
+    public function getCity()
+    {
+        return $this->hasOne(City::className(), ['id' => 'city_id'])->via('hotel');
     }
 
     /**
