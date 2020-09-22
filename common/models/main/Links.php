@@ -205,7 +205,7 @@ class Links extends \yii\db\ActiveRecord
         }
 
         if (!$this->url) {
-            $this->url = $this->parent ? preg_replace('/\/$/', '', self::findOne($this->parent)->url).'/'.$this->name : '/'.$this->name;
+            $this->url = $this->parent ? preg_replace('/\/$/', '', self::findOne($this->parent)->url).'/'.$this->name : '/'.$this->name.'/';
         }
 
         if ($insert) {
